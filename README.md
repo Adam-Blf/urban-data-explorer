@@ -112,8 +112,3 @@ cd frontend
 python -m http.server 3000
 ```
 
----
-
-## 🎯 Vision IA & Évolutivité
-Ce projet est conçu pour être la fondation d'un système de recommandation prédictif.
-Consultez notre [Roadmap IA](./AI_ROADMAP.md) pour découvrir comment nous prévoyons d'implémenter des modèles de prédiction de prix via PySpark dans la V2.
