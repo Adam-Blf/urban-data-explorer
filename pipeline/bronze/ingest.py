@@ -24,6 +24,10 @@ SOURCES = {
         "url": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-emplacement-des-stations/exports/geojson",
         "ext": "geojson",
     },
+    "ecoles_elementaires": {
+        "url": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/etablissements-scolaires-ecoles-elementaires/exports/geojson",
+        "ext": "geojson",
+    },
     **{
         f"dvf_{y}": {
             "url": f"https://files.data.gouv.fr/geo-dvf/latest/csv/{y}/departements/75.csv.gz",

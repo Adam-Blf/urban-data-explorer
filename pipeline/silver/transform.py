@@ -114,10 +114,14 @@ def velib() -> Path:
     return _count_per_ar("velib_stations", "geojson", "velib")
 
 
+def ecoles() -> Path:
+    return _count_per_ar("ecoles_elementaires", "geojson", "ecoles")
+
+
 def run():
     arrondissements()
     dvf()
-    for fn in (logements_sociaux, espaces_verts, velib):
+    for fn in (logements_sociaux, espaces_verts, velib, ecoles):
         try:
             fn()
         except Exception as e:
