@@ -95,10 +95,29 @@ def espaces_verts() -> Path:
     return out
 
 
+def _count_per_ar(src_name: str, ext: str, label: str) -> Path:
+    gv = gpd.read_file(_latest(src_name, ext))
+    ar = gpd.read_parquet(SILVER / "arrondissements.parquet")
+    if gv.crs is None:
+        gv.set_crs(epsg=4326, inplace=True)
+    gv = gv.to_crs(ar.crs)
+    gv["geometry"] = gv.geometry.representative_point()
+    joined = gpd.sjoin(gv, ar[["code_ar", "geometry"]], how="inner", predicate="within")
+    agg = joined.groupby("code_ar").size().rename(f"nb_{label}").reset_index()
+    out = SILVER / f"{label}.parquet"
+    agg.to_parquet(out, index=False)
+    print(f"[silver] {out} · {len(agg)} rows")
+    return out
+
+
+def velib() -> Path:
+    return _count_per_ar("velib_stations", "geojson", "velib")
+
+
 def run():
     arrondissements()
     dvf()
-    for fn in (logements_sociaux, espaces_verts):
+    for fn in (logements_sociaux, espaces_verts, velib):
         try:
             fn()
         except Exception as e:

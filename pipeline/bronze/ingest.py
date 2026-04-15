@@ -20,6 +20,10 @@ SOURCES = {
         "url": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/espaces_verts/exports/geojson",
         "ext": "geojson",
     },
+    "velib_stations": {
+        "url": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-emplacement-des-stations/exports/geojson",
+        "ext": "geojson",
+    },
     **{
         f"dvf_{y}": {
             "url": f"https://files.data.gouv.fr/geo-dvf/latest/csv/{y}/departements/75.csv.gz",
