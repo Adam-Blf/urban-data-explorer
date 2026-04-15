@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://urban-data-explorer-api.onrender.com/:path*" }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [ { "key": "X-Frame-Options", "value": "DENY" } ] }
+  ]
+}

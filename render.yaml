@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: urban-data-explorer-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: |
+      pip install -r pipeline/requirements.txt -r api/requirements.txt
+      python -m pipeline.run
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"

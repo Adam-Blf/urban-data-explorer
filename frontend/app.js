@@ -1,4 +1,7 @@
-const API = (typeof window !== "undefined" && window.URBAN_API) || "http://localhost:8000";
+const API = (typeof window !== "undefined" && window.URBAN_API)
+  || (location.hostname === "localhost" || location.hostname === "127.0.0.1"
+      ? "http://localhost:8000"
+      : "/api");
 
 const state = {
   data: null,
