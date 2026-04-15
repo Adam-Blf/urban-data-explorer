@@ -1,4 +1,16 @@
-"""Silver · nettoyage + normalisation → parquet"""
+"""
+Couche Silver (medallion architecture).
+
+Rôle : charger les données brutes déposées par la couche Bronze, les nettoyer
+(dédup, valeurs aberrantes, types), harmoniser les clés de jointure (notamment
+`code_ar` pour l'arrondissement parisien 1..20) et les écrire en parquet pour
+des lectures rapides côté Gold et API.
+
+Helper clé : `_count_per_ar` effectue une spatial join (point-in-polygon) entre
+un GeoJSON de points/polygones et les contours des arrondissements, puis compte
+les occurrences · utilisé pour vélib, écoles, collèges, marchés, sanisettes,
+bornes Belib', aménagements cyclables.
+"""
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -14,6 +26,7 @@ SILVER = ROOT / "data" / "silver"
 
 
 def _latest(src: str, ext: str) -> Path:
+    """Retourne le fichier bronze le plus récent pour la source donnée."""
     files = sorted((BRONZE / src).glob(f"*.{ext}"))
     if not files:
         raise FileNotFoundError(f"no bronze file for {src}.{ext}")
@@ -21,8 +34,10 @@ def _latest(src: str, ext: str) -> Path:
 
 
 def arrondissements() -> Path:
+    """Contours des 20 arrondissements · pivot géographique du projet."""
     gdf = gpd.read_file(_latest("arrondissements", "geojson"))
-    # harmonise la clé
+    # Le jeu de données opendata.paris.fr utilise des noms de colonne variables
+    # selon les versions · on normalise vers `code_ar` (int, 1..20).
     code_col = next(c for c in ["c_ar", "c_arinsee", "arrondissement"] if c in gdf.columns)
     gdf = gdf.rename(columns={code_col: "code_ar"})
     gdf["code_ar"] = gdf["code_ar"].astype(int)
@@ -36,6 +51,13 @@ def arrondissements() -> Path:
 
 
 def dvf() -> Path:
+    """
+    Demandes de valeurs foncières · assemble toutes les années dispo en bronze.
+
+    Nettoyages : garde seulement les VENTES d'appartements/maisons, retire les
+    surfaces <=9m² (baux non résidentiels, erreurs), garde les prix m² entre
+    1000 et 50000€ (winsorisation contre les outliers du DVF brut).
+    """
     frames = []
     for src in sorted((BRONZE).glob("dvf_*")):
         f = sorted(src.glob("*.csv.gz"))
@@ -60,6 +82,7 @@ def dvf() -> Path:
 
 
 def logements_sociaux() -> Path:
+    """Programmes sociaux financés à Paris · agrégés par arrondissement."""
     raw = json.loads(_latest("logements_sociaux", "json").read_text(encoding="utf-8"))
     df = pd.DataFrame(raw)
     # garder seulement les colonnes scalaires (DVF + parquet n'aime pas les structs vides)
@@ -96,11 +119,21 @@ def espaces_verts() -> Path:
 
 
 def _count_per_ar(src_name: str, ext: str, label: str) -> Path:
+    """
+    Spatial join point-in-polygon pour compter les entités d'un GeoJSON
+    (stations, équipements...) à l'intérieur de chaque arrondissement.
+
+    Retourne un parquet {code_ar, nb_<label>} · colonne prête à être mergée
+    par la couche Gold.
+    """
     gv = gpd.read_file(_latest(src_name, ext))
     ar = gpd.read_parquet(SILVER / "arrondissements.parquet")
+    # Certains jeux opendata omettent le CRS · WGS84 est le défaut web.
     if gv.crs is None:
         gv.set_crs(epsg=4326, inplace=True)
     gv = gv.to_crs(ar.crs)
+    # `representative_point` garantit un point à l'intérieur de la géométrie,
+    # même pour des polygones complexes ou invalides (plus robuste que centroid).
     gv["geometry"] = gv.geometry.representative_point()
     joined = gpd.sjoin(gv, ar[["code_ar", "geometry"]], how="inner", predicate="within")
     agg = joined.groupby("code_ar").size().rename(f"nb_{label}").reset_index()
@@ -110,18 +143,21 @@ def _count_per_ar(src_name: str, ext: str, label: str) -> Path:
     return out
 
 
-def velib() -> Path:
-    return _count_per_ar("velib_stations", "geojson", "velib")
-
-
-def ecoles() -> Path:
-    return _count_per_ar("ecoles_elementaires", "geojson", "ecoles")
+# Chaque wrapper instancie un comptage par arrondissement pour une source donnée.
+def velib() -> Path: return _count_per_ar("velib_stations", "geojson", "velib")
+def ecoles() -> Path: return _count_per_ar("ecoles_elementaires", "geojson", "ecoles")
+def colleges() -> Path: return _count_per_ar("colleges", "geojson", "colleges")
+def marches() -> Path: return _count_per_ar("marches_decouverts", "geojson", "marches")
+def sanisettes() -> Path: return _count_per_ar("sanisettes", "geojson", "sanisettes")
+def belib() -> Path: return _count_per_ar("belib", "geojson", "belib")
+def cyclables() -> Path: return _count_per_ar("amenagements_cyclables", "geojson", "cyclables")
 
 
 def run():
     arrondissements()
     dvf()
-    for fn in (logements_sociaux, espaces_verts, velib, ecoles):
+    for fn in (logements_sociaux, espaces_verts, velib, ecoles,
+               colleges, marches, sanisettes, belib, cyclables):
         try:
             fn()
         except Exception as e:

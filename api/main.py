@@ -24,7 +24,9 @@ INDICATORS = {
     "dynamique_immo_pct": "Variation prix m² sur 5 ans (%)",
     "tension_locative": "Indice de tension (1 = médiane Paris)",
     "mixite_sociale": "Score de mixité sociale (0-1)",
-    "qualite_vie": "Qualité de vie (verts + vélib + écoles)",
+    "qualite_vie": "Qualité de vie (verts + vélib + écoles + sanisettes)",
+    "mobilite_douce": "Mobilité douce (vélib + belib + cyclables)",
+    "service_public": "Service public (écoles + collèges + marchés)",
 }
 
 
