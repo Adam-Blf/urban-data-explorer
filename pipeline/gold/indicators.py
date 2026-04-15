@@ -17,16 +17,20 @@ def _load():
         ls = pd.read_parquet(SILVER / "logements_sociaux.parquet")
     except FileNotFoundError:
         ls = pd.DataFrame(columns=["code_ar"])
-    try:
-        ev = pd.read_parquet(SILVER / "espaces_verts.parquet")
-    except FileNotFoundError:
-        ev = pd.DataFrame(columns=["code_ar", "nb_espaces_verts"])
-    return ar, dvf, ls, ev
+    def _try(name, cols):
+        try:
+            return pd.read_parquet(SILVER / f"{name}.parquet")
+        except FileNotFoundError:
+            return pd.DataFrame(columns=cols)
+    ev = _try("espaces_verts", ["code_ar", "nb_espaces_verts"])
+    vb = _try("velib", ["code_ar", "nb_velib"])
+    ec = _try("ecoles", ["code_ar", "nb_ecoles"])
+    return ar, dvf, ls, ev, vb, ec
 
 
 def build():
     GOLD.mkdir(parents=True, exist_ok=True)
-    ar, dvf, ls, ev = _load()
+    ar, dvf, ls, ev, vb, ec = _load()
 
     # prix m² courant (dernière année dispo)
     last_year = int(dvf["annee"].max())
@@ -77,12 +81,23 @@ def build():
     else:
         ar["mixite_sociale"] = None
 
-    # Indicateur 3 · qualité de vie composite (espaces verts / surface, normalisé)
-    if len(ev):
-        ar = ar.merge(ev, on="code_ar", how="left")
-        ar["qualite_vie"] = (ar["nb_espaces_verts"].fillna(0) / ar["surface"]).astype(float)
-        m = ar["qualite_vie"].max() or 1
-        ar["qualite_vie"] = (ar["qualite_vie"] / m).round(3)
+    # Indicateur 3 · qualité de vie composite = moyenne normalisée (espaces verts + vélib + écoles) / surface
+    for frame in (ev, vb, ec):
+        if len(frame):
+            ar = ar.merge(frame, on="code_ar", how="left")
+
+    def _norm(s: pd.Series) -> pd.Series:
+        m = s.max() or 1
+        return (s.fillna(0) / m).astype(float)
+
+    parts = [
+        _norm(ar[col] / ar["surface"])
+        for col in ("nb_espaces_verts", "nb_velib", "nb_ecoles")
+        if col in ar.columns
+    ]
+    if parts:
+        composite = sum(parts) / len(parts)
+        ar["qualite_vie"] = (composite / (composite.max() or 1)).round(3)
     else:
         ar["qualite_vie"] = None
 
