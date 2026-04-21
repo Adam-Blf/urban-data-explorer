@@ -1,5 +1,13 @@
 # Urban Data Explorer
 
+![Status](https://img.shields.io/badge/status-academic-blue)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?logo=duckdb&logoColor=black)
+![MapLibre](https://img.shields.io/badge/MapLibre-396CB2?logo=maplibre&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![EFREI M1](https://img.shields.io/badge/EFREI-M1_Data_Eng-000091)
+
 Explorer, comprendre et comparer les dynamiques du logement au cœur de Paris.
 
 Plateforme complète : pipeline data (Bronze/Silver/Gold) → API FastAPI → dashboard cartographique MapLibre.
