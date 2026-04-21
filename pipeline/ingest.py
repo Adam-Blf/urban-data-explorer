@@ -8,7 +8,11 @@ Rôle : Extraction automatisée des datasets de l'API OpenData Paris et Data.gou
 import os
 import requests
 import time
-from config import BRONZE_DIR, PARIS_DATASETS, DATA_GOUV_DATASETS
+from config import (
+    BRONZE_DIR, PARIS_DATASETS, DATA_GOUV_DATASETS, 
+    PARIS_OPENDATA_BASE, PARIS_OPENDATA_GEOJSON_BASE
+)
+
 
 def ensure_bronze_dir():
     """Vérifie l'existence du dossier data/bronze ou le crée."""
@@ -45,16 +49,24 @@ def ingest_all():
     print("=" * 50)
     
     # 1. OpenData Paris
-    for name, url in PARIS_DATASETS.items():
-        ext = "geojson" if "geojson" in url else "json"
-        target_path = os.path.join(BRONZE_DIR, f"{name}.{ext}")
+    for name, info in PARIS_DATASETS.items():
+        dataset_id = info['id']
+        fmt = info['format']
+        url = PARIS_OPENDATA_BASE.format(dataset=dataset_id)
+        if fmt == "geojson":
+            url = PARIS_OPENDATA_GEOJSON_BASE.format(dataset=dataset_id)
+            
+        target_path = os.path.join(BRONZE_DIR, f"{name}.{fmt}")
         download_file(url, target_path)
         time.sleep(0.2) # Throttling amical
         
     # 2. Data.gouv.fr
-    for name, url in DATA_GOUV_DATASETS.items():
-        target_path = os.path.join(BRONZE_DIR, f"{name}.csv")
+    for name, info in DATA_GOUV_DATASETS.items():
+        url = info['url']
+        fmt = info['format']
+        target_path = os.path.join(BRONZE_DIR, f"{name}.{fmt}")
         download_file(url, target_path)
+
         
     print("\nBronze Ingestion Complete!")
 

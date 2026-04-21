@@ -56,7 +56,6 @@ def assign_arrondissement(df, lat_col, lon_col, arrondissements_gdf):
     """
     Réalise une jointure spatiale (Point-in-Polygon) pour assigner un arrondissement à chaque coordonnée.
     """
-    # Initialisation de la colonne pour éviter les KeyError
     if 'arrondissement' not in df.columns:
         df['arrondissement'] = 0
 
@@ -72,16 +71,20 @@ def assign_arrondissement(df, lat_col, lon_col, arrondissements_gdf):
     geometry = [Point(xy) for xy in zip(df_coords[lon_col], df_coords[lat_col])]
     gdf_points = gpd.GeoDataFrame(df_coords, geometry=geometry, crs="EPSG:4326")
     
+    # Suppression de la colonne arrondissement existante pour éviter les collisions (arrondissement_left/right)
+    if 'arrondissement' in gdf_points.columns:
+        gdf_points = gdf_points.drop(columns=['arrondissement'])
+    
     # Jointure spatiale
     joined = gpd.sjoin(gdf_points, arrondissements_gdf, how="left", predicate="within")
     
     # Application des résultats
     if 'arrondissement' in joined.columns:
-        # On utilise l'index pour mapper les résultats
         df.loc[df_coords.index, 'arrondissement'] = joined['arrondissement'].fillna(0).astype(int).values
         
     df['arrondissement'] = df['arrondissement'].fillna(0).astype(int)
     return df
+
 
 def clean_and_save(data, name):
     """Sauvegarde les données nettoyées au format JSON."""
@@ -202,30 +205,81 @@ def transform_data_gouv():
     if os.path.exists(path):
         # Utilisation de l'underscore pour correspondre au header réel
         df = pd.read_csv(path, sep='|', on_bad_lines='skip', low_memory=False)
-        df_paris = df[df['Commune_forme_index'] == 'Paris'].copy()
+        
+        # Filtre souple sur Paris (car peut être "Paris 01", "Paris 18e", etc.)
+        df_paris = df[df['Commune_forme_index'].str.contains('Paris', na=False, case=False)].copy()
         
         records = []
         for _, row in df_paris.iterrows():
             coords = str(row.get('coordonnees_au_format_WGS84', ''))
             lat, lon = None, None
             if ',' in coords:
-                lat, lon = coords.split(',')
-                try: lat, lon = float(lat), float(lon)
-                except: lat, lon = None, None
+                parts = coords.split(',')
+                if len(parts) == 2:
+                    try:
+                        lat, lon = float(parts[0].strip()), float(parts[1].strip())
+                    except:
+                        lat, lon = None, None
             
             records.append({
-                "nom": row.get('Denomination_de_l_edifice', ''),
+                "nom": row.get('Denomination_de_l_edifice', 'Inconnu'),
                 "adresse": row.get('Adresse_forme_editoriale', ''),
                 "lat": lat,
                 "lon": lon
             })
         
         df_clean = pd.DataFrame(records)
+        df_clean = df_clean.dropna(subset=['lat', 'lon'])
+        
         arr_gdf = load_arrondissements()
         df_clean = assign_arrondissement(df_clean, "lat", "lon", arr_gdf)
         df_clean = df_clean[df_clean['arrondissement'] > 0]
         
         clean_and_save(df_clean.where(pd.notnull(df_clean), None).to_dict(orient="records"), "monuments_historiques")
+
+def transform_air_quality():
+    """Traitement des indices de qualité de l'air (ATMO)."""
+    path = os.path.join(BRONZE_DIR, "qualite_air.json")
+    if not os.path.exists(path): return
+    
+    with open(path, 'r', encoding='utf-8') as f:
+        raw = json.load(f)
+        
+    # On garde les mesures récentes (ex: indice ATMO du jour)
+    # Ce dataset est global pour Paris, on l'utilisera comme constante pour tous les arrondissements
+    clean_and_save(raw, "qualite_air")
+
+def transform_culture_events(arr_gdf):
+    """Traitement des événements culturels 'Que faire à Paris'."""
+    path = os.path.join(BRONZE_DIR, "culture_events.json")
+    if not os.path.exists(path): return
+    
+    with open(path, 'r', encoding='utf-8') as f:
+        raw = json.load(f)
+        
+    records = []
+    for item in raw:
+        gp = item.get("geo_point_2d")
+        if not gp: continue
+        
+        records.append({
+            "nom": item.get("title", "Événement"),
+            "lieu": item.get("address_name", ""),
+            "lat": gp.get("lat"),
+            "lon": gp.get("lon"),
+            "date_debut": item.get("date_start"),
+            "date_fin": item.get("date_end")
+        })
+        
+    df = pd.DataFrame(records)
+    if df.empty: return
+    
+    df = assign_arrondissement(df, "lat", "lon", arr_gdf)
+    df = df[df['arrondissement'] > 0]
+    
+    clean_and_save(df.to_dict(orient="records"), "culture_events")
+
+
 
 def process_all():
     """Orchestre la phase Silver."""
@@ -245,8 +299,14 @@ def process_all():
     transform_common_points("ecoles", "nom_etablissement", "geo_point_2d.lat", "geo_point_2d.lon", arr_gdf)
     transform_common_points("colleges", "nom_etablissement", "geo_point_2d.lat", "geo_point_2d.lon", arr_gdf)
     transform_common_points("marches", "nom", "geo_point_2d.lat", "geo_point_2d.lon", arr_gdf, ["jours_tenue"])
+    transform_common_points("arbres", "libelle_francais", "geo_point_2d.lat", "geo_point_2d.lon", arr_gdf, ["stade_de_developpement"])
+    transform_common_points("commerces", "enseigne", "geo_point_2d.lat", "geo_point_2d.lon", arr_gdf, ["libelle_activite_principale"])
     
     transform_data_gouv()
+    transform_air_quality()
+    transform_culture_events(arr_gdf)
+
+
     
     print("\nSilver Transformation Complete!")
 

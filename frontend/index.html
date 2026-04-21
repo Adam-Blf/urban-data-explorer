@@ -103,61 +103,107 @@
                 </div>
             </div>
 
-            <!-- Left Sidebar (Indicators & Stats) -->
-            <aside class="sidebar glass-panel" id="sidebar">
-                <div class="sidebar-header">
-                    <h2>Arrondissement</h2>
-                    <select id="arrondissement-select" class="custom-select">
-                        <option value="0">Vue Globale (Paris)</option>
-                        <!-- Options generated via JS -->
-                    </select>
-                </div>
-                
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <i class="fa-solid fa-leaf kpi-icon color-qdv"></i>
-                        <div class="kpi-data">
-                            <span class="kpi-value" id="kpi-qdv">--</span>
-                            <span class="kpi-label">Qualité de Vie</span>
-                        </div>
-                        <div class="kpi-gauge"><div class="gauge-fill bg-qdv" id="bar-qdv" style="width: 0%"></div></div>
+            <!-- Dashboard Side Panels Container -->
+            <div id="dashboard-layout" class="single-view">
+                <!-- Left Sidebar (Arrondissement A) -->
+                <aside class="sidebar glass-panel" id="sidebar-a">
+                    <div class="sidebar-header">
+                        <h2>District A</h2>
+                        <select id="arrondissement-select-a" class="custom-select">
+                            <option value="0">Vue Globale (Paris)</option>
+                        </select>
                     </div>
-                    <div class="kpi-card">
-                        <i class="fa-solid fa-car-burst kpi-icon color-mob"></i>
-                        <div class="kpi-data">
-                            <span class="kpi-value" id="kpi-mob">--</span>
-                            <span class="kpi-label">Mobilité Urbaine</span>
+                    
+                    <div class="kpi-grid" id="kpi-grid-a">
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-leaf kpi-icon color-qdv"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-qdv-a">--</span>
+                                <span class="kpi-label">Qualité de Vie</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-qdv" id="bar-qdv-a" style="width: 0%"></div></div>
                         </div>
-                        <div class="kpi-gauge"><div class="gauge-fill bg-mob" id="bar-mob" style="width: 0%"></div></div>
-                    </div>
-                    <div class="kpi-card">
-                        <i class="fa-solid fa-landmark-dome kpi-icon color-cul"></i>
-                        <div class="kpi-data">
-                            <span class="kpi-value" id="kpi-cul">--</span>
-                            <span class="kpi-label">Patrimoine Culturel</span>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-car-burst kpi-icon color-mob"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-mob-a">--</span>
+                                <span class="kpi-label">Mobilité Urbaine</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-mob" id="bar-mob-a" style="width: 0%"></div></div>
                         </div>
-                        <div class="kpi-gauge"><div class="gauge-fill bg-cul" id="bar-cul" style="width: 0%"></div></div>
-                    </div>
-                    <div class="kpi-card">
-                        <i class="fa-solid fa-building-user kpi-icon color-ten"></i>
-                        <div class="kpi-data">
-                            <span class="kpi-value" id="kpi-ten">--</span>
-                            <span class="kpi-label">Tension Immobilière</span>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-landmark-dome kpi-icon color-cul"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-cul-a">--</span>
+                                <span class="kpi-label">Patrimoine Culturel</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-cul" id="bar-cul-a" style="width: 0%"></div></div>
                         </div>
-                        <div class="kpi-gauge"><div class="gauge-fill bg-ten" id="bar-ten" style="width: 0%"></div></div>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-building-user kpi-icon color-ten"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-ten-a">--</span>
+                                <span class="kpi-label">Tension Immobilière</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-ten" id="bar-ten-a" style="width: 0%"></div></div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="chart-container">
-                    <h3>Détails Logement & Prix</h3>
-                    <canvas id="housingChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <h3>Services de proximité</h3>
-                    <canvas id="servicesChart"></canvas>
-                </div>
-            </aside>
+                    <div class="chart-container">
+                        <canvas id="radarChartA"></canvas>
+                    </div>
+                </aside>
+
+                <!-- Right Sidebar (Arrondissement B - Visible in Compare Mode) -->
+                <aside class="sidebar glass-panel hidden" id="sidebar-b">
+                    <div class="sidebar-header">
+                        <h2>District B</h2>
+                        <select id="arrondissement-select-b" class="custom-select">
+                            <option value="0">Comparer avec...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="kpi-grid" id="kpi-grid-b">
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-leaf kpi-icon color-qdv"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-qdv-b">--</span>
+                                <span class="kpi-label">Qualité de Vie</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-qdv" id="bar-qdv-b" style="width: 0%"></div></div>
+                        </div>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-car-burst kpi-icon color-mob"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-mob-b">--</span>
+                                <span class="kpi-label">Mobilité Urbaine</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-mob" id="bar-mob-b" style="width: 0%"></div></div>
+                        </div>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-landmark-dome kpi-icon color-cul"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-cul-b">--</span>
+                                <span class="kpi-label">Patrimoine Culturel</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-cul" id="bar-cul-b" style="width: 0%"></div></div>
+                        </div>
+                        <div class="kpi-card">
+                            <i class="fa-solid fa-building-user kpi-icon color-ten"></i>
+                            <div class="kpi-data">
+                                <span class="kpi-value" id="kpi-ten-b">--</span>
+                                <span class="kpi-label">Tension Immobilière</span>
+                            </div>
+                            <div class="kpi-gauge"><div class="gauge-fill bg-ten" id="bar-ten-b" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="radarChartB"></canvas>
+                    </div>
+                </aside>
+            </div>
+
             
             <!-- Comparison Modal (Hidden by default) -->
             <div id="compare-modal" class="modal-overlay hidden">

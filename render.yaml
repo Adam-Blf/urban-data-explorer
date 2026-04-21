@@ -8,3 +8,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
+      - key: RENDER_EXTERNAL_URL
+        value: https://urban-data-explorer-api.onrender.com
+

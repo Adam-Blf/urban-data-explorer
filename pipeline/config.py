@@ -62,6 +62,14 @@ PARIS_DATASETS = {
         "id": "marches-decouverts",
         "format": "json"
     },
+    "arbres": {
+        "id": "les-arbres",
+        "format": "json"
+    },
+    "commerces": {
+        "id": "commerces-a-paris",
+        "format": "json"
+    },
     "culture_events": {
         "id": "que-faire-a-paris-",
         "format": "json"
@@ -77,8 +85,14 @@ PARIS_DATASETS = {
     "arrondissements": { # Fond de carte pour les jointures spatiales
         "id": "arrondissements",
         "format": "geojson"
+    },
+    "qualite_air": {
+        "id": "barometre_aiparif_2021v2",
+        "format": "json"
     }
 }
+
+
 
 # 2. Data.gouv.fr (Plateforme Nationale)
 # Téléchargement direct des dernières versions CSV consolidées par le ministère.

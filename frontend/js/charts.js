@@ -1,109 +1,53 @@
-// Charts Definition
-let housingChartInstance = null;
-let servicesChartInstance = null;
-let compareRadarInstance = null;
+/**
+ * Module de Visualisation (Charts.js)
+ * Auteur : Adam BELOUCIF (Refactored for Split-Screen)
+ * Rôle : Rendu des graphiques radar pour la comparaison et indicateurs.
+ */
+
+let charts = {
+    a: null,
+    b: null
+};
 
 Chart.defaults.color = '#94a3b8';
 Chart.defaults.font.family = "'Outfit', sans-serif";
 
 function initCharts() {
-    // Boilerplate until we load data
+    console.log("📊 Graphiques initialisés.");
 }
 
-function updateHousingChart(data) {
-    const ctx = document.getElementById('housingChart').getContext('2d');
-    if (housingChartInstance) housingChartInstance.destroy();
+/**
+ * Met à jour le graphique radar d'un slot spécifique (A ou B).
+ * @param {Object} data - Données de l'arrondissement.
+ * @param {string} slot - 'a' ou 'b'.
+ */
+function updateRadarChart(data, slot) {
+    const s = slot.toLowerCase();
+    const canvasId = `radarChart${slot.toUpperCase()}`;
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    
+    if (charts[s]) charts[s].destroy();
 
-    housingChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Logements Sociaux (en dizaines)', 'Prix m² (en K€)'],
-            datasets: [{
-                label: 'Métriques',
-                data: [
-                    (data.logements_sociaux || 0) / 10, 
-                    (data.prix_m2 || 0) / 1000
-                ],
-                backgroundColor: [
-                    'rgba(244, 63, 94, 0.6)', 
-                    'rgba(59, 130, 246, 0.6)'
-                ],
-                borderColor: [
-                    '#f43f5e',
-                    '#3b82f6'
-                ],
-                borderWidth: 1,
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            aspectRatio: 1.5,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                x: { grid: { display: false } }
-            }
-        }
-    });
-}
+    const color = s === 'a' ? 'rgba(59, 130, 246, 0.5)' : 'rgba(239, 68, 68, 0.5)';
+    const borderColor = s === 'a' ? '#3b82f6' : '#ef4444';
 
-function updateServicesChart(data) {
-    const ctx = document.getElementById('servicesChart').getContext('2d');
-    if (servicesChartInstance) servicesChartInstance.destroy();
-
-    servicesChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Ecoles', 'Toilettes', 'Marchés'],
-            datasets: [{
-                data: [data.nb_ecoles || 0, data.nb_toilettes || 0, data.nb_marches || 0],
-                backgroundColor: [
-                    'rgba(52, 211, 153, 0.7)',
-                    'rgba(14, 165, 233, 0.7)',
-                    'rgba(245, 158, 11, 0.7)'
-                ],
-                borderWidth: 0,
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            aspectRatio: 1.5,
-            cutout: '60%',
-            plugins: {
-                legend: { position: 'right' }
-            }
-        }
-    });
-}
-
-function updateComparisonRadar(data1, data2, name1, name2) {
-    const ctx = document.getElementById('radarChart').getContext('2d');
-    if (compareRadarInstance) compareRadarInstance.destroy();
-
-    compareRadarInstance = new Chart(ctx, {
+    charts[s] = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Qualité de Vie', 'Mobilité', 'Culture', 'Tension Immo'],
-            datasets: [
-                {
-                    label: name1,
-                    data: [data1.indice_qdv, data1.indice_mobilite, data1.indice_culture, data1.indice_tension],
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                    borderColor: '#3b82f6',
-                    pointBackgroundColor: '#3b82f6',
-                },
-                {
-                    label: name2,
-                    data: [data2.indice_qdv, data2.indice_mobilite, data2.indice_culture, data2.indice_tension],
-                    backgroundColor: 'rgba(244, 63, 94, 0.2)',
-                    borderColor: '#f43f5e',
-                    pointBackgroundColor: '#f43f5e',
-                }
-            ]
+            labels: ['Qualité de Vie', 'Mobilité', 'Patrimoine', 'Dynamisme'],
+            datasets: [{
+                label: `Indicateurs - District ${slot.toUpperCase()}`,
+                data: [
+                    data.qualite_vie || 0, 
+                    data.mobilite || 0, 
+                    data.patrimoine || 0, 
+                    data.tension || 0
+                ],
+                backgroundColor: color,
+                borderColor: borderColor,
+                pointBackgroundColor: borderColor,
+                borderWidth: 2
+            }]
         },
         options: {
             responsive: true,
@@ -112,12 +56,17 @@ function updateComparisonRadar(data1, data2, name1, name2) {
                 r: {
                     angleLines: { color: 'rgba(255,255,255,0.1)' },
                     grid: { color: 'rgba(255,255,255,0.1)' },
-                    pointLabels: { color: '#94a3b8', font: { size: 14 } },
-                    ticks: { display: false, min: 0, max: 100 }
+                    pointLabels: { 
+                        color: '#94a3b8', 
+                        font: { size: 12, weight: '500' } 
+                    },
+                    ticks: { display: false, min: 0, max: 100, stepSize: 20 },
+                    suggestedMin: 0,
+                    suggestedMax: 100
                 }
             },
             plugins: {
-                legend: { position: 'top', labels: { color: '#fff', font: { size: 14 } } }
+                legend: { display: false }
             }
         }
     });

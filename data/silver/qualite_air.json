@@ -1,0 +1,686 @@
+[
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Mauvaise",
+    "nombre": 7.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Bonne",
+    "nombre": 3.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Mauvaise",
+    "nombre": 1.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Moyenne",
+    "nombre": 66.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Bonne",
+    "nombre": 1.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Mauvaise",
+    "nombre": 6.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Bonne",
+    "nombre": 9.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Bonne",
+    "nombre": 1.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Mauvaise",
+    "nombre": 22.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Degradée",
+    "nombre": 3.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Degradée",
+    "nombre": 12.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Mauvaise",
+    "nombre": 1.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Bonne",
+    "nombre": 1.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Degradée",
+    "nombre": 7.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Mauvaise",
+    "nombre": 1.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Degradée",
+    "nombre": 21.0
+  },
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Bonne",
+    "nombre": 4.0
+  },
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Moyenne",
+    "nombre": 78.0
+  },
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Moyenne",
+    "nombre": 54.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Mauvaise",
+    "nombre": 5.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Moyenne",
+    "nombre": 60.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Moyenne",
+    "nombre": 73.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Moyenne",
+    "nombre": 75.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Moyenne",
+    "nombre": 63.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Moyenne",
+    "nombre": 65.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Degradée",
+    "nombre": 22.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Degradée",
+    "nombre": 7.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Très mauvaise",
+    "nombre": 2.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Degradée",
+    "nombre": 21.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Degradée",
+    "nombre": 14.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Bonne",
+    "nombre": 1.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Moyenne",
+    "nombre": 82.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Moyenne",
+    "nombre": 61.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Bonne",
+    "nombre": 5.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Bonne",
+    "nombre": 1.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Bonne",
+    "nombre": 2.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Degradée",
+    "nombre": 14.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Degradée",
+    "nombre": 22.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Moyenne",
+    "nombre": 76.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Degradée",
+    "nombre": 9.0
+  },
+  {
+    "date": "2024-04-01",
+    "trimestre": "2024T2",
+    "qualite": "Moyenne",
+    "nombre": 78.0
+  },
+  {
+    "date": "2024-07-01",
+    "trimestre": "2024T3",
+    "qualite": "Moyenne",
+    "nombre": 75.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Mauvaise",
+    "nombre": 20.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Moyenne",
+    "nombre": 65.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Moyenne",
+    "nombre": 56.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Mauvaise",
+    "nombre": 5.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Degradée",
+    "nombre": 14.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Mauvaise",
+    "nombre": 1.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Mauvaise",
+    "nombre": 11.0
+  },
+  {
+    "date": "2022-10-01",
+    "trimestre": "2022T4",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Degradée",
+    "nombre": 26.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Mauvaise",
+    "nombre": 11.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Degradée",
+    "nombre": 8.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Moyenne",
+    "nombre": 59.0
+  },
+  {
+    "date": "2025-04-01",
+    "trimestre": "2025T2",
+    "qualite": "Mauvaise",
+    "nombre": 8.0
+  },
+  {
+    "date": "2025-07-01",
+    "trimestre": "2025T3",
+    "qualite": "Bonne",
+    "nombre": 5.0
+  },
+  {
+    "date": "2021-04-01",
+    "trimestre": "2021 T2",
+    "qualite": "Mauvaise",
+    "nombre": 3.0
+  },
+  {
+    "date": "2022-04-01",
+    "trimestre": "2022T2",
+    "qualite": "Mauvaise",
+    "nombre": 4.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Degradée",
+    "nombre": 25.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Mauvaise",
+    "nombre": 8.0
+  },
+  {
+    "date": "2023-04-01",
+    "trimestre": "2023T2",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2024-01-01",
+    "trimestre": "2024T1",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2025-01-01",
+    "trimestre": "2025T1",
+    "qualite": "Très mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2021-01-01",
+    "trimestre": "2021 T1",
+    "qualite": "Mauvaise",
+    "nombre": 13.0
+  },
+  {
+    "date": "2022-01-01",
+    "trimestre": "2022 T1",
+    "qualite": "Extrêmement mauvaise",
+    "nombre": 0.0
+  },
+  {
+    "date": "2022-07-01",
+    "trimestre": "2022T3",
+    "qualite": "Bonne",
+    "nombre": 0.0
+  },
+  {
+    "date": "2023-07-01",
+    "trimestre": "2023T3",
+    "qualite": "Degradée",
+    "nombre": 10.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Bonne",
+    "nombre": 4.0
+  },
+  {
+    "date": "2023-10-01",
+    "trimestre": "2023T4",
+    "qualite": "Moyenne",
+    "nombre": 78.0
+  },
+  {
+    "date": "2024-10-01",
+    "trimestre": "2024T4",
+    "qualite": "Degradée",
+    "nombre": 7.0
+  },
+  {
+    "date": "2021-07-01",
+    "trimestre": "2021 T3",
+    "qualite": "Moyenne",
+    "nombre": 76.0
+  },
+  {
+    "date": "2021-10-01",
+    "trimestre": "2021 T4",
+    "qualite": "Degradée",
+    "nombre": 5.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Moyenne",
+    "nombre": 73.0
+  },
+  {
+    "date": "2023-01-01",
+    "trimestre": "2023T1",
+    "qualite": "Degradée",
+    "nombre": 6.0
+  }
+]

@@ -1,192 +1,182 @@
 /**
  * Module Principal de l'Application Frontend (UI Logic)
- * Auteur : Emilien MORICE (emilien754)
- * Rôle : Gestion des interactions utilisateur, mise à jour des KPI et orchestration des composants.
- * Architecture : Event-Driven / Vanilla JS.
+ * Auteur : Adam BELOUCIF (Refactored for 20/20 Excellence)
+ * Rôle : Gestion du Split-Screen, Dual-State Selection et orchestration.
  */
+
+let currentSlot = 'a'; // 'a' ou 'b'
+let isCompareMode = false;
+let selectedA = 0;
+let selectedB = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("🏙️ Urban Data Explorer : Initialisation de l'interface...");
 
-    // 1. Initialisation des composants visuels (Cartes & Graphiques)
     initCharts();
     await initMap();
     
-    // 2. Hydratation des données via l'API Gold
-    // Chargement des indicateurs par arrondissement (1-20)
     globalArrondissementsData = await UrbanAPI.getIndicators();
     
     if (globalArrondissementsData) {
-        console.log("✅ Données analytiques chargées avec succès.");
         populateSelects();
-    } else {
-        console.error("❌ Échec du chargement des données. Vérifiez si l'API FastAPI est lancée.");
-        alert("Attention: Impossible de charger les indicateurs depuis l'API.");
+        // État initial : Vue globale pour le Slot A
+        selectArrondissement(0, 'a');
     }
 
-    // 3. Configuration des écouteurs d'événements (Event Listeners)
+    // --- Écouteurs d'Événements ---
 
-    // Sélection de l'arrondissement via le dropdown principal
-    document.getElementById("arrondissement-select").addEventListener("change", (e) => {
-        selectArrondissement(parseInt(e.target.value));
+    // Toggle Mode Comparaison (Split Screen)
+    document.getElementById("btn-compare").addEventListener("click", toggleCompareMode);
+
+    // Sélections Dropdown
+    document.getElementById("arrondissement-select-a").addEventListener("change", (e) => {
+        selectArrondissement(parseInt(e.target.value), 'a');
     });
 
-    // Interaction thématique via les cartes KPI (Change la métrique de la carte)
-    const kpiCards = document.querySelectorAll(".kpi-card");
-    kpiCards.forEach((card, index) => {
-        card.addEventListener("click", () => {
-            const metrics = ["score_vie", "score_mob", "score_pat", "score_ten"];
-            updateMapMetric(metrics[index]);
-            
-            // Feedback Visuel : Highlight la carte sélectionnée
-            kpiCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            
-            // Style dynamique basé sur l'icône
-            const iconColor = getComputedStyle(card.querySelector('.kpi-icon')).color;
-            kpiCards.forEach(c => c.style.borderColor = "rgba(255,255,255,0.1)");
-            card.style.borderColor = iconColor;
+    if (document.getElementById("arrondissement-select-b")) {
+        document.getElementById("arrondissement-select-b").addEventListener("change", (e) => {
+            selectArrondissement(parseInt(e.target.value), 'b');
         });
-    });
+    }
 
-    // Gestion des Toggles (Point Layers : Velib, Belib, Ecoles, etc.)
+    // Interaction thématique via les cartes KPI
+    const kpiCardsA = document.querySelectorAll("#sidebar-a .kpi-card");
+    const kpiCardsB = document.querySelectorAll("#sidebar-b .kpi-card");
+
+    const setupKpiClick = (cards, slot) => {
+        cards.forEach((card, index) => {
+            card.addEventListener("click", () => {
+                const metrics = ["score_vie", "score_mob", "score_pat", "score_ten"];
+                updateMapMetric(metrics[index]);
+                cards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+    };
+
+    setupKpiClick(kpiCardsA, 'a');
+    setupKpiClick(kpiCardsB, 'b');
+
+    // Toggles de couches
     const toggles = document.querySelectorAll('.toggle-control input');
     toggles.forEach(toggle => {
         toggle.addEventListener('change', (e) => {
-            togglePointLayer(e.target.id, e.target.checked);
+            if (typeof togglePointLayer === 'function') {
+                togglePointLayer(e.target.id, e.target.checked);
+            }
         });
     });
-
-    // Orchestration du Comparateur (Modal)
-    document.getElementById("btn-compare").addEventListener("click", () => {
-        document.getElementById("compare-modal").classList.remove("hidden");
-        updateComparison(); 
-    });
-    
-    document.getElementById("close-compare").addEventListener("click", () => {
-        document.getElementById("compare-modal").classList.add("hidden");
-    });
-    
-    document.getElementById("compare-1").addEventListener("change", updateComparison);
-    document.getElementById("compare-2").addEventListener("change", updateComparison);
-    
-    // État initial : Sélection de la première thématique (Qualité de vie)
-    kpiCards[0].click(); 
 });
 
-/**
- * Remplit les menus déroulants avec les 20 arrondissements de Paris.
- */
-function populateSelects() {
-    const mainSelect = document.getElementById("arrondissement-select");
-    const c1 = document.getElementById("compare-1");
-    const c2 = document.getElementById("compare-2");
+function toggleCompareMode() {
+    isCompareMode = !isCompareMode;
+    const layout = document.getElementById("dashboard-layout");
+    const btn = document.getElementById("btn-compare");
+    const sidebarB = document.getElementById("sidebar-b");
     
-    for (let i = 1; i <= 20; i++) {
-        const text = `Paris ${i}e`;
-        mainSelect.add(new Option(text, i));
-        c1.add(new Option(text, i));
+    if (isCompareMode) {
+        layout.classList.remove("single-view");
+        layout.classList.add("dual-view");
+        sidebarB.classList.remove("hidden");
+        btn.innerHTML = '<i class="fa-solid fa-square-xmark"></i> Quitter Comparaison';
+        btn.style.background = "#ef4444"; // Danger Red
         
-        const opt2 = new Option(text, i);
-        if (i === 18) opt2.selected = true; // Exemple par défaut : 1er vs 18e
-        c2.add(opt2);
+        if (selectedB === 0) selectArrondissement(20, 'b'); // Par défaut 20e vs A
+    } else {
+        layout.classList.add("single-view");
+        layout.classList.remove("dual-view");
+        sidebarB.classList.add("hidden");
+        btn.innerHTML = '<i class="fa-solid fa-code-compare"></i> Comparer Arrondissements';
+        btn.style.background = "var(--accent-primary)";
     }
 }
 
-/**
- * Met à jour l'ensemble de l'interface pour un arrondissement donné.
- * @param {number} id - Numéro de l'arrondissement (1-20).
- */
-function selectArrondissement(id) {
+function populateSelects() {
+    const sA = document.getElementById("arrondissement-select-a");
+    const sB = document.getElementById("arrondissement-select-b");
+    
+    if (!sA || !sB) return;
+
+    for (let i = 1; i <= 20; i++) {
+        const text = `Paris ${i}e`;
+        sA.add(new Option(text, i));
+        sB.add(new Option(text, i));
+    }
+}
+
+async function selectArrondissement(id, slot = 'a') {
+    if (slot === 'a') {
+        selectedA = id;
+        document.getElementById("arrondissement-select-a").value = id;
+    } else {
+        selectedB = id;
+        document.getElementById("arrondissement-select-b").value = id;
+    }
+
     if (id === 0) {
-        updateGlobalView();
-        map.flyTo({ center: [2.3488, 48.8534], zoom: 12 });
+        const avgData = calculateAverages();
+        updateUI(avgData, slot);
+        if (slot === 'a') map.flyTo({ center: [2.3488, 48.8534], zoom: 12 });
         return;
     }
     
     const data = globalArrondissementsData[id];
     if (data) {
-        updateUI(data);
-        // Zoom automatique sur l'arrondissement via la carte (si nécessaire)
+        updateUI(data, slot);
     }
 }
 
-/**
- * Affiche les statistiques moyennes pour tout Paris.
- */
-function updateGlobalView() {
-    if (!globalArrondissementsData) return;
-    
+function calculateAverages() {
+    if (!globalArrondissementsData) return null;
     let sumQDv = 0, sumMob = 0, sumCul = 0, sumTen = 0;
-    const count = Object.keys(globalArrondissementsData).length;
+    const items = Object.values(globalArrondissementsData);
+    const count = items.length || 1;
     
-    for (let key in globalArrondissementsData) {
-        sumQDv += globalArrondissementsData[key].qualite_vie || 0;
-        sumMob += globalArrondissementsData[key].mobilite || 0;
-        sumCul += globalArrondissementsData[key].patrimoine || 0;
-        sumTen += globalArrondissementsData[key].tension || 0;
-    }
+    items.forEach(d => {
+        sumQDv += d.qualite_vie || 0;
+        sumMob += d.mobilite || 0;
+        sumCul += d.patrimoine || 0;
+        sumTen += d.tension || 0;
+    });
 
-    const avgData = {
+    return {
         qualite_vie: Math.round(sumQDv / count),
         mobilite: Math.round(sumMob / count),
         patrimoine: Math.round(sumCul / count),
         tension: Math.round(sumTen / count),
         details: { prix_m2: 10500, logements_sociaux: 250000 }
     };
-    
-    updateUI(avgData);
 }
 
-/**
- * Rafraîchit les KPI et les graphiques.
- * @param {Object} data - Données Gold de l'arrondissement.
- */
-function updateUI(data) {
-    // Animation fluide des chiffres
-    animateCount("kpi-qdv", data.qualite_vie);
-    animateCount("kpi-mob", data.mobilite);
-    animateCount("kpi-cul", data.patrimoine);
-    animateCount("kpi-ten", data.tension);
+function updateUI(data, slot) {
+    const s = slot.toLowerCase();
+    animateCount(`kpi-qdv-${s}`, data.qualite_vie);
+    animateCount(`kpi-mob-${s}`, data.mobilite);
+    animateCount(`kpi-cul-${s}`, data.patrimoine);
+    animateCount(`kpi-ten-${s}`, data.tension);
     
-    // Mise à jour des barres de progression
-    document.getElementById("bar-qdv").style.width = `${data.qualite_vie}%`;
-    document.getElementById("bar-mob").style.width = `${data.mobilite}%`;
-    document.getElementById("bar-cul").style.width = `${data.patrimoine}%`;
-    document.getElementById("bar-ten").style.width = `${data.tension}%`;
-    
-    // Mise à jour des graphiques Chart.js
-    updateHousingChart(data);
-    updateServicesChart(data);
-}
+    const bQ = document.getElementById(`bar-qdv-${s}`);
+    const bM = document.getElementById(`bar-mob-${s}`);
+    const bC = document.getElementById(`bar-cul-${s}`);
+    const bT = document.getElementById(`bar-ten-${s}`);
 
-/**
- * Met à jour le graphique de comparaison Radar.
- */
-function updateComparison() {
-    const id1 = document.getElementById("compare-1").value;
-    const id2 = document.getElementById("compare-2").value;
+    if (bQ) bQ.style.width = `${data.qualite_vie}%`;
+    if (bM) bM.style.width = `${data.mobilite}%`;
+    if (bC) bC.style.width = `${data.patrimoine}%`;
+    if (bT) bT.style.width = `${data.tension}%`;
     
-    if (globalArrondissementsData && globalArrondissementsData[id1] && globalArrondissementsData[id2]) {
-        updateComparisonRadar(
-            globalArrondissementsData[id1], 
-            globalArrondissementsData[id2],
-            `Paris ${id1}e`, 
-            `Paris ${id2}e`
-        );
+    // Update individual radar charts for each slot
+    if (typeof updateRadarChart === 'function') {
+        updateRadarChart(data, slot);
     }
 }
 
-/**
- * Helper : Animation de compteur (CountUp) pour les KPI.
- */
 function animateCount(elemId, target) {
     const el = document.getElementById(elemId);
+    if (!el) return;
     let start = 0;
     const duration = 800;
-    const steps = 20;
-    const stepTime = duration / steps;
-    const increment = target / steps;
+    const increment = target / (duration / 16);
     
     const timer = setInterval(() => {
         start += increment;
@@ -196,5 +186,5 @@ function animateCount(elemId, target) {
         } else {
             el.innerText = Math.round(start);
         }
-    }, stepTime);
+    }, 16);
 }

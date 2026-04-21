@@ -1,1 +1,4321 @@
-[]
+[
+  {
+    "nom": "WC",
+    "lat": 48.8635329953232,
+    "lon": 2.342529116536389,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86235400010427,
+    "lon": 2.3422090001035785,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86734758386589,
+    "lon": 2.3540127664042605,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85522108096124,
+    "lon": 2.365276627759591,
+    "acces_pmr": "Non",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86022100024615,
+    "lon": 2.350380999814234,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85445899991381,
+    "lon": 2.3309899996955994,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.862506999594046,
+    "lon": 2.310900000016987,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87873399962815,
+    "lon": 2.358600000445668,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86174800033497,
+    "lon": 2.3726620002059193,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86058300021109,
+    "lon": 2.374601999852079,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84310448474707,
+    "lon": 2.4204189876204447,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.850021923997524,
+    "lon": 2.376966217600214,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84924999991015,
+    "lon": 2.37115100002481,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84888019555787,
+    "lon": 2.3676189245638684,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.822863313168874,
+    "lon": 2.458262733620495,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82392400040274,
+    "lon": 2.358158000071719,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8349649999147,
+    "lon": 2.3463720004044526,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84038080012922,
+    "lon": 2.2790591009497088,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86236300033649,
+    "lon": 2.2682330002198334,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83985200043711,
+    "lon": 2.2630849998625098,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87893599967904,
+    "lon": 2.294483000629384,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89525799997793,
+    "lon": 2.3595610006604915,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.882676999876686,
+    "lon": 2.336451000082447,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89346599973612,
+    "lon": 2.336828000433842,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86489899973789,
+    "lon": 2.3998249994463534,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85473800037653,
+    "lon": 2.395936999373824,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86836900011861,
+    "lon": 2.381853999881199,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87072500007379,
+    "lon": 2.409188000439303,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85284931542226,
+    "lon": 2.351064327131835,
+    "acces_pmr": "Non",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86155799965233,
+    "lon": 2.35003599988823,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84221838628398,
+    "lon": 2.337260643906852,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84286800014476,
+    "lon": 2.3275829994274915,
+    "acces_pmr": "Non",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84122000004061,
+    "lon": 2.332351000486413,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86261171554387,
+    "lon": 2.3196494118205013,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85433100021918,
+    "lon": 2.3051089994689358,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87629499978287,
+    "lon": 2.3614029999510397,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87743100005244,
+    "lon": 2.3708719998770422,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86576100043247,
+    "lon": 2.37761300023142,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84657172830047,
+    "lon": 2.4039110734655846,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.838922999875344,
+    "lon": 2.389580000482424,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.847455999950604,
+    "lon": 2.37180299975841,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.840502999686144,
+    "lon": 2.392042000365784,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.827498385447356,
+    "lon": 2.3673178731393754,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82302967544841,
+    "lon": 2.3485091460670224,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85555399956984,
+    "lon": 2.2898729994070504,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85125999992028,
+    "lon": 2.2753980004073235,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.868443030700334,
+    "lon": 2.24571855392109,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8811389996345,
+    "lon": 2.2829540000409247,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.897914000345686,
+    "lon": 2.329484000444752,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88419800002976,
+    "lon": 2.3551060006538584,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89989643206477,
+    "lon": 2.366573420983327,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85392001355039,
+    "lon": 2.401213778352068,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87081299107255,
+    "lon": 2.4112649493156337,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85533899971065,
+    "lon": 2.415241999740021,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.849620046843484,
+    "lon": 2.40370184146147,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86309999967739,
+    "lon": 2.352738000085078,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85650199997113,
+    "lon": 2.349804999950442,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84949300006735,
+    "lon": 2.366126999945174,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87581195724887,
+    "lon": 2.304961341601859,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87539799993754,
+    "lon": 2.3151160002183904,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87677500038332,
+    "lon": 2.346886999517786,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88017200006998,
+    "lon": 2.36732200062348,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87625100031507,
+    "lon": 2.3681969998527252,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8574710001974,
+    "lon": 2.3924470002462113,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83825700255321,
+    "lon": 2.4446432727101692,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83742064610817,
+    "lon": 2.4475953145869003,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.841005862551526,
+    "lon": 2.402205289443234,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82858708787678,
+    "lon": 2.349436628935091,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.821014127516676,
+    "lon": 2.35678871657851,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82166498960514,
+    "lon": 2.3758995602355886,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82978900039544,
+    "lon": 2.368977999556735,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82227702153403,
+    "lon": 2.336591562073573,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83134761087849,
+    "lon": 2.320531757502638,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8323179998504,
+    "lon": 2.3308930005580017,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82566699985328,
+    "lon": 2.315061000374368,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84209645009474,
+    "lon": 2.2752968060267973,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.833131999824694,
+    "lon": 2.2995150000862523,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8422429999721,
+    "lon": 2.2561819999758157,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.894764966209635,
+    "lon": 2.326850236952466,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89484000010782,
+    "lon": 2.3143000003616483,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88450599960812,
+    "lon": 2.344665999897245,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8992760000466,
+    "lon": 2.3405330004326794,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.887338736045145,
+    "lon": 2.343535464617314,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89897599974761,
+    "lon": 2.386777000523741,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888696000220584,
+    "lon": 2.3739280000810385,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.878626999897804,
+    "lon": 2.3782569996445666,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.857736689764785,
+    "lon": 2.4060322699889594,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87498499083153,
+    "lon": 2.3992812572847195,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86316500012886,
+    "lon": 2.3418320005004327,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.864851999714816,
+    "lon": 2.3516230003101315,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.867368000158166,
+    "lon": 2.3539869993359095,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "WC",
+    "lat": 48.854278089074455,
+    "lon": 2.3545796777169627,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8607969998681,
+    "lon": 2.3513150004040457,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84782200009687,
+    "lon": 2.3439919994121317,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Urinoir femme",
+    "lat": 48.848303078499335,
+    "lon": 2.3590599814167366,
+    "acces_pmr": "Non",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.841318000011505,
+    "lon": 2.3562390003168203,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86516300032715,
+    "lon": 2.3180510003316344,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87004800003424,
+    "lon": 2.3666020002139914,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8680320000993,
+    "lon": 2.365234000168771,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86568599967996,
+    "lon": 2.3809620003827687,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.846122000363245,
+    "lon": 2.37656199946577,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8441029998056,
+    "lon": 2.4112259998051573,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84711699958415,
+    "lon": 2.384212000518841,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.826202786392535,
+    "lon": 2.3748344955656324,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82304802120928,
+    "lon": 2.3643766938524524,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82961672332092,
+    "lon": 2.379618709145078,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.821251000296556,
+    "lon": 2.369023000521541,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83301699993433,
+    "lon": 2.331193000598376,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84174621365813,
+    "lon": 2.2761964354273543,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85724500040771,
+    "lon": 2.291110000602172,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.845887999766205,
+    "lon": 2.2559780002277843,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89161847331643,
+    "lon": 2.3144877004250732,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88566799997428,
+    "lon": 2.3263190003680143,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.895789999814355,
+    "lon": 2.3459840001934857,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.900707999615555,
+    "lon": 2.3402449995031565,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88440200017035,
+    "lon": 2.330284000482643,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8990230002305,
+    "lon": 2.3377140002823458,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88659200023629,
+    "lon": 2.3771520001702493,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8798695519275,
+    "lon": 2.3851685144141865,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.883499999978575,
+    "lon": 2.3834239996492426,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.88531561271516,
+    "lon": 2.372034229443866,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88106418703482,
+    "lon": 2.3873090506008023,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85581626708709,
+    "lon": 2.4015086818295086,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.866766000213,
+    "lon": 2.3833749997622435,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86626191493033,
+    "lon": 2.4097626243737658,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87006399987241,
+    "lon": 2.329369999633761,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86275600006959,
+    "lon": 2.359337999553333,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.860068000390896,
+    "lon": 2.36070300013047,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8577865433105,
+    "lon": 2.349321267856243,
+    "acces_pmr": "Non",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84326200012617,
+    "lon": 2.3507700001216016,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.841765000286124,
+    "lon": 2.337491000210142,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.862950773927956,
+    "lon": 2.309290123883407,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.853583000261125,
+    "lon": 2.311350000458147,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88271599957815,
+    "lon": 2.343379000255218,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87716500003902,
+    "lon": 2.3550860001821023,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8547522462135,
+    "lon": 2.3940091345940764,
+    "acces_pmr": "Non",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86490000031819,
+    "lon": 2.3760440001918792,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.840437999723655,
+    "lon": 2.4046250000370883,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83470680271946,
+    "lon": 2.4067865540145665,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83652400037507,
+    "lon": 2.404424000410672,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83965399978955,
+    "lon": 2.3617629994569604,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82225626602283,
+    "lon": 2.3236001578901857,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8189959997807,
+    "lon": 2.3443319997521512,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82795466191802,
+    "lon": 2.322543506474705,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.846033999806316,
+    "lon": 2.308885999428817,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.867765583257565,
+    "lon": 2.2947040778061325,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.883118000401375,
+    "lon": 2.325236000174818,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8963399997984,
+    "lon": 2.3529850000351793,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.888348035569166,
+    "lon": 2.366157104749158,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.879452251121414,
+    "lon": 2.382729246215703,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.882377968834255,
+    "lon": 2.3827790219788856,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.885789999828496,
+    "lon": 2.3703740004690315,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86414400014382,
+    "lon": 2.4091379994704725,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.857055000000464,
+    "lon": 2.4045350000751977,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8662639998932,
+    "lon": 2.3897559999677913,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86893600009567,
+    "lon": 2.340639000086698,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86112300001341,
+    "lon": 2.367030999614015,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.852020021082176,
+    "lon": 2.3606999839537917,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.860529999632405,
+    "lon": 2.35117099989451,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84433299987727,
+    "lon": 2.3606220006197094,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87943422815411,
+    "lon": 2.3061560915147212,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87858749586786,
+    "lon": 2.336728380224635,
+    "acces_pmr": "Non",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88355600007844,
+    "lon": 2.3335029995805887,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87184499980991,
+    "lon": 2.3654770003332772,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.874592990978734,
+    "lon": 2.362746272451846,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87075900013074,
+    "lon": 2.354575000128536,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.876193000062784,
+    "lon": 2.372206000330588,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85705699961709,
+    "lon": 2.3793530002626153,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84620599974493,
+    "lon": 2.411279000289181,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.81872280496346,
+    "lon": 2.3603105337704053,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.828350000238366,
+    "lon": 2.3766289996508227,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.818985999956716,
+    "lon": 2.3575760003024606,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82669999980564,
+    "lon": 2.3418059999088467,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82765799983502,
+    "lon": 2.311417000462912,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82624000023127,
+    "lon": 2.3053559995891075,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89189723662848,
+    "lon": 2.304142778577189,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87497799960401,
+    "lon": 2.295708000355636,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88150300016054,
+    "lon": 2.2955319997723596,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88912500041226,
+    "lon": 2.3451110000948807,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8966156453422,
+    "lon": 2.363820903429186,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88421400037466,
+    "lon": 2.328972999602953,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89777199983381,
+    "lon": 2.3417379994179384,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88324600019954,
+    "lon": 2.345855999825567,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88303199992398,
+    "lon": 2.3814320001101352,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86840100026175,
+    "lon": 2.389873999903682,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87154116048027,
+    "lon": 2.384968920960215,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.87142182795628,
+    "lon": 2.385813917618,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86001899986408,
+    "lon": 2.40103099972282,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888842000218574,
+    "lon": 2.3790580004698865,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87669393738172,
+    "lon": 2.3931583796208193,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86379599961598,
+    "lon": 2.389195000186024,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.862250005118426,
+    "lon": 2.3463609754114185,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85797799960644,
+    "lon": 2.346546000463207,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86876100022834,
+    "lon": 2.343226999493932,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.871311000377034,
+    "lon": 2.3436539998311914,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86428649324811,
+    "lon": 2.360499743483085,
+    "acces_pmr": "Non",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.874335999751764,
+    "lon": 2.320433000475625,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85042799976941,
+    "lon": 2.3839940003683404,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.847117999654465,
+    "lon": 2.40746299964385,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84435659522636,
+    "lon": 2.381996875345674,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84196340767003,
+    "lon": 2.409904209035685,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.834474259928996,
+    "lon": 2.342501412608784,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83791699997501,
+    "lon": 2.3556389995511884,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82619075481292,
+    "lon": 2.3382298412088063,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82377533751297,
+    "lon": 2.318778528754187,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.822634999746384,
+    "lon": 2.3288419999339864,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82435200002841,
+    "lon": 2.3211240000695974,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83140699960149,
+    "lon": 2.315755000561693,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83865000033367,
+    "lon": 2.3200149997476203,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83193400009531,
+    "lon": 2.302731999726336,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.840913000180066,
+    "lon": 2.3164160006734824,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83716199962859,
+    "lon": 2.2968000000475284,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.842774535610474,
+    "lon": 2.2974060618595407,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84127764690941,
+    "lon": 2.285555470451857,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83623800016424,
+    "lon": 2.2816640003019857,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.844844108071605,
+    "lon": 2.2691726043891225,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84845599967594,
+    "lon": 2.2571669993722003,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.845990000123685,
+    "lon": 2.2690679997469223,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88785096721723,
+    "lon": 2.2935815375928916,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888861999774,
+    "lon": 2.2975689997764004,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888480999620306,
+    "lon": 2.3157870003157077,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.899396000353256,
+    "lon": 2.3444620003732797,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86552499977582,
+    "lon": 2.3522500005228077,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "WC",
+    "lat": 48.853549579130835,
+    "lon": 2.3539016527283474,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8541569998975,
+    "lon": 2.3560319998420343,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83920299969486,
+    "lon": 2.3387829995144718,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83796300030022,
+    "lon": 2.351201000675956,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.855008999651,
+    "lon": 2.300448000570928,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.86726257414111,
+    "lon": 2.3170898782796265,
+    "acces_pmr": "Non",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8827379996895,
+    "lon": 2.3434889998913424,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88170100015116,
+    "lon": 2.3454389995445704,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.883961999565514,
+    "lon": 2.331781000436028,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86840899962093,
+    "lon": 2.3634090001921604,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.872324000304815,
+    "lon": 2.3696019996603654,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.874612000118276,
+    "lon": 2.36274000000879,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.869003999831435,
+    "lon": 2.3562090006801126,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87557278769458,
+    "lon": 2.3613396833828313,
+    "acces_pmr": "Non",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.832777621760634,
+    "lon": 2.414299843157846,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84528899957986,
+    "lon": 2.3692559997890204,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.843692999864764,
+    "lon": 2.401883000548471,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.847431000203116,
+    "lon": 2.3954909999106944,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84416299993688,
+    "lon": 2.4410950000563707,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84446500030273,
+    "lon": 2.377441000293956,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84285654035907,
+    "lon": 2.3882835200147157,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83133948652227,
+    "lon": 2.348139173841785,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.821612195284416,
+    "lon": 2.3483757362666657,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82948800034881,
+    "lon": 2.349431999860653,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.833940000016895,
+    "lon": 2.314572999428689,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82123528699989,
+    "lon": 2.336047444337296,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.839090999926285,
+    "lon": 2.282565000035356,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83951900010157,
+    "lon": 2.2913129996138974,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.846002972916274,
+    "lon": 2.2528237722993447,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86831300009682,
+    "lon": 2.293730000289752,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83839599968173,
+    "lon": 2.2586289995600968,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89581500042085,
+    "lon": 2.3280460003061214,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.878431999995215,
+    "lon": 2.3739559999400193,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89925173270559,
+    "lon": 2.3744646190808827,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89770400022884,
+    "lon": 2.37659900036232,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87157400006918,
+    "lon": 2.402133000083452,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.852652999949676,
+    "lon": 2.3683649994164124,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "WC",
+    "lat": 48.845456223644945,
+    "lon": 2.3532438534336686,
+    "acces_pmr": "Non",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87254300024813,
+    "lon": 2.3265210001099694,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87815499981868,
+    "lon": 2.3616439994155423,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87111399971983,
+    "lon": 2.36099799953849,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.87207827833964,
+    "lon": 2.3644474054843485,
+    "acces_pmr": "Non",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86582400035271,
+    "lon": 2.3693620003229823,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86969599974975,
+    "lon": 2.371148999796178,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.867270999745976,
+    "lon": 2.368349000020222,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.851992478470365,
+    "lon": 2.3809239992368436,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.845600999856394,
+    "lon": 2.3849130003823196,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.829127999752224,
+    "lon": 2.3607159996714113,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8337069998535,
+    "lon": 2.365073999519075,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83064100039682,
+    "lon": 2.353364999561522,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.81990547173018,
+    "lon": 2.361947467270594,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83195400015655,
+    "lon": 2.313222999764901,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83033800032827,
+    "lon": 2.333811999463941,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82455600034032,
+    "lon": 2.339524000475489,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.834812000126654,
+    "lon": 2.332134999323913,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.824990000266716,
+    "lon": 2.311332000086151,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83926220674336,
+    "lon": 2.306357573467657,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8309549998389,
+    "lon": 2.2919599996490962,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85105900025366,
+    "lon": 2.295117000147868,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84091199984846,
+    "lon": 2.3002929993416408,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83808899998454,
+    "lon": 2.2779889994831684,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84653499962192,
+    "lon": 2.2847800004937246,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.843817611869724,
+    "lon": 2.2685112822119478,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89728300032829,
+    "lon": 2.3590869996795547,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89642000005421,
+    "lon": 2.3345859997408973,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88975238964436,
+    "lon": 2.3635013194466503,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89225644637529,
+    "lon": 2.339101315132686,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89500623204368,
+    "lon": 2.3532738607939145,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88427299956943,
+    "lon": 2.3673839993875667,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87045899931411,
+    "lon": 2.385561775235243,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87592999972109,
+    "lon": 2.4069080001652554,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8635660000149,
+    "lon": 2.3424760006223413,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "WC",
+    "lat": 48.858224759756716,
+    "lon": 2.363290756873782,
+    "acces_pmr": "Non",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85321800009419,
+    "lon": 2.359600999616255,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84038899996341,
+    "lon": 2.361277999417304,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84623700043839,
+    "lon": 2.3548760000015174,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85139700039018,
+    "lon": 2.34281200042014,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86958033266654,
+    "lon": 2.312433694953087,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87761600030234,
+    "lon": 2.32703499949662,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "WC",
+    "lat": 48.877220135034726,
+    "lon": 2.3467356473599623,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87575799968338,
+    "lon": 2.36045199996412,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85389799975062,
+    "lon": 2.369659999910584,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.822675000277414,
+    "lon": 2.366831000158784,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82376170264877,
+    "lon": 2.3369443388318576,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84785199976075,
+    "lon": 2.3020870000183318,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84554300024747,
+    "lon": 2.301903999451625,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83566000042267,
+    "lon": 2.3026020002043985,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84762442984191,
+    "lon": 2.256663501525257,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.855364641497715,
+    "lon": 2.2829801193776933,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88403600002253,
+    "lon": 2.3042199996773927,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.890815999562285,
+    "lon": 2.3196469999756277,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.883342999654786,
+    "lon": 2.3262660000526107,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88409599982888,
+    "lon": 2.3521919996635696,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.896914000104445,
+    "lon": 2.3594679996442203,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.90111799966754,
+    "lon": 2.3444070003233,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88837160642731,
+    "lon": 2.3371101598781707,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.872420405495575,
+    "lon": 2.4121436972104693,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.864860999801245,
+    "lon": 2.4007799997498127,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87193799995212,
+    "lon": 2.392061000008219,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85332099971272,
+    "lon": 2.4092419994786365,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84613600025297,
+    "lon": 2.3400460002316805,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85111943873878,
+    "lon": 2.3256456465969055,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.86181155673819,
+    "lon": 2.3222825945335166,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85636680208473,
+    "lon": 2.2964253340959515,
+    "acces_pmr": "Non",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.855055715390506,
+    "lon": 2.3004471484940945,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85162799987539,
+    "lon": 2.325177999564928,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87225799975622,
+    "lon": 2.3766129993778713,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87221299997781,
+    "lon": 2.3649209994630906,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86626700040959,
+    "lon": 2.365007000217622,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86725312324554,
+    "lon": 2.36837638005999,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.833983191521675,
+    "lon": 2.382471395340474,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84309000031842,
+    "lon": 2.3643509996401595,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.829586999622435,
+    "lon": 2.326281999864547,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.831972867353436,
+    "lon": 2.3131442408876772,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.840455999570636,
+    "lon": 2.3268410003738786,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84652499973139,
+    "lon": 2.316950999507549,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85285199998405,
+    "lon": 2.298003000411582,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83924300033341,
+    "lon": 2.3063419997303214,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84429229095396,
+    "lon": 2.2891995674457033,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86883301419714,
+    "lon": 2.248019574417668,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87694200019017,
+    "lon": 2.2859550004232956,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.885984000259434,
+    "lon": 2.356305999707875,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89209499970645,
+    "lon": 2.3615539994578914,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.90057399987358,
+    "lon": 2.3350770000594387,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.887354999657674,
+    "lon": 2.3435250001843118,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.891476402299865,
+    "lon": 2.3316192813555867,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89473799969621,
+    "lon": 2.382028999632136,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.869910694027446,
+    "lon": 2.4110869068483605,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8623170004171,
+    "lon": 2.3502059993590385,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86335399962326,
+    "lon": 2.343470999424425,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86336159524302,
+    "lon": 2.3433824297259456,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86941799975518,
+    "lon": 2.3535109996560086,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8567980002404,
+    "lon": 2.354192000454317,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84223100003779,
+    "lon": 2.337286000126423,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.872602999853626,
+    "lon": 2.364076999848973,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85879600026491,
+    "lon": 2.389296999816509,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86424800000605,
+    "lon": 2.379485000610408,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8599893100381,
+    "lon": 2.384662194688091,
+    "acces_pmr": "Non",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83992843351192,
+    "lon": 2.4407682089981737,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8419809997397,
+    "lon": 2.4099140000081043,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.844575826781394,
+    "lon": 2.3876622985220606,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83259000023232,
+    "lon": 2.356165999891942,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83481400020258,
+    "lon": 2.3578050001911746,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83229243203558,
+    "lon": 2.3268802422669674,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82552100015474,
+    "lon": 2.3041339997620978,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.831645000180735,
+    "lon": 2.3201859998879044,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.845387999807166,
+    "lon": 2.2921819997340007,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.858252239843125,
+    "lon": 2.2683134994523138,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.843881777990774,
+    "lon": 2.2686233189051084,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88513800043196,
+    "lon": 2.344348000195785,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8801430164065,
+    "lon": 2.380334555394377,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888967999902704,
+    "lon": 2.3930770004901785,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88553200013261,
+    "lon": 2.3810259998570658,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88580000040487,
+    "lon": 2.3757979994329954,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87407599960259,
+    "lon": 2.3763659997192055,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86235983215094,
+    "lon": 2.406993131337986,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.855580999991574,
+    "lon": 2.4099690001674428,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86495100000291,
+    "lon": 2.3947409995292643,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85142599970635,
+    "lon": 2.4113059997771447,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.857975184227456,
+    "lon": 2.343958413401344,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86744800005651,
+    "lon": 2.34381000007998,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86498999997651,
+    "lon": 2.360132999850921,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84164499972937,
+    "lon": 2.3487010000881967,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.86950302299618,
+    "lon": 2.324805261449435,
+    "acces_pmr": "Non",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88027485429225,
+    "lon": 2.3090771864035164,
+    "acces_pmr": "Non",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87581134036737,
+    "lon": 2.356122001817729,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88358300007065,
+    "lon": 2.368730999528819,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85414100002846,
+    "lon": 2.3776669999727487,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.849558000107436,
+    "lon": 2.3962630006286507,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83122069411921,
+    "lon": 2.369854778458344,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82228900039548,
+    "lon": 2.372721000201444,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.818848096444846,
+    "lon": 2.3480724076166646,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8213968803319,
+    "lon": 2.3409114177677273,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83967100001336,
+    "lon": 2.3019669995904684,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.834632999567155,
+    "lon": 2.2841089999091544,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83776398366367,
+    "lon": 2.313031075347604,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84474699955954,
+    "lon": 2.3110269993733965,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.865617431628074,
+    "lon": 2.252324088204249,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84122600012948,
+    "lon": 2.2546109993780084,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.900789000131866,
+    "lon": 2.3437689999932854,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88447100021972,
+    "lon": 2.3427400006679586,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89147599958362,
+    "lon": 2.3497189997933323,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86683600014275,
+    "lon": 2.352738999879689,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86356900029383,
+    "lon": 2.3663139998987983,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.843135999716935,
+    "lon": 2.3520940005625017,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83742600028599,
+    "lon": 2.353552000228023,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85274100024098,
+    "lon": 2.3346000001385465,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86520000007258,
+    "lon": 2.300204999518594,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.876842785637415,
+    "lon": 2.331288517935493,
+    "acces_pmr": "Non",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.858680999851344,
+    "lon": 2.383949000681867,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85326799962916,
+    "lon": 2.387873999429428,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.857198000446246,
+    "lon": 2.380934000066133,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.839177999838114,
+    "lon": 2.3922959994127493,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.839537717674226,
+    "lon": 2.4061405643321274,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82782963723179,
+    "lon": 2.3617356101503515,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.818579099419416,
+    "lon": 2.3549329192676653,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83519399972884,
+    "lon": 2.36879099996476,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.826838999890526,
+    "lon": 2.364581000006739,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83827600019253,
+    "lon": 2.341770000019688,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83489600037225,
+    "lon": 2.3241460003250762,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83561300041891,
+    "lon": 2.3155799994518778,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82827099964057,
+    "lon": 2.303363000332393,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84844600004027,
+    "lon": 2.2604170005449817,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85084100025581,
+    "lon": 2.2778989993259198,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89166543963781,
+    "lon": 2.3143788261043468,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89010284437884,
+    "lon": 2.315752564171945,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "WC",
+    "lat": 48.885658542356424,
+    "lon": 2.327515105424676,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.901022999656156,
+    "lon": 2.3354129998428843,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.886644543971286,
+    "lon": 2.3650124921346753,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.881824766920786,
+    "lon": 2.3836409649221526,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88101652135978,
+    "lon": 2.3987808441159437,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.868154999752115,
+    "lon": 2.3484040005465134,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.855252999706806,
+    "lon": 2.3605029994385647,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.846981999729174,
+    "lon": 2.328164999368402,
+    "acces_pmr": "Oui",
+    "arrondissement": 6
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85240888991868,
+    "lon": 2.324502929972812,
+    "acces_pmr": "Non",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8747809999503,
+    "lon": 2.3032080001118813,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88238662077099,
+    "lon": 2.3441329532517114,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88343599997154,
+    "lon": 2.3474330003643105,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86836400009876,
+    "lon": 2.3607839994327855,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87348599983935,
+    "lon": 2.375296999759469,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85214933667669,
+    "lon": 2.385387211338689,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.859369999830044,
+    "lon": 2.372018999818233,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85565300038383,
+    "lon": 2.3835310004540045,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.853785095364564,
+    "lon": 2.3904652995553635,
+    "acces_pmr": "Non",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83961600028436,
+    "lon": 2.378220999802014,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.824060999722725,
+    "lon": 2.35310099937436,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.835833999662924,
+    "lon": 2.3600550005799796,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84260699987145,
+    "lon": 2.292144000168206,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.842868999580126,
+    "lon": 2.2978170002501836,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83980953562733,
+    "lon": 2.3196854418888537,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85720199962261,
+    "lon": 2.266699000196737,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87626369017988,
+    "lon": 2.281006175261719,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8965549996813,
+    "lon": 2.3382690006224656,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89179399983482,
+    "lon": 2.335235000035163,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8851019996426,
+    "lon": 2.354958999429904,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.888503000261,
+    "lon": 2.3494229997704337,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86624979610642,
+    "lon": 2.399921131428531,
+    "acces_pmr": "Non",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86027099976448,
+    "lon": 2.3464810005605803,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.866804999596724,
+    "lon": 2.349579999718723,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.85311889213951,
+    "lon": 2.3485479396362106,
+    "acces_pmr": "Non",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85820799978709,
+    "lon": 2.3497979996411367,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84993799993057,
+    "lon": 2.366737000299422,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85402499987285,
+    "lon": 2.3493969996309874,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8538159998011,
+    "lon": 2.349242000048236,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.849386000305095,
+    "lon": 2.354806000036073,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85640899955829,
+    "lon": 2.2964729998993914,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87058299996762,
+    "lon": 2.3231299994343995,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87464099983616,
+    "lon": 2.3023690004899127,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.882071999650535,
+    "lon": 2.339160999797763,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87495187559819,
+    "lon": 2.36058658232068,
+    "acces_pmr": "Non",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.87730188526426,
+    "lon": 2.3656811726382156,
+    "acces_pmr": "Non",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88182600016088,
+    "lon": 2.353240999831761,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85934672330581,
+    "lon": 2.3720151300395567,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.853532000369576,
+    "lon": 2.369807000478822,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.859211999816615,
+    "lon": 2.389097000091459,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85488000020635,
+    "lon": 2.3728630004242413,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83323699980999,
+    "lon": 2.4039959996640956,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.82536366341094,
+    "lon": 2.369429498040314,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83197962734259,
+    "lon": 2.3777156678661813,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.828118124938314,
+    "lon": 2.377540668531616,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.826888000110166,
+    "lon": 2.3512849996060785,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83113100037872,
+    "lon": 2.344515000507623,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.81997300007583,
+    "lon": 2.3477259994101534,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83654537646535,
+    "lon": 2.316402799684797,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.833046000436205,
+    "lon": 2.332932999675896,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85258138739333,
+    "lon": 2.2935714281377564,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86215399978413,
+    "lon": 2.2863900005791047,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88215739533499,
+    "lon": 2.2906140246442765,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88719868625628,
+    "lon": 2.317249785037184,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89147000027953,
+    "lon": 2.3610720000476983,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89324524370296,
+    "lon": 2.3464251036281003,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87788200035503,
+    "lon": 2.3812450003177807,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87057599972035,
+    "lon": 2.398208999654319,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.865186750587874,
+    "lon": 2.4097694489250627,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85742584289672,
+    "lon": 2.345928474585103,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86366800042222,
+    "lon": 2.350961999878497,
+    "acces_pmr": "Oui",
+    "arrondissement": 2
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.849844999753095,
+    "lon": 2.323064000201817,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.855115999955316,
+    "lon": 2.295900999560928,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.8730821071864,
+    "lon": 2.296062832904191,
+    "acces_pmr": "Non",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.869455000115,
+    "lon": 2.3127870002036954,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87566909887208,
+    "lon": 2.3693804937786944,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88326399964491,
+    "lon": 2.3496630005578174,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.874929000173424,
+    "lon": 2.363653000580924,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85600860592317,
+    "lon": 2.3766995953652805,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84959000030518,
+    "lon": 2.3936389998768104,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86339400003775,
+    "lon": 2.371021999418347,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83375567644587,
+    "lon": 2.362528628434362,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83027199966163,
+    "lon": 2.375263999694382,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84118348536188,
+    "lon": 2.363377124615041,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82820400038698,
+    "lon": 2.35847500032991,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.829382999912745,
+    "lon": 2.365296999680814,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.825257999699474,
+    "lon": 2.315764999477494,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82385599955443,
+    "lon": 2.318167999804201,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83472300000109,
+    "lon": 2.3368019998211698,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.838127000206434,
+    "lon": 2.322328000088415,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82896699969239,
+    "lon": 2.3279549995752253,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84734400025202,
+    "lon": 2.31095500019752,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86518199958975,
+    "lon": 2.275176000119446,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.86001453233371,
+    "lon": 2.28976020891041,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.870565647115654,
+    "lon": 2.246175582871884,
+    "acces_pmr": "Non",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.894122158005445,
+    "lon": 2.3523880408452515,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.890484999699346,
+    "lon": 2.354604000147833,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89920699989907,
+    "lon": 2.343965999536896,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.884076000310905,
+    "lon": 2.3533559998478304,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88820499977508,
+    "lon": 2.325897000059476,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.89705716284851,
+    "lon": 2.362718132802322,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.90033113067889,
+    "lon": 2.349905244334732,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87621300006406,
+    "lon": 2.39300899976985,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.878124297106616,
+    "lon": 2.37992746862574,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87365699955662,
+    "lon": 2.3897390006371526,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85988000001835,
+    "lon": 2.348837000178527,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "WC",
+    "lat": 48.86140027291512,
+    "lon": 2.3545285827832645,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86603499956287,
+    "lon": 2.3525500005526423,
+    "acces_pmr": "Oui",
+    "arrondissement": 3
+  },
+  {
+    "nom": "WC",
+    "lat": 48.848436644167236,
+    "lon": 2.359146507792513,
+    "acces_pmr": "Oui",
+    "arrondissement": 5
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85081103484684,
+    "lon": 2.3440871652208792,
+    "acces_pmr": "Non",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87923899966627,
+    "lon": 2.304040999956061,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88221799966364,
+    "lon": 2.3506540002472054,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86230200015077,
+    "lon": 2.3790769994169096,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85828900018697,
+    "lon": 2.380220999817642,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85211699990634,
+    "lon": 2.393696000462172,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84498399967939,
+    "lon": 2.380364000051836,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85084399988939,
+    "lon": 2.3702969996401757,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83251000032607,
+    "lon": 2.361663999679988,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82444800030104,
+    "lon": 2.3385550002226787,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.832022000030875,
+    "lon": 2.3253950006661976,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83377543414644,
+    "lon": 2.3198918705057547,
+    "acces_pmr": "Non",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.849187999731,
+    "lon": 2.3035700001032366,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.849043999766934,
+    "lon": 2.2879300003682173,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.831621530311644,
+    "lon": 2.299950907200807,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.84213546483047,
+    "lon": 2.30558818110809,
+    "acces_pmr": "Non",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84624299973706,
+    "lon": 2.2775840006165198,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88589735591783,
+    "lon": 2.3533236521311065,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87937300037187,
+    "lon": 2.3844280005447898,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.87685545505606,
+    "lon": 2.3807900741875963,
+    "acces_pmr": "Non",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84828000022474,
+    "lon": 2.400034999342383,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8527449998664,
+    "lon": 2.408976999582062,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.848155306212256,
+    "lon": 2.349373388032164,
+    "acces_pmr": "Non",
+    "arrondissement": 5
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85140130019359,
+    "lon": 2.3204853892262167,
+    "acces_pmr": "Non",
+    "arrondissement": 7
+  },
+  {
+    "nom": "WC",
+    "lat": 48.859172244960064,
+    "lon": 2.319582878541188,
+    "acces_pmr": "Oui",
+    "arrondissement": 7
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87015400026656,
+    "lon": 2.3102040005778934,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87578999993249,
+    "lon": 2.3562779996613306,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86057160535726,
+    "lon": 2.3746801075180075,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "WC",
+    "lat": 48.861457471318396,
+    "lon": 2.3787483756587955,
+    "acces_pmr": "Non",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84601399979751,
+    "lon": 2.3670590005979135,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83632168352183,
+    "lon": 2.3737508079721197,
+    "acces_pmr": "Non",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.81960500001131,
+    "lon": 2.3640220002201393,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.82806899973039,
+    "lon": 2.356523000078744,
+    "acces_pmr": "Oui",
+    "arrondissement": 13
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8241625789515,
+    "lon": 2.3398489381239456,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.827958000189895,
+    "lon": 2.3056599996663603,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84481099995824,
+    "lon": 2.290481000526719,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.83641799985991,
+    "lon": 2.3098449997509936,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8477650001166,
+    "lon": 2.273727999432425,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8954612989361,
+    "lon": 2.320485641171495,
+    "acces_pmr": "Non",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.887574000018475,
+    "lon": 2.2943669996128166,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Lavatory",
+    "lat": 48.88626726174863,
+    "lon": 2.3438632119121188,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89191899977726,
+    "lon": 2.3271440004547537,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8856340001017,
+    "lon": 2.3534120006044774,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.895558597727934,
+    "lon": 2.363815455797893,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.88506257517637,
+    "lon": 2.3560931672956853,
+    "acces_pmr": "Non",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89414899967719,
+    "lon": 2.3517639999325417,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.887256000024,
+    "lon": 2.3758409999279495,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.87621299957802,
+    "lon": 2.38054299978079,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88066700014851,
+    "lon": 2.4004340002685676,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88817900034023,
+    "lon": 2.3737530005285743,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86597727781132,
+    "lon": 2.3877480195818386,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.84911200033021,
+    "lon": 2.402572999497757,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "WC",
+    "lat": 48.85873792521301,
+    "lon": 2.399128753613177,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88465700018282,
+    "lon": 2.359093999739106,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "WC",
+    "lat": 48.888739244570104,
+    "lon": 2.363252921089419,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88764899975983,
+    "lon": 2.3527540005299024,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.890968999662405,
+    "lon": 2.3772510001708542,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.883886999607576,
+    "lon": 2.39785400062757,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.88949999989094,
+    "lon": 2.3806269999988365,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "WC",
+    "lat": 48.878344636450926,
+    "lon": 2.408116526446009,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89549599988921,
+    "lon": 2.3789530004040476,
+    "acces_pmr": "Oui",
+    "arrondissement": 19
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.858346999989685,
+    "lon": 2.4147219995199873,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86597700014329,
+    "lon": 2.387733999898357,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.853777000113496,
+    "lon": 2.4115299997084336,
+    "acces_pmr": "Oui",
+    "arrondissement": 20
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86275800006392,
+    "lon": 2.346046000240498,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Urinoir",
+    "lat": 48.85875124442205,
+    "lon": 2.3404727607557665,
+    "acces_pmr": "Oui",
+    "arrondissement": 1
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.85783900005621,
+    "lon": 2.3558229999089435,
+    "acces_pmr": "Oui",
+    "arrondissement": 4
+  },
+  {
+    "nom": "WC",
+    "lat": 48.838735231144916,
+    "lon": 2.353943110508907,
+    "acces_pmr": "Non",
+    "arrondissement": 5
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.86882300008768,
+    "lon": 2.3011940003051334,
+    "acces_pmr": "Oui",
+    "arrondissement": 8
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.882332000210475,
+    "lon": 2.341430000449094,
+    "acces_pmr": "Oui",
+    "arrondissement": 9
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.870289999998704,
+    "lon": 2.3658410001675967,
+    "acces_pmr": "Oui",
+    "arrondissement": 10
+  },
+  {
+    "nom": "WC",
+    "lat": 48.8700197118485,
+    "lon": 2.375293808714896,
+    "acces_pmr": "Oui",
+    "arrondissement": 11
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8347220001264,
+    "lon": 2.3935230005132726,
+    "acces_pmr": "Oui",
+    "arrondissement": 12
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83625106996013,
+    "lon": 2.401190944045912,
+    "acces_pmr": "Non",
+    "arrondissement": 12
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.842188000361666,
+    "lon": 2.3231750005795164,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.832575000069404,
+    "lon": 2.311423000611557,
+    "acces_pmr": "Oui",
+    "arrondissement": 14
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.835999999580864,
+    "lon": 2.293395000594456,
+    "acces_pmr": "Oui",
+    "arrondissement": 15
+  },
+  {
+    "nom": "WC",
+    "lat": 48.83586949307395,
+    "lon": 2.254693576359468,
+    "acces_pmr": "Oui",
+    "arrondissement": 16
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.8894439996382,
+    "lon": 2.3189150003784507,
+    "acces_pmr": "Oui",
+    "arrondissement": 17
+  },
+  {
+    "nom": "Sanisette",
+    "lat": 48.89904699985777,
+    "lon": 2.3340709996599873,
+    "acces_pmr": "Oui",
+    "arrondissement": 18
+  }
+]

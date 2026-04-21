@@ -3,6 +3,7 @@
   "public": true,
   "name": "urban-data-explorer",
   "rewrites": [
+    { "source": "/api/ping", "destination": "/api/ping.js" },
     { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }
