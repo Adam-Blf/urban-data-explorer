@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Urban Data Explorer · Paris</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+<aside id="sidebar">
+    <header class="brand">
+        <div class="logo">UDE</div>
+        <div>
+            <h1>Urban Data Explorer</h1>
+            <p class="tagline">Paris · marché du logement · indicateurs composites</p>
+        </div>
+    </header>
+
+    <section class="login" id="login-section">
+        <h2>Connexion</h2>
+        <input id="username" placeholder="utilisateur" value="admin" />
+        <input id="password" type="password" placeholder="mot de passe" value="admin" />
+        <button id="login-btn">Se connecter</button>
+        <p class="hint" id="login-hint"></p>
+    </section>
+
+    <section class="filters hidden" id="filters-section">
+        <h2>Couches & filtres</h2>
+        <label>Indicateur affiché
+            <select id="indicator-select">
+                <option value="prix_m2">Prix m² médian (€)</option>
+                <option value="idx_accessibilite">Indice accessibilité</option>
+                <option value="idx_tension">Indice tension</option>
+                <option value="idx_effort_social">Indice effort social</option>
+                <option value="idx_attractivite">Indice attractivité</option>
+                <option value="nb_culture">Équipements culture</option>
+                <option value="nb_sante">Équipements santé</option>
+                <option value="nb_transport">Équipements transport</option>
+            </select>
+        </label>
+
+        <fieldset class="layers">
+            <legend>Points d'intérêt</legend>
+            <label><input type="checkbox" data-cat="transport"      /> Transport (Vélib, Belib)</label>
+            <label><input type="checkbox" data-cat="service_public" /> Services publics (écoles, sanisettes)</label>
+            <label><input type="checkbox" data-cat="commerce"       /> Commerce (marchés)</label>
+            <label><input type="checkbox" data-cat="culture"        /> Culture (musées, monuments)</label>
+            <label><input type="checkbox" data-cat="sante"          /> Santé (hôpitaux)</label>
+            <label><input type="checkbox" data-cat="environnement"  /> Environnement (espaces verts)</label>
+        </fieldset>
+
+        <fieldset class="timeline">
+            <legend>Timeline · prix m² mensuel</legend>
+            <input type="range" id="time-range" min="0" max="0" value="0" step="1" />
+            <div class="time-label" id="time-label">—</div>
+        </fieldset>
+
+        <fieldset class="compare">
+            <legend>Comparaison</legend>
+            <label>Arr. A
+                <select id="compare-a"></select>
+            </label>
+            <label>Arr. B
+                <select id="compare-b"></select>
+            </label>
+            <button id="compare-btn">Comparer</button>
+        </fieldset>
+    </section>
+
+    <section class="kpi-card hidden" id="kpi-section">
+        <h2 id="kpi-title">— Sélectionne un arrondissement —</h2>
+        <div class="kpi-grid" id="kpi-grid"></div>
+        <canvas id="chart-bar"></canvas>
+        <canvas id="chart-line"></canvas>
+    </section>
+
+    <section class="compare-card hidden" id="compare-section">
+        <h2>Comparaison <span id="compare-title"></span></h2>
+        <canvas id="chart-compare"></canvas>
+    </section>
+
+    <footer class="credits">
+        <p>Urban Data Explorer · M1 Data Eng. · EFREI</p>
+        <p>Adam Beloucif · Emilien Morice · 2026</p>
+    </footer>
+</aside>
+
+<main id="map"></main>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script type="module" src="./app.js"></script>
+
+</body>
+</html>
