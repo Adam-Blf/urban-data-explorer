@@ -91,8 +91,9 @@ def add_round_rect(slide, left, top, width, height, color, radius=0.04):
     return s
 
 
-def add_logo(slide, left, top, height_in):
-    logo = ASSETS / "efrei-logo.png"
+def add_logo(slide, left, top, height_in, white=True):
+    """Logo blanc par défaut (mieux contrasté sur fond sombre du deck)."""
+    logo = ASSETS / ("efrei-logo-white.png" if white else "efrei-logo.png")
     if logo.exists():
         slide.shapes.add_picture(str(logo), Inches(left), Inches(top), height=Inches(height_in))
 
