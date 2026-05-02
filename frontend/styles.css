@@ -3,14 +3,88 @@
     --bg-1: #11172d;
     --bg-2: #1a2142;
     --fg-0: #f4f6fb;
-    --fg-1: #aab2cc;
+    --fg-1: #c9d0e3;             /* lifted from #aab2cc to pass WCAG AA on dark */
     --accent: #FFD166;
     --accent-2: #06D6A0;
     --accent-3: #EF476F;
     --border: rgba(255, 255, 255, 0.08);
     --radius: 18px;
     --shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.6);
+    --focus-ring: 0 0 0 3px rgba(255, 209, 102, 0.55);
 }
+
+/* a11y · skip link, focus rings, visually hidden helper */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 8px;
+    background: var(--accent);
+    color: var(--bg-0);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    z-index: 9999;
+    transition: top 0.15s ease;
+}
+.skip-link:focus { top: 8px; }
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, #map:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* scroll-reveal sections */
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* Shortcuts help modal (press ?) */
+#shortcuts-modal {
+    position: fixed; inset: 0;
+    background: rgba(11, 16, 32, 0.7);
+    backdrop-filter: blur(6px);
+    display: grid; place-items: center;
+    z-index: 9999;
+}
+.shortcuts-card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    max-width: 380px; width: calc(100% - 48px);
+    box-shadow: var(--shadow);
+}
+.shortcuts-card h3 { margin: 0 0 16px; color: var(--accent); font-size: 18px; }
+.shortcuts-card dl { display: grid; grid-template-columns: 80px 1fr; gap: 10px 16px; margin: 0 0 20px; }
+.shortcuts-card dt { display: flex; align-items: center; }
+.shortcuts-card kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 4px 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--accent);
+}
+.shortcuts-card dd { margin: 0; color: var(--fg-1); font-size: 13px; align-self: center; }
+.shortcuts-card button { width: 100%; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg-0); color: var(--fg-0); font-family: 'Plus Jakarta Sans', sans-serif; }

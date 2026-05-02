@@ -3,7 +3,16 @@
  * MapLibre GL JS + Chart.js + fetch direct sur l'API FastAPI.
  */
 
-const API_BASE = "http://localhost:8000";
+// API base · priorité ·
+//   1. ?api=https://...  dans l'URL (utile pour la démo Vercel)
+//   2. <meta name=udeApiBase content=...>
+//   3. fallback localhost
+const API_BASE = (() => {
+    const fromQs = new URLSearchParams(location.search).get("api");
+    if (fromQs) return fromQs.replace(/\/$/, "");
+    const metaTag = document.querySelector('meta[name="udeApiBase"]');
+    return (metaTag?.getAttribute("content") || "http://localhost:8000").replace(/\/$/, "");
+})();
 
 // --------------------------------------------------------------------------
 // Auth flow
@@ -47,6 +56,51 @@ els.timeRange.addEventListener("input", onTimeChanged);
 els.compareBtn.addEventListener("click", runCompare);
 document.querySelectorAll('.layers input[type="checkbox"]').forEach(cb => {
     cb.addEventListener("change", () => togglePoiLayer(cb.dataset.cat, cb.checked));
+});
+
+// Submit on Enter from password field
+els.password.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+// Keyboard shortcut · "?" for help, "/" to focus indicator select
+document.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+    if (e.key === "?") { showShortcutsHelp(); }
+    if (e.key === "/") { e.preventDefault(); els.indicatorSelect.focus(); }
+});
+
+function showShortcutsHelp() {
+    const existing = document.getElementById("shortcuts-modal");
+    if (existing) { existing.remove(); return; }
+    const modal = document.createElement("div");
+    modal.id = "shortcuts-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.innerHTML = `
+        <div class="shortcuts-card">
+            <h3>Raccourcis clavier</h3>
+            <dl>
+                <dt><kbd>?</kbd></dt><dd>Afficher / cacher cette aide</dd>
+                <dt><kbd>/</kbd></dt><dd>Sélecteur d'indicateur</dd>
+                <dt><kbd>Tab</kbd></dt><dd>Naviguer entre les contrôles</dd>
+                <dt><kbd>Esc</kbd></dt><dd>Fermer cette aide</dd>
+            </dl>
+            <button type="button" id="shortcuts-close">Fermer</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById("shortcuts-close").addEventListener("click", () => modal.remove());
+    document.addEventListener("keydown", function escClose(e) {
+        if (e.key === "Escape") { modal.remove(); document.removeEventListener("keydown", escClose); }
+    });
+}
+
+// Scroll-reveal sections in the sidebar
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("is-visible"); });
+}, { threshold: 0.15 });
+document.querySelectorAll("aside section").forEach((s) => {
+    s.classList.add("reveal");
+    revealObserver.observe(s);
 });
 
 async function login() {

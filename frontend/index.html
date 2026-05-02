@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Urban Data Explorer · Plateforme open data Paris · pipeline médaillon, API REST sécurisée et dashboard cartographique pour explorer les dynamiques du logement parisien." />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="udeApiBase" content="http://localhost:8000" />
     <title>Urban Data Explorer · Paris</title>
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,8 +14,9 @@
     <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
+<a class="skip-link" href="#main">Aller au contenu principal</a>
 
-<aside id="sidebar">
+<aside id="sidebar" aria-label="Panneau de contrôle et indicateurs">
     <header class="brand">
         <div class="logo">UDE</div>
         <div>
@@ -21,12 +25,14 @@
         </div>
     </header>
 
-    <section class="login" id="login-section">
-        <h2>Connexion</h2>
-        <input id="username" placeholder="utilisateur" value="admin" />
-        <input id="password" type="password" placeholder="mot de passe" value="admin" />
-        <button id="login-btn">Se connecter</button>
-        <p class="hint" id="login-hint"></p>
+    <section class="login" id="login-section" aria-labelledby="login-h">
+        <h2 id="login-h">Connexion</h2>
+        <label for="username" class="visually-hidden">Nom d'utilisateur</label>
+        <input id="username" placeholder="utilisateur" value="admin" autocomplete="username" />
+        <label for="password" class="visually-hidden">Mot de passe</label>
+        <input id="password" type="password" placeholder="mot de passe" value="admin" autocomplete="current-password" />
+        <button id="login-btn" type="button">Se connecter</button>
+        <p class="hint" id="login-hint" role="status" aria-live="polite"></p>
     </section>
 
     <section class="filters hidden" id="filters-section">
@@ -90,7 +96,9 @@
     </footer>
 </aside>
 
-<main id="map"></main>
+<main id="main" role="main">
+    <div id="map" aria-label="Carte cartographique des arrondissements de Paris" tabindex="0"></div>
+</main>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
