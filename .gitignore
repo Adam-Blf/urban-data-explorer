@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+.venv*/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data lake (large local files, regenerable from feeders)
+data/raw/
+data/silver/
+data/gold/
+*.parquet
+*.duckdb
+*.duckdb.wal
+*.sqlite
+*.db
+
+# Logs
+logs/
+*.log
+*.log.txt
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*secret*
+*.token
+sbp_*
+ghp_*
+github_pat_*
+
+# Node / frontend build
+node_modules/
+dist/
+.next/
+.cache/
+.parcel-cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Local one-shot scripts
+scripts/*.local.*
