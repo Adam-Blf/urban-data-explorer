@@ -18,16 +18,6 @@ import sys
 OWNER = "Adam-Blf"
 
 
-def gh(args: list[str]) -> dict | list | None:
-    proc = subprocess.run(["gh", *args], text=True, capture_output=True, check=False)
-    if proc.returncode != 0:
-        if "404" in proc.stderr or "Not Found" in proc.stderr:
-            return None
-        print(f"  ERROR · {proc.stderr.strip()[:200]}", file=sys.stderr)
-        return None
-    return json.loads(proc.stdout) if proc.stdout.strip() else None
-
-
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--workflow", default="sync-topics.yml")
@@ -43,18 +33,6 @@ def main():
 
     total = 0
     for name in repos:
-        runs = gh(["api", f"repos/{OWNER}/{name}/actions/workflows/{args.workflow}/runs",
-                   "--jq", ".workflow_runs[] | {id, conclusion}"])
-        if not runs:
-            continue
-        # gh --jq returns one JSON object per line · subprocess concat'd them
-        ids = []
-        for line in str(runs).splitlines() if isinstance(runs, str) else []:
-            obj = json.loads(line) if line.strip() else None
-            if obj and obj.get("conclusion") == "failure":
-                ids.append(obj["id"])
-
-        # Re-fetch the proper way · the gh api with --jq returns a stream
         proc = subprocess.run(
             ["gh", "api",
              f"repos/{OWNER}/{name}/actions/workflows/{args.workflow}/runs",
@@ -63,17 +41,22 @@ def main():
         )
         if proc.returncode != 0:
             continue
-        try:
-            data = json.loads(proc.stdout)
-        except Exception:
-            continue
-        ids = [
-            r["id"] for r in (data.get("workflow_runs") or [])
-            if r.get("conclusion") == "failure"
-        ]
+
+        # `gh api --paginate` concatenates JSON pages with newlines · split & merge
+        runs: list[dict] = []
+        for chunk in proc.stdout.strip().split("\n{"):
+            if not chunk.strip():
+                continue
+            try:
+                obj = json.loads(chunk if chunk.startswith("{") else "{" + chunk)
+            except json.JSONDecodeError:
+                continue
+            runs.extend(obj.get("workflow_runs") or [])
+
+        ids = [r["id"] for r in runs if r.get("conclusion") == "failure"]
         if not ids:
             continue
-        print(f"  {name}: {len(ids)} failed run(s) → deleting")
+        print(f"  {name}: {len(ids)} failed run(s) -> deleting")
         for rid in ids:
             d = subprocess.run(
                 ["gh", "api", "-X", "DELETE",
@@ -82,6 +65,8 @@ def main():
             )
             if d.returncode == 0:
                 total += 1
+            else:
+                print(f"    DELETE {rid} failed · {d.stderr.strip()[:120]}", file=sys.stderr)
 
     print(f"\nDeleted {total} failed run(s) total.")
 
