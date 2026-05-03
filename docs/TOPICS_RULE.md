@@ -46,6 +46,26 @@ on:
 → se déclenche **uniquement** si `.github/topics.yml` change. Aucun coût en
 minutes CI sur les commits qui ne touchent pas la liste.
 
+### Setup PAT (une seule fois)
+
+Le `GITHUB_TOKEN` natif **ne peut pas** modifier les topics (limite GitHub
+Actions documentée). Il faut un Personal Access Token avec scope
+`public_repo` (ou `repo` pour les privés) stocké dans le secret repo
+`TOPICS_PAT`.
+
+```bash
+# 1. créer le PAT classique sur github.com/settings/tokens
+#    → expiration 1 an · scope public_repo (+ repo si tu as des privés)
+
+# 2. l'enregistrer en bulk sur tous tes repos
+gh secret set TOPICS_PAT \
+  --body "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  --repos "$(gh repo list Adam-Blf --limit 100 --json name,isArchived --jq '[.[] | select(.isArchived==false) | "Adam-Blf/" + .name] | join(",")')"
+```
+
+Sans `TOPICS_PAT` configuré, le workflow se termine en **succès** avec un
+warning "skip" plutôt que de polluer l'onglet Actions de runs rouges.
+
 ## Bootstrap d'un nouveau repo
 
 Pour appliquer la convention sur un repo existant ·
