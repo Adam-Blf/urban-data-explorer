@@ -31,7 +31,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install reportlab svglib python-pptx scikit-learn
+          # PDF/PPT generators only · scikit-learn was a leftover from an
+          # earlier ML iteration removed from scope. svglib needs libcairo2-dev
+          # which we don't pull in (PNG logo is committed directly).
+          pip install reportlab python-pptx
 
       - name: Ruff (lint)
         run: ruff check .
