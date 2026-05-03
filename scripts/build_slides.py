@@ -422,17 +422,32 @@ def slide_choices(prs, n, total):
 def slide_demo(prs, n, total):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     fill_bg(slide, NAVY)
+    add_kicker(slide, "10 · Démonstration", TEAL)
+    add_text(slide, "Captures du dashboard live.",
+             0.7, 1.0, 12, 0.7, size=26, bold=True)
 
-    # vertical accent
-    add_round_rect(slide, 0.7, 2.0, 0.18, 3.5, TEAL, radius=0.5)
-
-    add_text(slide, "Démonstration", 1.1, 2.2, 11, 1.4,
-             size=68, bold=True, line_spacing=1.0)
-    add_text(slide, "live.", 1.1, 3.5, 11, 1.4,
-             size=68, bold=True, color=TEAL, line_spacing=1.0)
-    add_text(slide,
-             "Exécution du pipeline · API en route · dashboard interactif.",
-             1.1, 5.2, 11, 0.6, size=18, color=GREY)
+    shots = [
+        ("02-choropleth-prix.png",        "Prix m² médian"),
+        ("03-choropleth-attractivite.png", "Indice attractivité"),
+        ("04-poi-layers.png",             "Couches POI"),
+        ("05-compare-radar.png",          "Choroplèthe + comparaison"),
+    ]
+    cell_w, cell_h = 5.85, 2.45
+    for i, (fname, caption) in enumerate(shots):
+        path = ASSETS.parent / "screenshots" / fname
+        x = 0.7 + (i % 2) * 6.05
+        y = 1.9 + (i // 2) * 2.65
+        if path.exists():
+            slide.shapes.add_picture(
+                str(path), Inches(x), Inches(y),
+                width=Inches(cell_w), height=Inches(cell_h),
+            )
+            add_text(slide, caption, x, y + cell_h + 0.05, cell_w, 0.3,
+                     size=10, color=GREY, align=PP_ALIGN.CENTER)
+        else:
+            add_round_rect(slide, x, y, cell_w, cell_h, NAVY2)
+            add_text(slide, caption, x, y + cell_h / 2, cell_w, 0.4,
+                     size=14, color=GREY, align=PP_ALIGN.CENTER)
 
     add_footer(slide, n, total)
 

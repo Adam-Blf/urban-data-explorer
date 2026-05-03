@@ -18,19 +18,46 @@ router = APIRouter(prefix="/geo", tags=["geo"])
 
 @router.get("/arrondissements.geojson")
 def get_arrondissements_geojson(user: str = Depends(get_current_user)):
-    """Retourne le GeoJSON le plus récent enrichi des KPIs arrondissement."""
+    """Retourne le GeoJSON enrichi des KPIs arrondissement.
+
+    Priorité · raw GeoJSON ingéré (`arrondissements/...`). Fallback ·
+    polygones bbox synthétiques à partir des centroïdes Gold (utile en mode
+    démo seed, sans avoir à télécharger le vrai GeoJSON).
+    """
     settings = get_settings()
     arr_files = sorted(
         (settings.raw_dir / "arrondissements").rglob("arrondissements.geojson")
     )
-    if not arr_files:
-        raise HTTPException(status_code=404, detail="arrondissements GeoJSON not ingested")
-
-    payload = json.loads(Path(arr_files[-1]).read_text(encoding="utf-8"))
 
     with gold_connection() as con:
         kpi_rows = con.execute("SELECT * FROM kpi_arrondissement").fetch_arrow_table().to_pylist()
     kpi_index = {r["code_arrondissement"]: r for r in kpi_rows}
+
+    if arr_files:
+        payload = json.loads(Path(arr_files[-1]).read_text(encoding="utf-8"))
+    else:
+        # Fallback · bbox synthétique autour de chaque centroïde Gold
+        features = []
+        for code, kpi in kpi_index.items():
+            lon = kpi.get("centroid_lon")
+            lat = kpi.get("centroid_lat")
+            if lon is None or lat is None:
+                continue
+            features.append({
+                "type": "Feature",
+                "properties": {"code_arrondissement": code},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [lon - 0.014, lat - 0.009],
+                        [lon + 0.014, lat - 0.009],
+                        [lon + 0.014, lat + 0.009],
+                        [lon - 0.014, lat + 0.009],
+                        [lon - 0.014, lat - 0.009],
+                    ]],
+                },
+            })
+        payload = {"type": "FeatureCollection", "features": features}
 
     for feat in payload.get("features", []):
         props = feat.setdefault("properties", {})
@@ -42,8 +69,16 @@ def get_arrondissements_geojson(user: str = Depends(get_current_user)):
         props["code_arrondissement"] = code
         if code and code in kpi_index:
             for k, v in kpi_index[code].items():
-                if k != "code_arrondissement":
+                if k == "code_arrondissement":
+                    continue
+                # Coerce DuckDB Decimal / datetime / Arrow scalars to JSON-safe types
+                if v is None or isinstance(v, (int, float, str, bool)):
                     props[k] = v
+                else:
+                    try:
+                        props[k] = float(v)
+                    except (TypeError, ValueError):
+                        props[k] = str(v)
     return JSONResponse(payload)
 
 

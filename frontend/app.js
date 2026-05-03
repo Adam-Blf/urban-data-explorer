@@ -154,6 +154,7 @@ async function bootstrapMap() {
 
     map = new maplibregl.Map({
         container: "map",
+        attributionControl: { compact: true },
         style: {
             version: 8,
             sources: {
@@ -170,6 +171,9 @@ async function bootstrapMap() {
         zoom: 11.5,
         pitch: 28,
     });
+
+    // Expose for screenshot/E2E tools
+    window.map = map;
 
     map.on("load", () => {
         map.addSource("arr", { type: "geojson", data: arrondissementsData });

@@ -15,6 +15,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import (
     Image,
+    KeepInFrame,
     PageBreak,
     Paragraph,
     SimpleDocTemplate,
@@ -328,6 +329,31 @@ def main():
         "commitée pour que l'API + le front fonctionnent dès le clone, "
         "sans télécharger les ~500 MB de DVF/POI bruts.",
     ])
+
+    # ---- 8c. Captures du dashboard ----
+    shots_dir = DOCS / "screenshots"
+    if shots_dir.exists():
+        section(story, styles, "8c · Captures du dashboard live", [
+            "Les captures suivantes sont produites automatiquement par "
+            "<font face='Courier'>scripts/capture_screenshots.py</font> "
+            "(Playwright + chromium headless), à partir de la base de démo "
+            "et de l'API en local. Reproductible à tout moment.",
+        ])
+        captures = [
+            ("02-choropleth-prix.png",        "Choroplèthe · prix m² médian par arrondissement"),
+            ("03-choropleth-attractivite.png", "Choroplèthe · indice composite d'attractivité"),
+            ("04-poi-layers.png",             "Couches POI activables · transport, culture, santé"),
+            ("05-compare-radar.png",          "Mode comparaison · 16e vs 19e (radar 5 dimensions)"),
+        ]
+        for fname, caption in captures:
+            p = shots_dir / fname
+            if not p.exists():
+                continue
+            img = Image(str(p), width=16 * cm, height=10 * cm, kind="proportional")
+            story.append(img)
+            story.append(Paragraph(f"<i>{caption}</i>", styles["Body"]))
+            story.append(Spacer(1, 8))
+        story.append(PageBreak())
 
     # ---- 9. Résultats ----
     section(story, styles, "9 · Résultats &amp; conclusion", [
