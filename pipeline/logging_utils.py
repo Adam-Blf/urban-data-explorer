@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .config import get_settings
@@ -26,7 +26,7 @@ def get_logger(app_name: str, run_id: str | None = None) -> logging.Logger:
     settings.logs_dir.mkdir(parents=True, exist_ok=True)
 
     if run_id is None:
-        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
+        run_id = datetime.now(UTC).strftime("%Y%m%dT%H%M%S")
 
     log_path: Path = settings.logs_dir / f"{app_name}_{run_id}.txt"
 
@@ -54,4 +54,4 @@ def get_logger(app_name: str, run_id: str | None = None) -> logging.Logger:
 
 def today_partition() -> str:
     """ISO date `YYYY-MM-DD` utilisée pour le partitionnement courant."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return datetime.now(UTC).strftime("%Y-%m-%d")

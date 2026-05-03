@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import math
 import random
-from datetime import date
 from pathlib import Path
 
 import duckdb
@@ -222,7 +221,7 @@ def main():
     cats = ["transport", "service_public", "commerce", "culture", "sante", "environnement"]
     for code, _label, lon, lat, *_ in ARRONDISSEMENTS:
         densities = POI_DENSITY_PER_ARR[code[-2:]]
-        for cat, total in zip(cats, densities):
+        for cat, total in zip(cats, densities, strict=False):
             sub = POI_NAMES[cat][0]
             con.execute(
                 "INSERT INTO fact_poi_arr VALUES (?, ?, ?, ?)",

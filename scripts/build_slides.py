@@ -11,8 +11,8 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-from pptx.util import Inches, Pt, Emu
+from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from pptx.util import Emu, Inches, Pt
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
@@ -254,7 +254,7 @@ def slide_sources(prs, n, total):
     col_w = [2.0, 3.5, 3.9, 2.5]
 
     add_round_rect(slide, 0.5, 1.85, 12.4, 0.5, NAVY3)
-    for h, x, w in zip(headers, col_x, col_w):
+    for h, x, w in zip(headers, col_x, col_w, strict=False):
         add_text(slide, h.upper(), x, 1.92, w, 0.4, size=10, bold=True, color=GOLD)
 
     y = 2.4
@@ -262,7 +262,7 @@ def slide_sources(prs, n, total):
     for i, row in enumerate(rows):
         if i % 2 == 0:
             add_rect(slide, 0.5, y - 0.02, 12.4, row_h + 0.02, NAVY2)
-        for cell, x, w in zip(row, col_x, col_w):
+        for cell, x, w in zip(row, col_x, col_w, strict=False):
             color = TEAL if cell.startswith("~") or "/" in cell else WHITE
             add_text(slide, cell, x, y, w, row_h, size=9, color=color)
         y += row_h

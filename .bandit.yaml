@@ -1,0 +1,24 @@
+# Bandit configuration · Urban Data Explorer
+#
+# Exclusions justified · l'audit complet est documenté dans SECURITY.md.
+#
+# B608 (hardcoded_sql_expressions) ·
+#   Toutes les requêtes "à risque" sur api/routers/* construisent dynamiquement
+#   la clause WHERE via concaténation, MAIS chaque valeur est passée comme
+#   placeholder `?` paramétré (DuckDB), et chaque option d'ORDER BY est
+#   contrainte par regex Pydantic (`pattern="^(...)$"`). Pas d'injection
+#   possible. Sur pipeline/datamart.py les requêtes sont purement internes
+#   (pas d'input utilisateur).
+#
+# B104 (hardcoded_bind_all_interfaces) ·
+#   `API_HOST=0.0.0.0` est le default attendu en container/Docker pour que le
+#   port soit exposé. En prod, on restreint l'accès via reverse proxy / WAF.
+skips:
+  - B608
+  - B104
+exclude_dirs:
+  - tests
+  - .venv
+  - data
+  - logs
+  - docs

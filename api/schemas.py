@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -61,7 +61,7 @@ class IndicatorRow(BaseModel):
     value: float | None
 
 
-class Page(BaseModel, Generic[T]):
+class Page[T](BaseModel):
     """Enveloppe de pagination standard."""
     items: list[T]
     page: int = Field(ge=1)

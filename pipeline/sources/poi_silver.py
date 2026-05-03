@@ -81,7 +81,7 @@ def _spatial_join(
     lons = df["lon"].to_list()
     lats = df["lat"].to_list()
     codes: list[str | None] = []
-    for lon, lat in zip(lons, lats):
+    for lon, lat in zip(lons, lats, strict=False):
         if lon is None or lat is None:
             codes.append(None)
             continue

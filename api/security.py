@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -23,7 +23,7 @@ def verify_credentials(username: str, password: str) -> bool:
 
 def create_access_token(subject: str, ttl_minutes: int | None = None) -> str:
     s = get_settings()
-    expire = datetime.now(timezone.utc) + timedelta(
+    expire = datetime.now(UTC) + timedelta(
         minutes=ttl_minutes or s.jwt_ttl_minutes
     )
     payload = {"sub": subject, "exp": expire}

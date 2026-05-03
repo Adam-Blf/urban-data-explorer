@@ -78,7 +78,7 @@ def _spatial_join_arrondissement(
     lons = df[lon_col].to_list()
     lats = df[lat_col].to_list()
     codes: list[str | None] = []
-    for lon, lat in zip(lons, lats):
+    for lon, lat in zip(lons, lats, strict=False):
         if lon is None or lat is None:
             codes.append(None)
             continue

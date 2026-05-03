@@ -16,7 +16,7 @@ import json
 import os
 import socket
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import duckdb
@@ -64,7 +64,8 @@ def _gold_summary() -> dict:
             sample_bytes = json.dumps(sample, default=str, sort_keys=True).encode()
             out["tables"][t] = {
                 "row_count": count,
-                "sample_md5": hashlib.md5(sample_bytes).hexdigest()[:16],
+                # MD5 used for non-cryptographic content fingerprinting only.
+                "sample_md5": hashlib.md5(sample_bytes, usedforsecurity=False).hexdigest()[:16],
             }
         return out
     finally:
@@ -73,7 +74,7 @@ def _gold_summary() -> dict:
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
 
     manifest = {
         "run_id": ts,

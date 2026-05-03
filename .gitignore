@@ -62,5 +62,10 @@ Thumbs.db
 # Notebooks
 .ipynb_checkpoints/
 
+# Coverage HTML reports (regenerable via pytest --cov)
+docs/coverage/
+.coverage
+htmlcov/
+
 # Local one-shot scripts
 scripts/*.local.*
