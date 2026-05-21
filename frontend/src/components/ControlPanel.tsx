@@ -1,21 +1,64 @@
 import React from 'react';
-import { Layers, Filter, Sparkles } from 'lucide-react';
+import { Layers, Filter, Sparkles, X } from 'lucide-react';
 
 interface ControlPanelProps {
   granularity: number;
   setGranularity: (val: number) => void;
   activeFamily: string;
   setActiveFamily: (val: string) => void;
+  style?: React.CSSProperties;
+  onClose?: () => void;
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
   granularity,
   setGranularity,
   activeFamily,
-  setActiveFamily
+  setActiveFamily,
+  style,
+  onClose
 }) => {
   return (
-    <div className="glass-panel" style={{ position: 'absolute', top: '110px', left: '20px', bottom: '20px', width: '380px', zIndex: 10, padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
+    <div 
+      className="glass-panel" 
+      style={{ 
+        position: 'absolute', 
+        top: '110px', 
+        left: '20px', 
+        bottom: '20px', 
+        width: '380px', 
+        zIndex: 10, 
+        padding: '24px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '24px', 
+        overflowY: 'auto',
+        ...style 
+      }}
+    >
+      {/* Configuration Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '-8px' }}>
+        <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>Configuration</h2>
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="btn-tab"
+            style={{ 
+              padding: '6px', 
+              background: 'none', 
+              border: 'none', 
+              borderRadius: '6px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            title="Masquer"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
 
       {/* Granularity Selector */}
       <div>
@@ -62,13 +105,22 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               { id: 'immobilier', name: 'Marché Immobilier' },
               { id: 'logement_social', name: 'Logement Social' },
               { id: 'revenus', name: 'Revenus & Socio-Éco' },
-              { id: 'cadre_vie', name: 'Cadre de vie' }
+              { id: 'cadre_vie', name: 'Cadre de vie' },
+              { id: 'environnement', name: 'Environnement', fullWidth: true }
             ].map((f) => (
               <button
                 key={f.id}
                 onClick={() => setActiveFamily(f.id)}
                 className={`btn-tab ${activeFamily === f.id ? 'active' : ''}`}
-                style={{ fontSize: '12px', justifyContent: 'center', padding: '8px 4px', height: '44px', textAlign: 'center', lineHeight: '1.2' }}
+                style={{
+                  fontSize: '12px',
+                  justifyContent: 'center',
+                  padding: '8px 4px',
+                  height: '44px',
+                  textAlign: 'center',
+                  lineHeight: '1.2',
+                  gridColumn: f.fullWidth ? 'span 2' : 'auto'
+                }}
               >
                 {f.name}
               </button>
@@ -83,7 +135,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           <Sparkles size={14} /> Indicateur croisé consolidé
         </h4>
         <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-          Affiche le score global moyen des 4 catégories pour chaque arrondissement. Sélectionnez une catégorie ci-dessus pour colorer la carte par indicateur.
+          Affiche le score global moyen des 5 catégories pour chaque arrondissement. Sélectionnez une catégorie ci-dessus pour colorer la carte par indicateur.
         </p>
       </div>
     </div>

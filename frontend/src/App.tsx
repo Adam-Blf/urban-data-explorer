@@ -21,6 +21,10 @@ export default function App() {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [comparedDistrict, setComparedDistrict] = useState<string | null>(null);
 
+  // Panel visibility
+  const [showControlPanel, setShowControlPanel] = useState<boolean>(true);
+  const [showDataPanel, setShowDataPanel] = useState<boolean>(true);
+
   // API Data
   const [districts, setDistricts] = useState<District[]>([]);
   const [overview, setOverview] = useState<Overview | null>(null);
@@ -64,6 +68,7 @@ export default function App() {
         logement_social_idx: 22,
         revenu_idx: 55,
         cadre_vie_idx: 68,
+        environnement_idx: 72,
         prix_m2: 11200.0,
         logement_social_pct: 14.5,
         revenu_median: 32000.0,
@@ -82,7 +87,8 @@ export default function App() {
         const logement_social_idx = Math.round(pct * 2.5);
         const revenu_idx = Math.round(((income - 20000) / 28000) * 100);
         const cadre_vie_idx = Math.round(base_acc);
-        const score = Math.round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4);
+        const environnement_idx = Math.round(55 + (i * 4) % 35);
+        const score = Math.round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx + environnement_idx) / 5);
 
         return {
           code,
@@ -100,6 +106,7 @@ export default function App() {
           logement_social_idx,
           revenu_idx,
           cadre_vie_idx,
+          environnement_idx,
           prix_m2: prix,
           logements_sociaux_count: count,
           logement_social_pct: pct,
@@ -119,7 +126,8 @@ export default function App() {
         immobilier_idx: 65 + Math.sin(i * 0.4) * 2,
         logement_social_idx: 22 + Math.cos(i * 0.3) * 0.5,
         revenu_idx: 55 + Math.sin(i * 0.5) * 1.5,
-        cadre_vie_idx: 65 + Math.sin(i) * 3
+        cadre_vie_idx: 65 + Math.sin(i) * 3,
+        environnement_idx: 70 + Math.cos(i * 0.4) * 3
       })));
     }
   };
@@ -159,6 +167,10 @@ export default function App() {
         setMapMode={setMapMode}
         showSettings={showSettings}
         setShowSettings={setShowSettings}
+        showControlPanel={showControlPanel}
+        setShowControlPanel={setShowControlPanel}
+        showDataPanel={showDataPanel}
+        setShowDataPanel={setShowDataPanel}
       />
 
       <SettingsDrawer
@@ -173,6 +185,12 @@ export default function App() {
         setGranularity={setGranularity}
         activeFamily={activeFamily}
         setActiveFamily={setActiveFamily}
+        style={{
+          right: showControlPanel ? (showDataPanel ? '480px' : '20px') : '-400px',
+          left: 'auto',
+          transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+        onClose={() => setShowControlPanel(false)}
       />
 
       <DataPanel
@@ -186,6 +204,11 @@ export default function App() {
         events={events}
         activeFamily={activeFamily}
         maxActivity={maxActivity}
+        style={{
+          right: showDataPanel ? '20px' : '-460px',
+          transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+        onClose={() => setShowDataPanel(false)}
       />
     </div>
   );

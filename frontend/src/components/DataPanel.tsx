@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, Activity, RefreshCw } from 'lucide-react';
+import { TrendingUp, Activity, RefreshCw, X } from 'lucide-react';
 import { District, Overview, TimelinePoint, EventLog } from '../types';
 
 interface DataPanelProps {
@@ -13,6 +13,8 @@ interface DataPanelProps {
   events: EventLog[];
   activeFamily: string;
   maxActivity: number;
+  style?: React.CSSProperties;
+  onClose?: () => void;
 }
 
 const formatValue = (key: string, val: number) => {
@@ -39,6 +41,7 @@ const getTimelineValue = (t: TimelinePoint, family: string) => {
   if (family === 'logement_social') return t.logement_social_idx;
   if (family === 'revenus') return t.revenu_idx;
   if (family === 'cadre_vie') return t.cadre_vie_idx;
+  if (family === 'environnement') return t.environnement_idx;
   return t.activity;
 };
 
@@ -47,6 +50,7 @@ const getTimelineLabel = (family: string) => {
   if (family === 'logement_social') return "Indice Logement Social (Tendance)";
   if (family === 'revenus') return "Indice Revenus & Socio-Éco (Tendance)";
   if (family === 'cadre_vie') return "Indice Cadre de Vie (Tendance)";
+  if (family === 'environnement') return "Indice Environnement (Tendance)";
   return "Activité Globale (Messages Kafka)";
 };
 
@@ -60,7 +64,9 @@ export const DataPanel: React.FC<DataPanelProps> = ({
   timeline,
   events,
   activeFamily,
-  maxActivity
+  maxActivity,
+  style,
+  onClose
 }) => {
   const selectedA = districts.find(d => d.code === selectedDistrict);
   const selectedB = districts.find(d => d.code === comparedDistrict);
@@ -125,6 +131,17 @@ export const DataPanel: React.FC<DataPanelProps> = ({
       rawB: selectedB ? `Accessibilité: ${selectedB.accessibility_index}%` : null,
       rawAvg: overview ? `Accessibilité: ${overview.accessibility_index}%` : null,
       familyId: 'cadre_vie'
+    },
+    {
+      id: 'environnement',
+      label: 'Qualité de l\'Environnement',
+      idxA: selectedA?.environnement_idx,
+      idxB: selectedB?.environnement_idx,
+      idxAvg: overview?.environnement_idx || 72,
+      rawA: selectedA ? `Espaces Verts: ${selectedA.family_counts.green_space || 0}` : null,
+      rawB: selectedB ? `Espaces Verts: ${selectedB.family_counts.green_space || 0}` : null,
+      rawAvg: 'Espaces Verts: Moyen',
+      familyId: 'environnement'
     }
   ];
 
@@ -134,7 +151,7 @@ export const DataPanel: React.FC<DataPanelProps> = ({
     : 100;
 
   return (
-    <div className="glass-panel" style={{ position: 'absolute', top: '110px', right: '20px', bottom: '20px', width: '440px', zIndex: 10, padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+    <div className="glass-panel" style={{ position: 'absolute', top: '110px', right: '20px', bottom: '20px', width: '440px', zIndex: 10, padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', ...style }}>
 
       {/* Selection & Comparison Header */}
       <div>
@@ -142,14 +159,35 @@ export const DataPanel: React.FC<DataPanelProps> = ({
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>
             {selectedA ? `${selectedA.label} - ${selectedA.name}` : 'Paris (Consolidé)'}
           </h2>
-          {selectedDistrict && (
-            <button
-              onClick={() => { setSelectedDistrict(null); setComparedDistrict(null); }}
-              style={{ background: 'none', border: 'none', color: 'var(--accent-pink)', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
-            >
-              Effacer sélection
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {selectedDistrict && (
+              <button
+                onClick={() => { setSelectedDistrict(null); setComparedDistrict(null); }}
+                style={{ background: 'none', border: 'none', color: 'var(--accent-pink)', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
+              >
+                Effacer sélection
+              </button>
+            )}
+            {onClose && (
+              <button 
+                onClick={onClose}
+                className="btn-tab"
+                style={{ 
+                  padding: '6px', 
+                  background: 'none', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                title="Masquer"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
         </div>
         <p style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
           <TrendingUp size={11} style={{ color: 'var(--accent-cyan)' }} />

@@ -11,6 +11,7 @@ export interface District {
   logement_social_idx: number;
   revenu_idx: number;
   cadre_vie_idx: number;
+  environnement_idx: number;
   prix_m2: number;
   logements_sociaux_count: number;
   logement_social_pct: number;
@@ -30,6 +31,7 @@ export interface Overview {
   logement_social_idx: number;
   revenu_idx: number;
   cadre_vie_idx: number;
+  environnement_idx: number;
   prix_m2: number;
   logement_social_pct: number;
   revenu_median: number;
@@ -46,6 +48,7 @@ export interface TimelinePoint {
   logement_social_idx: number;
   revenu_idx: number;
   cadre_vie_idx: number;
+  environnement_idx: number;
 }
 
 export interface EventLog {

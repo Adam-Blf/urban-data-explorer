@@ -16,6 +16,12 @@ from functools import lru_cache
 from pathlib import Path
 
 from etl.catalog import ALL_SOURCES, FAMILIES
+from etl.processing import resolve_iris
+
+@lru_cache(maxsize=10000)
+def cached_resolve_iris(lat: float, lon: float) -> str | None:
+    res = resolve_iris(lat, lon)
+    return res.get("insee_com")
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "raw" / "downloads"
@@ -175,9 +181,10 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     logement_social_idx = round(clamp(logement_social_pct * 2.5, 5, 95))
     revenu_idx = round(clamp((revenu_median - 20000) / (48000 - 20000) * 100, 10, 95))
     cadre_vie_idx = round(clamp(acc, 0, 100))
+    environnement_idx = round(clamp(gs * 7.5, 20, 95))
     
-    # Overall score is the mean of the 4 indices
-    score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4)
+    # Overall score is the mean of the 5 indices
+    score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx + environnement_idx) / 5)
     
     return {
         "code": code,
@@ -203,6 +210,7 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
         "logement_social_idx": logement_social_idx,
         "revenu_idx": revenu_idx,
         "cadre_vie_idx": cadre_vie_idx,
+        "environnement_idx": environnement_idx,
         "prix_m2": prix_m2,
         "logements_sociaux_count": logements_sociaux_count,
         "logement_social_pct": logement_social_pct,
@@ -398,6 +406,7 @@ def city_overview():
         "logement_social_idx": round(sum(r["logement_social_idx"] for r in rows) / n),
         "revenu_idx": round(sum(r["revenu_idx"] for r in rows) / n),
         "cadre_vie_idx": round(sum(r["cadre_vie_idx"] for r in rows) / n),
+        "environnement_idx": round(sum(r["environnement_idx"] for r in rows) / n),
         "prix_m2": round(sum(r["prix_m2"] for r in rows) / n, 2),
         "logement_social_pct": round(sum(r["logement_social_pct"] for r in rows) / n, 2),
         "revenu_median": round(sum(r["revenu_median"] for r in rows) / n, 2),
@@ -446,6 +455,7 @@ def timeline_rows():
                     "logement_social_idx": round(clamp(15.0 + wave * 0.5, 0, 100), 2),
                     "revenu_idx": round(clamp(50.0 + wave * 1.5, 0, 100), 2),
                     "cadre_vie_idx": round(clamp(acc, 0, 100), 2),
+                    "environnement_idx": round(clamp(70.0 + wave * 2.2, 0, 100), 2),
                 })
             if rows:
                 return rows
@@ -491,6 +501,7 @@ def timeline_rows():
                     "logement_social_idx": round(clamp(15.0 + wave * 0.5, 0, 100), 2),
                     "revenu_idx": round(clamp(50.0 + wave * 1.5, 0, 100), 2),
                     "cadre_vie_idx": round(clamp(acc, 0, 100), 2),
+                    "environnement_idx": round(clamp(70.0 + wave * 2.2, 0, 100), 2),
                 })
             if rows:
                 return rows
@@ -516,6 +527,7 @@ def timeline_rows():
             "logement_social_idx": round(clamp(baseline["logement_social_idx"] + wave * 0.5, 0, 100), 2),
             "revenu_idx": round(clamp(baseline["revenu_idx"] + wave * 1.5, 0, 100), 2),
             "cadre_vie_idx": round(clamp(baseline["cadre_vie_idx"] + wave * 3.0, 0, 100), 2),
+            "environnement_idx": round(clamp(baseline["environnement_idx"] + wave * 2.5, 0, 100), 2),
         })
 
     return rows
@@ -624,6 +636,20 @@ def geojson_by_granularity(level: int) -> dict:
                 iris = properties.get("code_iris") or properties.get("c_iris") or properties.get("iris")
                 if isinstance(iris, str) and len(iris) >= 5:
                     code = iris[:5]
+            elif level == 3:
+                geom = properties.get("geom_x_y")
+                if isinstance(geom, dict):
+                    lon = geom.get("lon")
+                    lat = geom.get("lat")
+                    if lat is not None and lon is not None:
+                        code = cached_resolve_iris(float(lat), float(lon))
+            elif level == 4:
+                geom = properties.get("geo_point_2d")
+                if isinstance(geom, dict):
+                    lon = geom.get("lon")
+                    lat = geom.get("lat")
+                    if lat is not None and lon is not None:
+                        code = cached_resolve_iris(float(lat), float(lon))
                     
             if code:
                 code_str = _normalize_code(code)
@@ -635,6 +661,7 @@ def geojson_by_granularity(level: int) -> dict:
                         "logement_social_idx": d["logement_social_idx"],
                         "revenu_idx": d["revenu_idx"],
                         "cadre_vie_idx": d["cadre_vie_idx"],
+                        "environnement_idx": d["environnement_idx"],
                         "prix_m2": d["prix_m2"],
                         "logements_sociaux_count": d["logements_sociaux_count"],
                         "logement_social_pct": d["logement_social_pct"],

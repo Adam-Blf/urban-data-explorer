@@ -34,7 +34,11 @@ def download_dataset(spec: SourceSpec, download_dir: Path) -> bool:
             return False
         
         dataset_id = url_parts[-1]
-        csv_link = f"https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/{dataset_id}/exports/csv?limit=-1"
+        base_url = url_parts[0].split("/explore")[0]
+        csv_link = f"{base_url}/api/explore/v2.1/catalog/datasets/{dataset_id}/exports/csv?limit=-1"
+
+        if spec.source_id == "transit_stops":
+            csv_link += "&where=arrpostalregion%20like%20%27751*%27"
 
         # Le fichier de destination
         file_path = download_dir / f"{spec.source_id}.csv"
@@ -80,7 +84,8 @@ def scrape_catalog_metadata(spec: SourceSpec) -> Dict[str, Any]:
             }
         
         dataset_id = url_parts[-1]
-        api_url = f"https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/{dataset_id}"
+        base_url = url_parts[0].split("/explore")[0]
+        api_url = f"{base_url}/api/explore/v2.1/catalog/datasets/{dataset_id}"
         
         response = requests.get(api_url, timeout=10)
         if response.status_code == 200:

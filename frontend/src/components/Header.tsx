@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Settings } from 'lucide-react';
+import { Building2, Settings, Sliders, BarChart2 } from 'lucide-react';
 
 interface HeaderProps {
   isConnected: boolean;
@@ -7,6 +7,10 @@ interface HeaderProps {
   setMapMode: (mode: '2d' | '3d') => void;
   showSettings: boolean;
   setShowSettings: (show: boolean) => void;
+  showControlPanel: boolean;
+  setShowControlPanel: (show: boolean) => void;
+  showDataPanel: boolean;
+  setShowDataPanel: (show: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,7 +18,11 @@ export const Header: React.FC<HeaderProps> = ({
   mapMode,
   setMapMode,
   showSettings,
-  setShowSettings
+  setShowSettings,
+  showControlPanel,
+  setShowControlPanel,
+  showDataPanel,
+  setShowDataPanel
 }) => {
   return (
     <header className="glass-panel" style={{ position: 'absolute', top: '20px', left: '20px', right: '20px', height: '70px', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', pointerEvents: 'auto' }}>
@@ -37,6 +45,24 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={() => setShowControlPanel(!showControlPanel)}
+            className={`btn-tab ${showControlPanel ? 'active' : ''}`}
+            title="Afficher/Masquer le panneau de filtres"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Sliders size={18} />
+            <span>Filtres</span>
+          </button>
+          <button
+            onClick={() => setShowDataPanel(!showDataPanel)}
+            className={`btn-tab ${showDataPanel ? 'active' : ''}`}
+            title="Afficher/Masquer le panneau de statistiques"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <BarChart2 size={18} />
+            <span>Données</span>
+          </button>
           <button
             onClick={() => setMapMode('2d')}
             className={`btn-tab ${mapMode === '2d' ? 'active' : ''}`}

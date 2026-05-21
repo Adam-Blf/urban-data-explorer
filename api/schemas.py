@@ -32,6 +32,7 @@ class DistrictRow(BaseModel):
     logement_social_idx: int = 0
     revenu_idx: int = 0
     cadre_vie_idx: int = 0
+    environnement_idx: int = 0
     prix_m2: float = 0.0
     logements_sociaux_count: int = 0
     logement_social_pct: float = 0.0
@@ -51,6 +52,7 @@ class Overview(BaseModel):
     logement_social_idx: int = 0
     revenu_idx: int = 0
     cadre_vie_idx: int = 0
+    environnement_idx: int = 0
     prix_m2: float = 0.0
     logement_social_pct: float = 0.0
     revenu_median: float = 0.0
@@ -67,6 +69,7 @@ class TimelinePoint(BaseModel):
     logement_social_idx: float = 0.0
     revenu_idx: float = 0.0
     cadre_vie_idx: float = 0.0
+    environnement_idx: float = 0.0
 
 
 class EventRow(BaseModel):

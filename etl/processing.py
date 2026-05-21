@@ -112,11 +112,35 @@ def _normalize_code(raw: Any) -> str | None:
 # ── Point-in-polygon IRIS ────────────────────────────────────────────────
 
 
+def _get_bbox(geom: dict) -> tuple[float, float, float, float] | None:
+    """Calcule la bounding box d'une géométrie Polygon ou MultiPolygon."""
+    geom_type = geom.get("type", "")
+    coords = geom.get("coordinates", [])
+    
+    if geom_type == "Polygon":
+        if not coords or not coords[0]:
+            return None
+        lons = [p[0] for p in coords[0]]
+        lats = [p[1] for p in coords[0]]
+        return min(lons), min(lats), max(lons), max(lats)
+    elif geom_type == "MultiPolygon":
+        all_lons = []
+        all_lats = []
+        for poly in coords:
+            if poly and poly[0]:
+                all_lons.extend(p[0] for p in poly[0])
+                all_lats.extend(p[1] for p in poly[0])
+        if not all_lons:
+            return None
+        return min(all_lons), min(all_lats), max(all_lons), max(all_lats)
+    return None
+
+
 _iris_data: list[dict] | None = None
 
 
 def _load_iris() -> list[dict]:
-    """Charge le GeoJSON IRIS de Paris."""
+    """Charge le GeoJSON IRIS de Paris et précalcule les bboxes."""
     global _iris_data
     if _iris_data is not None:
         return _iris_data
@@ -128,7 +152,10 @@ def _load_iris() -> list[dict]:
     with open(IRIS_PATH, "r", encoding="utf-8") as f:
         geojson = json.load(f)
 
-    _iris_data = geojson.get("features", [])
+    features = geojson.get("features", [])
+    for feature in features:
+        feature["bbox"] = _get_bbox(feature.get("geometry", {}))
+    _iris_data = features
     return _iris_data
 
 
@@ -176,6 +203,11 @@ def resolve_iris(lat: float, lon: float) -> dict[str, str | None]:
     """
     features = _load_iris()
     for feature in features:
+        bbox = feature.get("bbox")
+        if bbox is not None:
+            min_lon, min_lat, max_lon, max_lat = bbox
+            if not (min_lon <= lon <= max_lon and min_lat <= lat <= max_lat):
+                continue
         if _point_in_feature(lon, lat, feature):
             props = feature.get("properties", {})
             insee = str(props.get("insee_com", ""))
@@ -371,9 +403,10 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         logement_social_idx = round(min(95, max(5, logement_social_pct * 2.5)))
         revenu_idx = round(min(95, max(10, (revenu_median - 20000) / (48000 - 20000) * 100)))
         cadre_vie_idx = round(min(100, max(0, accessibility)))
+        environnement_idx = round(min(95, max(20, gs * 7.5)))
 
         # Overall score
-        score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4)
+        score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx + environnement_idx) / 5)
 
         rows.append({
             "arrondissement_code": code,
@@ -392,6 +425,7 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
             "logement_social_idx": logement_social_idx,
             "revenu_idx": revenu_idx,
             "cadre_vie_idx": cadre_vie_idx,
+            "environnement_idx": environnement_idx,
             "prix_m2": prix_m2,
             "logements_sociaux_count": logements_sociaux_count,
             "logement_social_pct": logement_social_pct,
@@ -443,6 +477,7 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
         base_log = row["logement_social_idx"]
         base_rev = row["revenu_idx"]
         base_cad = row["cadre_vie_idx"]
+        base_env = row["environnement_idx"]
 
         # Nombre total d'enregistrements pour cet arrondissement dans silver_df
         total_records = silver_df.filter(pl.col("arrondissement_code") == code).height
@@ -459,6 +494,7 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
             log = min(100.0, max(0.0, base_log + wave * 0.5))
             rev = min(100.0, max(0.0, base_rev + wave * 1.5))
             cad = min(100.0, max(0.0, base_cad + wave * 3.0))
+            env = min(100.0, max(0.0, base_env + wave * 2.5))
 
             rows.append({
                 "arrondissement_code": code,
@@ -472,6 +508,7 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
                 "logement_social_idx": round(log, 2),
                 "revenu_idx": round(rev, 2),
                 "cadre_vie_idx": round(cad, 2),
+                "environnement_idx": round(env, 2),
             })
 
     return pl.DataFrame(rows)

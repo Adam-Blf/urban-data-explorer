@@ -95,6 +95,14 @@ ALL_SOURCES: list[SourceSpec] = [
         arrondissement_candidates=("arrondissement",),
         address_candidates=("adresse_station",),
     ),
+    SourceSpec(
+        source_id="transit_stops",
+        title="Points d'arret du reseau Ile-de-France Mobilites",
+        family="mobility",
+        catalog_url="https://data.iledefrance-mobilites.fr/explore/dataset/arrets/",
+        geo_point_column="arrgeopoint",
+        arrondissement_candidates=("arrpostalregion",),
+    ),
 
     # ── Éducation ─────────────────────────────────────────────────────────
     SourceSpec(

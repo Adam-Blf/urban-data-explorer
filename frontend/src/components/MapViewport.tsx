@@ -56,12 +56,13 @@ function extractCode(level: number, properties: Record<string, unknown> | null |
 
 /* ── Choropleth color scale expression generator ────────────────────── */
 
-const getChoroplethColorExpression = (activeFamily: string) => {
+const getChoroplethColorExpression = (activeFamily: string): any => {
   let propertyName = 'score';
   if (activeFamily === 'immobilier') propertyName = 'immobilier_idx';
   else if (activeFamily === 'logement_social') propertyName = 'logement_social_idx';
   else if (activeFamily === 'revenus') propertyName = 'revenu_idx';
   else if (activeFamily === 'cadre_vie') propertyName = 'cadre_vie_idx';
+  else if (activeFamily === 'environnement') propertyName = 'environnement_idx';
 
   return [
     'coalesce',
@@ -101,6 +102,13 @@ const getLegendDetails = (activeFamily: string) => {
     case 'cadre_vie':
       return {
         title: 'Index Cadre de Vie',
+        minLabel: '0 (Faible)',
+        maxLabel: '100 (Excellent)',
+        midLabel: '50',
+      };
+    case 'environnement':
+      return {
+        title: 'Index Environnement',
         minLabel: '0 (Faible)',
         maxLabel: '100 (Excellent)',
         midLabel: '50',
@@ -204,23 +212,40 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   const applyStyles2D = useCallback((map: maplibregl.Map, level: number, active: string, sel: string | null, comp: string | null) => {
     const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
     try {
+      if (map.getLayer('paris-base-fill')) {
+        map.setPaintProperty('paris-base-fill', 'fill-color', getChoroplethColorExpression(active));
+        if (level === 2) {
+          map.setPaintProperty('paris-base-fill', 'fill-opacity', 0.15);
+        } else if (level === 0) {
+          map.setPaintProperty('paris-base-fill', 'fill-opacity', 0.10);
+        } else {
+          map.setPaintProperty('paris-base-fill', 'fill-opacity', 0.60);
+        }
+      }
       if (map.getLayer('paris-districts-fill')) {
-        if (level === 1 || level === 2) {
+        if (level === 2) {
           map.setPaintProperty('paris-districts-fill', 'fill-color', getChoroplethColorExpression(active));
           map.setPaintProperty('paris-districts-fill', 'fill-opacity', 0.65);
+        } else if (level === 4) {
+          map.setPaintProperty('paris-districts-fill', 'fill-color', getChoroplethColorExpression(active));
+          map.setPaintProperty('paris-districts-fill', 'fill-opacity', 0.65);
+        } else if (level === 1) {
+          map.setPaintProperty('paris-districts-fill', 'fill-color', 'transparent');
+          map.setPaintProperty('paris-districts-fill', 'fill-opacity', 0.0);
         } else {
           map.setPaintProperty('paris-districts-fill', 'fill-color', style.fillColor);
           map.setPaintProperty('paris-districts-fill', 'fill-opacity', style.fillOpacity);
         }
       }
       if (map.getLayer('paris-districts-line')) {
+        const defaultLineColor = (level === 3) ? getChoroplethColorExpression(active) : style.lineColor;
         map.setPaintProperty('paris-districts-line', 'line-color', [
           'case',
           ['==', ['coalesce', ['get', 'c_arinsee'], ['get', 'c_ar'], ['get', 'insee_com']], sel || ''],
           '#06b6d4',
           ['==', ['coalesce', ['get', 'c_arinsee'], ['get', 'c_ar'], ['get', 'insee_com']], comp || ''],
           '#e879f9',
-          style.lineColor
+          defaultLineColor
         ]);
         map.setPaintProperty('paris-districts-line', 'line-width', [
           'case',
@@ -237,23 +262,40 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   const applyStyles3D = useCallback((map: mapboxgl.Map, level: number, active: string, sel: string | null, comp: string | null) => {
     const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
     try {
+      if (map.getLayer('paris-base-fill-3d')) {
+        map.setPaintProperty('paris-base-fill-3d', 'fill-color', getChoroplethColorExpression(active) as any);
+        if (level === 2) {
+          map.setPaintProperty('paris-base-fill-3d', 'fill-opacity', 0.15);
+        } else if (level === 0) {
+          map.setPaintProperty('paris-base-fill-3d', 'fill-opacity', 0.10);
+        } else {
+          map.setPaintProperty('paris-base-fill-3d', 'fill-opacity', 0.60);
+        }
+      }
       if (map.getLayer('paris-districts-fill-3d')) {
-        if (level === 1 || level === 2) {
+        if (level === 2) {
           map.setPaintProperty('paris-districts-fill-3d', 'fill-color', getChoroplethColorExpression(active) as any);
           map.setPaintProperty('paris-districts-fill-3d', 'fill-opacity', 0.65);
+        } else if (level === 4) {
+          map.setPaintProperty('paris-districts-fill-3d', 'fill-color', getChoroplethColorExpression(active) as any);
+          map.setPaintProperty('paris-districts-fill-3d', 'fill-opacity', 0.65);
+        } else if (level === 1) {
+          map.setPaintProperty('paris-districts-fill-3d', 'fill-color', 'transparent');
+          map.setPaintProperty('paris-districts-fill-3d', 'fill-opacity', 0.0);
         } else {
           map.setPaintProperty('paris-districts-fill-3d', 'fill-color', style.fillColor);
           map.setPaintProperty('paris-districts-fill-3d', 'fill-opacity', style.fillOpacity);
         }
       }
       if (map.getLayer('paris-districts-line-3d')) {
+        const defaultLineColor = (level === 3) ? getChoroplethColorExpression(active) : style.lineColor;
         map.setPaintProperty('paris-districts-line-3d', 'line-color', [
           'case',
           ['==', ['coalesce', ['get', 'c_arinsee'], ['get', 'c_ar'], ['get', 'insee_com']], sel || ''],
           '#06b6d4',
           ['==', ['coalesce', ['get', 'c_arinsee'], ['get', 'c_ar'], ['get', 'insee_com']], comp || ''],
           '#e879f9',
-          style.lineColor
+          defaultLineColor
         ] as any);
         map.setPaintProperty('paris-districts-line-3d', 'line-width', [
           'case',
@@ -302,6 +344,20 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       try {
         const level = granularityRef.current;
         const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+        
+        // Fetch base layer (arrondissements) to always keep background colored
+        const baseGeojson = await api.fetchGeoJsonByGranularity(1);
+        map.addSource('paris-base', { type: 'geojson', data: baseGeojson });
+        map.addLayer({
+          id: 'paris-base-fill',
+          type: 'fill',
+          source: 'paris-base',
+          paint: {
+            'fill-color': getChoroplethColorExpression(activeFamily),
+            'fill-opacity': 0.60
+          }
+        });
+
         const geojson = await api.fetchGeoJsonByGranularity(level);
         if (!geojson.features || geojson.features.length === 0) return;
         map.addSource('paris-bounds', { type: 'geojson', data: geojson });
@@ -401,6 +457,20 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       try {
         const level = granularityRef.current;
         const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+
+        // Fetch base layer (arrondissements) to always keep background colored
+        const baseGeojson = await api.fetchGeoJsonByGranularity(1);
+        map.addSource('paris-base-3d', { type: 'geojson', data: baseGeojson });
+        map.addLayer({
+          id: 'paris-base-fill-3d',
+          type: 'fill',
+          source: 'paris-base-3d',
+          paint: {
+            'fill-color': getChoroplethColorExpression(activeFamily) as any,
+            'fill-opacity': 0.60
+          }
+        });
+
         const geojson = await api.fetchGeoJsonByGranularity(level);
         if (!geojson.features || geojson.features.length === 0) return;
         map.addSource('paris-bounds-3d', { type: 'geojson', data: geojson });
@@ -482,11 +552,11 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       )}
 
       {/* Dynamic Legend / Scale */}
-      {(granularity === 1 || granularity === 2) && (
+      {granularity >= 1 && (
         <div className="glass-panel" style={{
           position: 'absolute',
           bottom: '20px',
-          left: '420px',
+          left: '20px',
           zIndex: 15,
           padding: '12px 16px',
           borderRadius: '12px',
