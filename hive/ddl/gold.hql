@@ -1,7 +1,9 @@
-CREATE DATABASE IF NOT EXISTS ude;
+-- Hive DDL – Gold layer (datamarts agrégés pour le dashboard)
+-- C1.3: Data Lake – couche de valorisation
+
 USE ude;
 
-CREATE EXTERNAL TABLE IF NOT EXISTS gold_arrondissement_dashboard (
+CREATE EXTERNAL TABLE IF NOT EXISTS gold_dashboard (
   arrondissement_code STRING,
   green_space_count INT,
   mobility_count INT,
@@ -16,9 +18,9 @@ CREATE EXTERNAL TABLE IF NOT EXISTS gold_arrondissement_dashboard (
   attractiveness_index DOUBLE
 )
 STORED AS PARQUET
-LOCATION '/data/gold/dashboard';
+LOCATION 'hdfs://namenode:8020/data/gold/dashboard';
 
-CREATE EXTERNAL TABLE IF NOT EXISTS gold_arrondissement_timeline (
+CREATE EXTERNAL TABLE IF NOT EXISTS gold_timeline (
   arrondissement_code STRING,
   year INT,
   month INT,
@@ -28,4 +30,4 @@ CREATE EXTERNAL TABLE IF NOT EXISTS gold_arrondissement_timeline (
   attractiveness_index DOUBLE
 )
 STORED AS PARQUET
-LOCATION '/data/gold/timeline';
+LOCATION 'hdfs://namenode:8020/data/gold/timeline';

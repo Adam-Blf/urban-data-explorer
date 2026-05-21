@@ -1,27 +1,5 @@
 services:
-  zookeeper:
-    image: bitnami/zookeeper:3.9
-    restart: unless-stopped
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    ports:
-      - "2181:2181"
-
-  kafka:
-    image: bitnami/kafka:3.7
-    restart: unless-stopped
-    depends_on:
-      - zookeeper
-    environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    ports:
-      - "9092:9092"
-    volumes:
-      - ./scripts:/scripts:ro
-
+  # ── Core ────────────────────────────────────────────────────────────────
   postgres:
     image: postgres:16
     restart: unless-stopped
@@ -45,94 +23,7 @@ services:
     ports:
       - "9042:9042"
     volumes:
-      - ./cassandra/schema.cql:/scripts/schema.cql:ro
       - ./scripts:/scripts:ro
-
-  namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
-    restart: unless-stopped
-    environment:
-      - CLUSTER_NAME=ude
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-    ports:
-      - "9870:9870"
-      - "8020:8020"
-    volumes:
-      - ./scripts:/scripts:ro
-
-  datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
-    restart: unless-stopped
-    depends_on:
-      - namenode
-    environment:
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - HDFS_CONF_dfs_replication=1
-
-  hive-metastore-db:
-    image: postgres:12
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=metastore
-      - POSTGRES_USER=hive
-      - POSTGRES_PASSWORD=hive
-
-  hive-metastore:
-    image: bde2020/hive-metastore:2.3.2-postgresql-metastore
-    restart: unless-stopped
-    depends_on:
-      - namenode
-      - datanode
-      - hive-metastore-db
-    environment:
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - HIVE_METASTORE_DB_TYPE=postgres
-      - HIVE_METASTORE_HOST=hive-metastore
-      - HIVE_METASTORE_USER=hive
-      - HIVE_METASTORE_PASS=hive
-      - HIVE_METASTORE_DB_HOST=hive-metastore-db
-
-  hive-server:
-    image: bde2020/hive:2.3.2-postgresql-metastore
-    restart: unless-stopped
-    depends_on:
-      - hive-metastore
-    environment:
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - HIVE_METASTORE_URIS=thrift://hive-metastore:9083
-    ports:
-      - "10000:10000"
-    volumes:
-      - ./hive/ddl:/hive/ddl:ro
-
-  spark-master:
-    build:
-      context: .
-      dockerfile: spark/Dockerfile
-    restart: unless-stopped
-    environment:
-      - SPARK_MODE=master
-      - PYTHONPATH=/opt/spark
-    ports:
-      - "7077:7077"
-      - "8081:8080"
-    volumes:
-      - ./spark/jobs:/opt/spark/jobs:ro
-      - ./etl:/opt/spark/etl:ro
-
-  spark-worker:
-    build:
-      context: .
-      dockerfile: spark/Dockerfile
-    restart: unless-stopped
-    depends_on:
-      - spark-master
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - PYTHONPATH=/opt/spark
-    volumes:
-      - ./etl:/opt/spark/etl:ro
 
   api:
     build:
@@ -157,3 +48,90 @@ services:
     restart: unless-stopped
     ports:
       - "8080:80"
+
+  # ── Streaming (profil optionnel) ────────────────────────────────────────
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    profiles: ["streaming"]
+    restart: unless-stopped
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: bitnami/kafka:3.7.0
+    profiles: ["streaming"]
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./scripts:/scripts:ro
+
+  # ── Data Lake (profil optionnel) ────────────────────────────────────────
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    profiles: ["lake"]
+    restart: unless-stopped
+    environment:
+      - CLUSTER_NAME=ude
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    profiles: ["lake"]
+    restart: unless-stopped
+    depends_on:
+      - namenode
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HDFS_CONF_dfs_replication=1
+
+  hive-metastore-db:
+    image: postgres:12
+    profiles: ["lake"]
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=metastore
+      - POSTGRES_USER=hive
+      - POSTGRES_PASSWORD=hive
+
+  hive-metastore:
+    image: bde2020/hive-metastore:2.3.2-postgresql-metastore
+    profiles: ["lake"]
+    restart: unless-stopped
+    depends_on:
+      - namenode
+      - datanode
+      - hive-metastore-db
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HIVE_METASTORE_DB_TYPE=postgres
+      - HIVE_METASTORE_HOST=hive-metastore
+      - HIVE_METASTORE_USER=hive
+      - HIVE_METASTORE_PASS=hive
+      - HIVE_METASTORE_DB_HOST=hive-metastore-db
+
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    profiles: ["lake"]
+    restart: unless-stopped
+    depends_on:
+      - hive-metastore
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HIVE_METASTORE_URIS=thrift://hive-metastore:9083
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./hive/ddl:/hive/ddl:ro

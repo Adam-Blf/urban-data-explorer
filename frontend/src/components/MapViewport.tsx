@@ -1,8 +1,62 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import mapboxgl from 'mapbox-gl';
 import { AlertTriangle, Settings } from 'lucide-react';
 import { api } from '../services/api';
+
+/* ── Style configuration per granularity level ─────────────────────────── */
+
+const LEVEL_STYLES: Record<number, {
+  fillColor: string;
+  lineColor: string;
+  lineWidth: number;
+  fillOpacity: number;
+  label: string;
+}> = {
+  0: { fillColor: '#06b6d4', lineColor: '#0891b2', lineWidth: 2.5, fillOpacity: 0.10, label: 'Ville' },
+  1: { fillColor: '#06b6d4', lineColor: '#0891b2', lineWidth: 1.5, fillOpacity: 0.15, label: 'Arrondissement' },
+  2: { fillColor: '#3b82f6', lineColor: '#2563eb', lineWidth: 1.0, fillOpacity: 0.10, label: 'IRIS' },
+  3: { fillColor: '#f59e0b', lineColor: '#d97706', lineWidth: 2.0, fillOpacity: 0.0,  label: 'Rue' },
+  4: { fillColor: '#8b5cf6', lineColor: '#7c3aed', lineWidth: 0.5, fillOpacity: 0.20, label: 'Bâtiment' },
+};
+
+/* ── Property extraction per level (for click handler) ─────────────────── */
+
+function extractCode(level: number, properties: Record<string, unknown> | null | undefined): string | null {
+  if (!properties) return null;
+  switch (level) {
+    case 0:
+      return typeof properties.name === 'string' ? properties.name : null;
+    case 1: {
+      // Open Data Paris arrondissements
+      const code = properties.c_arinsee ?? properties.c_ar ?? properties.insee_com;
+      return code != null ? String(code) : null;
+    }
+    case 2: {
+      // IRIS — extract arrondissement code
+      const iris = properties.code_iris ?? properties.c_iris ?? properties.iris;
+      if (typeof iris === 'string') return iris.substring(0, 5);
+      const arCode = properties.c_arinsee ?? properties.c_ar;
+      return arCode != null ? String(arCode) : null;
+    }
+    case 3:
+      return typeof properties.l_voie === 'string'
+        ? properties.l_voie
+        : typeof properties.name === 'string'
+          ? properties.name
+          : null;
+    case 4:
+      return typeof properties.n_sq_vo === 'string'
+        ? properties.n_sq_vo
+        : typeof properties.name === 'string'
+          ? properties.name
+          : null;
+    default:
+      return null;
+  }
+}
+
+/* ── Component ─────────────────────────────────────────────────────────── */
 
 interface MapViewportProps {
   mapMode: '2d' | '3d';
@@ -28,6 +82,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   const map2DRef = useRef<maplibregl.Map | null>(null);
   const map3DRef = useRef<mapboxgl.Map | null>(null);
   const granularityRef = useRef(granularity);
+  const loadingRef = useRef(false);
 
   const coords: Record<string, [number, number]> = {
     '75001': [2.3364, 48.8626], '75002': [2.3426, 48.8682], '75003': [2.3601, 48.8629],
@@ -43,9 +98,9 @@ export const MapViewport: React.FC<MapViewportProps> = ({
    granularityRef.current = granularity;
   }, [granularity]);
 
-  const updateGranularityByZoom = (zoom: number) => {
+  const updateGranularityByZoom = useCallback((zoom: number) => {
    let level = 0;
-   if (zoom >= 16) level = 4;      // Immeuble
+   if (zoom >= 16) level = 4;      // Bâtiment
    else if (zoom >= 14) level = 3; // Rue
    else if (zoom >= 12) level = 2; // IRIS
    else if (zoom >= 10) level = 1; // Arrondissement
@@ -55,7 +110,43 @@ export const MapViewport: React.FC<MapViewportProps> = ({
      granularityRef.current = level;
      setGranularity(level);
    }
-  };
+  }, [setGranularity]);
+
+  /* ── Helper: apply level-specific paint properties ─────────────────── */
+
+  const applyLevelStyle2D = useCallback((map: maplibregl.Map, level: number) => {
+    const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+    try {
+      if (map.getLayer('paris-districts-fill')) {
+        map.setPaintProperty('paris-districts-fill', 'fill-color', style.fillColor);
+        map.setPaintProperty('paris-districts-fill', 'fill-opacity', style.fillOpacity);
+      }
+      if (map.getLayer('paris-districts-line')) {
+        map.setPaintProperty('paris-districts-line', 'line-color', style.lineColor);
+        map.setPaintProperty('paris-districts-line', 'line-width', style.lineWidth);
+      }
+    } catch (e) {
+      console.warn('Style update failed', e);
+    }
+  }, []);
+
+  const applyLevelStyle3D = useCallback((map: mapboxgl.Map, level: number) => {
+    const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+    try {
+      if (map.getLayer('paris-districts-fill-3d')) {
+        map.setPaintProperty('paris-districts-fill-3d', 'fill-color', style.fillColor);
+        map.setPaintProperty('paris-districts-fill-3d', 'fill-opacity', style.fillOpacity);
+      }
+      if (map.getLayer('paris-districts-line-3d')) {
+        map.setPaintProperty('paris-districts-line-3d', 'line-color', style.lineColor);
+        map.setPaintProperty('paris-districts-line-3d', 'line-width', style.lineWidth);
+      }
+    } catch (e) {
+      console.warn('Style update failed', e);
+    }
+  }, []);
+
+  /* ── 2D Map ────────────────────────────────────────────────────────── */
 
   useEffect(() => {
     if (mapMode !== '2d' || !mapContainer2D.current) return;
@@ -88,29 +179,27 @@ export const MapViewport: React.FC<MapViewportProps> = ({
 
     map.on('load', async () => {
       try {
-        const geojson = await api.fetchGeoJsonByGranularity(granularityRef.current);
+        const level = granularityRef.current;
+        const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+        const geojson = await api.fetchGeoJsonByGranularity(level);
         if (!geojson.features || geojson.features.length === 0) return;
         map.addSource('paris-bounds', { type: 'geojson', data: geojson });
         map.addLayer({
           id: 'paris-districts-fill',
           type: 'fill',
           source: 'paris-bounds',
-          paint: { 'fill-color': '#06b6d4', 'fill-opacity': 0.15, 'fill-outline-color': '#0891b2' }
+          paint: { 'fill-color': style.fillColor, 'fill-opacity': style.fillOpacity, 'fill-outline-color': style.lineColor }
         });
         map.addLayer({
           id: 'paris-districts-line',
           type: 'line',
           source: 'paris-bounds',
-          paint: { 'line-color': '#06b6d4', 'line-width': 1.5 }
+          paint: { 'line-color': style.lineColor, 'line-width': style.lineWidth }
         });
         map.on('click', 'paris-districts-fill', (e) => {
           if (e.features && e.features[0]) {
             const properties = e.features[0].properties as Record<string, unknown> | null | undefined;
-            const code = typeof properties?.insee_com === 'string'
-              ? properties.insee_com
-              : typeof properties?.code_iris === 'string'
-                ? properties.code_iris.substring(0, 5)
-                : null;
+            const code = extractCode(granularityRef.current, properties);
             if (code) setSelectedDistrict(code);
           }
         });
@@ -120,14 +209,24 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     return () => { if (map2DRef.current) { map2DRef.current.remove(); map2DRef.current = null; } };
   }, [mapMode]);
 
+  /* ── Granularity change → reload data + update style (2D) ──────────── */
+
   useEffect(() => {
-    if (map2DRef.current && map2DRef.current.getSource('paris-bounds')) {
-      api.fetchGeoJsonByGranularity(granularity).then(data => {
-        const source = map2DRef.current?.getSource('paris-bounds') as maplibregl.GeoJSONSource | undefined;
+    const map = map2DRef.current;
+    if (!map || !map.getSource('paris-bounds') || loadingRef.current) return;
+
+    loadingRef.current = true;
+    api.fetchGeoJsonByGranularity(granularity)
+      .then(data => {
+        const source = map.getSource('paris-bounds') as maplibregl.GeoJSONSource | undefined;
         source?.setData(data);
-      });
-    }
-  }, [granularity]);
+        applyLevelStyle2D(map, granularity);
+      })
+      .catch(err => console.error('GeoJSON update failed', err))
+      .finally(() => { loadingRef.current = false; });
+  }, [granularity, applyLevelStyle2D]);
+
+  /* ── 3D Map ────────────────────────────────────────────────────────── */
 
   useEffect(() => {
     if (mapMode !== '3d' || !mapContainer3D.current || !mapboxToken) return;
@@ -153,6 +252,8 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     map.on('load', async () => {
       const layers = map.getStyle().layers;
       const labelLayerId = layers?.find((layer: any) => layer.type === 'symbol' && layer.layout?.['text-field'])?.id;
+
+      // Mapbox native building extrusion (always available for 3D)
       map.addLayer({
         id: '3d-buildings',
         source: 'composite',
@@ -169,29 +270,27 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       }, labelLayerId);
 
       try {
-        const geojson = await api.fetchGeoJsonByGranularity(granularityRef.current);
+        const level = granularityRef.current;
+        const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+        const geojson = await api.fetchGeoJsonByGranularity(level);
         if (!geojson.features || geojson.features.length === 0) return;
         map.addSource('paris-bounds-3d', { type: 'geojson', data: geojson });
         map.addLayer({
           id: 'paris-districts-fill-3d',
           type: 'fill',
           source: 'paris-bounds-3d',
-          paint: { 'fill-color': '#8b5cf6', 'fill-opacity': 0.12 }
+          paint: { 'fill-color': style.fillColor, 'fill-opacity': style.fillOpacity }
         });
         map.addLayer({
           id: 'paris-districts-line-3d',
           type: 'line',
           source: 'paris-bounds-3d',
-          paint: { 'line-color': '#8b5cf6', 'line-width': 1.5 }
+          paint: { 'line-color': style.lineColor, 'line-width': style.lineWidth }
         });
         map.on('click', 'paris-districts-fill-3d', (e) => {
           if (e.features && e.features[0]) {
             const properties = e.features[0].properties as Record<string, unknown> | null | undefined;
-            const code = typeof properties?.insee_com === 'string'
-              ? properties.insee_com
-              : typeof properties?.code_iris === 'string'
-                ? properties.code_iris.substring(0, 5)
-                : null;
+            const code = extractCode(granularityRef.current, properties);
             if (code) setSelectedDistrict(code);
           }
         });
@@ -201,14 +300,20 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     return () => { if (map3DRef.current) { map3DRef.current.remove(); map3DRef.current = null; } };
   }, [mapMode, mapboxToken]);
 
+  /* ── Granularity change → reload data + update style (3D) ──────────── */
+
   useEffect(() => {
-    if (map3DRef.current && map3DRef.current.getSource('paris-bounds-3d')) {
-      api.fetchGeoJsonByGranularity(granularity).then(data => {
-        const source = map3DRef.current?.getSource('paris-bounds-3d') as mapboxgl.GeoJSONSource | undefined;
-        source?.setData(data);
-      });
-    }
-  }, [granularity]);
+    const map = map3DRef.current;
+    if (!map || !map.getSource('paris-bounds-3d')) return;
+
+    api.fetchGeoJsonByGranularity(granularity).then(data => {
+      const source = map.getSource('paris-bounds-3d') as mapboxgl.GeoJSONSource | undefined;
+      source?.setData(data);
+      applyLevelStyle3D(map, granularity);
+    });
+  }, [granularity, applyLevelStyle3D]);
+
+  /* ── Fly to selected district ──────────────────────────────────────── */
 
   useEffect(() => {
     if (selectedDistrict && coords[selectedDistrict]) {
@@ -220,6 +325,10 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       }
     }
   }, [selectedDistrict, mapMode]);
+
+  /* ── Level indicator overlay ───────────────────────────────────────── */
+
+  const currentStyle = LEVEL_STYLES[granularity] || LEVEL_STYLES[1];
 
   return (
     <>
@@ -239,6 +348,40 @@ export const MapViewport: React.FC<MapViewportProps> = ({
           </button>
         </div>
       )}
+
+      {/* Level indicator badge */}
+      <div style={{
+        position: 'absolute',
+        bottom: '30px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 15,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        background: 'rgba(10, 12, 16, 0.85)',
+        backdropFilter: 'blur(12px)',
+        border: `1px solid ${currentStyle.lineColor}40`,
+        borderRadius: '20px',
+        padding: '6px 16px',
+        transition: 'all 0.3s ease',
+      }}>
+        <div style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          background: currentStyle.lineColor,
+          boxShadow: `0 0 8px ${currentStyle.lineColor}`,
+        }} />
+        <span style={{
+          fontSize: '12px',
+          fontWeight: 600,
+          color: currentStyle.lineColor,
+          letterSpacing: '0.03em',
+        }}>
+          Niveau {granularity} — {currentStyle.label}
+        </span>
+      </div>
     </>
   );
 };

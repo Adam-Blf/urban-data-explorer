@@ -1,27 +1,14 @@
 from __future__ import annotations
+from fastapi import APIRouter
+from ..data import source_catalog
+from ..schemas import SourceRow
 
-from fastapi import APIRouter, Depends
-
-from etl.catalog import ALL_SOURCES
-
-from ..schemas import SourceInfo
-from ..security import require_api_key
-
-router = APIRouter(prefix="/catalog", tags=["catalog"], dependencies=[Depends(require_api_key)])
+router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
-@router.get("/sources", response_model=list[SourceInfo])
-def list_sources():
-    """Expose the integrated source catalog for the frontend."""
-
-    return [
-        SourceInfo(
-            source_id=spec.source_id,
-            title=spec.title,
-            provider=spec.provider,
-            family=spec.family,
-            catalog_url=spec.catalog_url,
-            metadata_only=spec.metadata_only,
-        )
-        for spec in ALL_SOURCES
-    ]
+@router.get("/sources", response_model=list[SourceRow])
+def sources(family: str | None = None):
+    rows = source_catalog()
+    if family and family != "all":
+        rows = [r for r in rows if r["family"] == family]
+    return [SourceRow(**r) for r in rows]

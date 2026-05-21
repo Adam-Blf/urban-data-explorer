@@ -1,56 +1,27 @@
 from __future__ import annotations
+from fastapi import APIRouter
+from ..data import city_overview, district_rows, timeline_rows, geojson_by_granularity
+from ..schemas import DistrictRow, Overview, TimelinePoint
 
-from fastapi import APIRouter, Depends
-
-from ..db import pg_fetch_all
-from ..schemas import ArrondissementDashboard, TimelinePoint
-from ..security import require_api_key
-
-router = APIRouter(prefix="/datamarts", tags=["datamarts"], dependencies=[Depends(require_api_key)])
+router = APIRouter(prefix="/datamarts", tags=["datamarts"])
 
 
-@router.get("/dashboard", response_model=list[ArrondissementDashboard])
+@router.get("/dashboard", response_model=list[DistrictRow])
 def dashboard():
-    """Return the current arrondissement KPI dashboard."""
+    return [DistrictRow(**row) for row in district_rows()]
 
-    rows = pg_fetch_all(
-        """
-        SELECT
-            arrondissement_code,
-            green_space_count,
-            mobility_count,
-            public_service_count,
-            education_count,
-            culture_count,
-            health_count,
-            housing_count,
-            pressure_count,
-            accessibility_index,
-            pressure_index,
-            attractiveness_index
-        FROM fact_arrondissement_dashboard
-        ORDER BY arrondissement_code
-        """
-    )
-    return [ArrondissementDashboard(**row) for row in rows]
+
+@router.get("/overview", response_model=Overview)
+def overview():
+    return Overview(**city_overview())
 
 
 @router.get("/timeline", response_model=list[TimelinePoint])
 def timeline():
-    """Return the monthly Gold trend mart."""
+    return [TimelinePoint(**row) for row in timeline_rows()]
 
-    rows = pg_fetch_all(
-        """
-        SELECT
-            arrondissement_code,
-            year,
-            month,
-            record_count,
-            accessibility_index,
-            pressure_index,
-            attractiveness_index
-        FROM fact_arrondissement_timeline
-        ORDER BY arrondissement_code, year, month
-        """
-    )
-    return [TimelinePoint(**row) for row in rows]
+
+@router.get("/geojson/{level}")
+def get_geojson(level: int):
+    """Retourne le GeoJSON selon le niveau de granularité (0-4)."""
+    return geojson_by_granularity(level)

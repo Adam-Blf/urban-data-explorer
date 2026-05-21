@@ -18,7 +18,6 @@ from etl.catalog import ALL_SOURCES, FAMILIES
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "raw" / "downloads"
-PARIS_GEOJSON_PATH = DATA_DIR / "paris_iris.geojson"
 
 DISTRICTS = (
     {"code": "75001", "name": "Louvre", "label": "1er"},
@@ -75,6 +74,134 @@ def source_family_counts():
 
 @lru_cache(maxsize=1)
 def district_rows():
+    # 1. Try PostgreSQL
+    try:
+        from .db import pg_fetch_all
+        sql = """
+            SELECT 
+                arrondissement_code,
+                green_space_count,
+                mobility_count,
+                public_service_count,
+                education_count,
+                culture_count,
+                health_count,
+                housing_count,
+                pressure_count,
+                accessibility_index,
+                pressure_index,
+                attractiveness_index
+            FROM fact_arrondissement_dashboard
+        """
+        db_rows = pg_fetch_all(sql)
+        if db_rows:
+            rows = []
+            for row in db_rows:
+                code = row["arrondissement_code"]
+                district = next((d for d in DISTRICTS if d["code"] == code), None)
+                if not district:
+                    continue
+                
+                try:
+                    i = [d["code"] for d in DISTRICTS].index(code)
+                except ValueError:
+                    i = 0
+                
+                x = 300 + i * 25
+                y = 200 + int(math.sin(i) * 100)
+                
+                acc = row["accessibility_index"]
+                press = row["pressure_index"]
+                attr = row["attractiveness_index"]
+                score = round((acc + attr - press * 0.25) / 2)
+                
+                family_counts = {
+                    "green_space": int(row["green_space_count"]),
+                    "mobility": int(row["mobility_count"]),
+                    "public_service": int(row["public_service_count"]),
+                    "education": int(row["education_count"]),
+                    "culture": int(row["culture_count"]),
+                    "health": int(row["health_count"]),
+                    "housing": int(row["housing_count"]),
+                    "pressure": int(row["pressure_count"]),
+                }
+                
+                rows.append({
+                    "code": code,
+                    "name": district["name"],
+                    "label": district["label"],
+                    "x": x,
+                    "y": y,
+                    "family_counts": family_counts,
+                    "accessibility_index": round(acc),
+                    "pressure_index": round(press),
+                    "attractiveness_index": round(attr),
+                    "score": score,
+                })
+            
+            if rows:
+                rows.sort(key=lambda r: r["code"])
+                return rows
+    except Exception as exc:
+        print(f"  [INFO] PostgreSQL district_rows failed: {exc}")
+
+    # 2. Try Parquet
+    try:
+        import polars as pl
+        parquet_path = ROOT / "data" / "gold" / "dashboard.parquet"
+        if parquet_path.exists():
+            df = pl.read_parquet(parquet_path)
+            rows = []
+            for row in df.to_dicts():
+                code = row["arrondissement_code"]
+                district = next((d for d in DISTRICTS if d["code"] == code), None)
+                if not district:
+                    continue
+                
+                try:
+                    i = [d["code"] for d in DISTRICTS].index(code)
+                except ValueError:
+                    i = 0
+                
+                x = 300 + i * 25
+                y = 200 + int(math.sin(i) * 100)
+                
+                acc = row["accessibility_index"]
+                press = row["pressure_index"]
+                attr = row["attractiveness_index"]
+                score = round((acc + attr - press * 0.25) / 2)
+                
+                family_counts = {
+                    "green_space": int(row["green_space_count"]),
+                    "mobility": int(row["mobility_count"]),
+                    "public_service": int(row["public_service_count"]),
+                    "education": int(row["education_count"]),
+                    "culture": int(row["culture_count"]),
+                    "health": int(row["health_count"]),
+                    "housing": int(row["housing_count"]),
+                    "pressure": int(row["pressure_count"]),
+                }
+                
+                rows.append({
+                    "code": code,
+                    "name": district["name"],
+                    "label": district["label"],
+                    "x": x,
+                    "y": y,
+                    "family_counts": family_counts,
+                    "accessibility_index": round(acc),
+                    "pressure_index": round(press),
+                    "attractiveness_index": round(attr),
+                    "score": score,
+                })
+            
+            if rows:
+                rows.sort(key=lambda r: r["code"])
+                return rows
+    except Exception as exc:
+        print(f"  [INFO] Parquet dashboard failed: {exc}")
+
+    # 3. Fallback to math generator
     rows = []
     fam_counts = source_family_counts()
 
@@ -148,6 +275,84 @@ def city_overview():
 
 @lru_cache(maxsize=1)
 def timeline_rows():
+    # 1. Try PostgreSQL
+    try:
+        from .db import pg_fetch_all
+        sql = """
+            SELECT 
+                year,
+                month,
+                SUM(record_count) as activity,
+                AVG(accessibility_index) as accessibility_index,
+                AVG(pressure_index) as pressure_index,
+                AVG(attractiveness_index) as attractiveness_index
+            FROM fact_arrondissement_timeline
+            GROUP BY year, month
+            ORDER BY year ASC, month ASC
+        """
+        db_rows = pg_fetch_all(sql)
+        if db_rows:
+            rows = []
+            for row in db_rows:
+                y = int(row["year"])
+                m = int(row["month"])
+                
+                month_str = f"{y:04d}-{m:02d}"
+                month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                label_str = f"{month_names[m - 1]} {y}"
+                
+                rows.append({
+                    "month": month_str,
+                    "label": label_str,
+                    "activity": int(row["activity"]),
+                    "accessibility_index": round(float(row["accessibility_index"]), 2),
+                    "pressure_index": round(float(row["pressure_index"]), 2),
+                    "attractiveness_index": round(float(row["attractiveness_index"]), 2),
+                })
+            if rows:
+                return rows
+    except Exception as exc:
+        print(f"  [INFO] PostgreSQL timeline_rows failed: {exc}")
+
+    # 2. Try Parquet
+    try:
+        import polars as pl
+        parquet_path = ROOT / "data" / "gold" / "timeline.parquet"
+        if parquet_path.exists():
+            df = pl.read_parquet(parquet_path)
+            agg_df = (
+                df.group_by(["year", "month"])
+                .agg([
+                    pl.col("record_count").sum().alias("activity"),
+                    pl.col("accessibility_index").mean().alias("accessibility_index"),
+                    pl.col("pressure_index").mean().alias("pressure_index"),
+                    pl.col("attractiveness_index").mean().alias("attractiveness_index"),
+                ])
+                .sort(["year", "month"])
+            )
+            
+            rows = []
+            for row in agg_df.to_dicts():
+                y = int(row["year"])
+                m = int(row["month"])
+                month_str = f"{y:04d}-{m:02d}"
+                month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                label_str = f"{month_names[m - 1]} {y}"
+                
+                rows.append({
+                    "month": month_str,
+                    "label": label_str,
+                    "activity": int(row["activity"]),
+                    "accessibility_index": round(float(row["accessibility_index"]), 2),
+                    "pressure_index": round(float(row["pressure_index"]), 2),
+                    "attractiveness_index": round(float(row["attractiveness_index"]), 2),
+                })
+            if rows:
+                return rows
+    except Exception as exc:
+        print(f"  [INFO] Parquet timeline failed: {exc}")
+
+    # 3. Fallback to math generator
     rows = []
     baseline = city_overview()
     start = datetime.now(UTC).replace(day=1, hour=0, minute=0, second=0, microsecond=0) - timedelta(days=330)
@@ -207,98 +412,52 @@ def latest_pipeline_run():
     }
 
 
-@lru_cache(maxsize=10)
+LEVEL_FILES = {
+    0: DATA_DIR / "paris_city.geojson",
+    1: DATA_DIR / "paris_arrondissements.geojson",
+    2: DATA_DIR / "paris_iris.geojson",
+    3: DATA_DIR / "paris_streets.geojson",
+    4: DATA_DIR / "paris_buildings.geojson",
+}
+
+LEVEL_NAMES = {
+    0: "Ville",
+    1: "Arrondissement",
+    2: "IRIS",
+    3: "Rue",
+    4: "Bâtiment",
+}
+
+
+@lru_cache(maxsize=5)
+def _load_geojson(path: str) -> dict:
+    """Charge un fichier GeoJSON depuis le disque (avec cache LRU)."""
+    p = Path(path)
+    if not p.exists():
+        return {"type": "FeatureCollection", "features": []}
+    with p.open("r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
 def geojson_by_granularity(level: int) -> dict:
     """Retourne le GeoJSON correspondant au niveau de granularité demandé.
 
     Levels:
-    0: Ville (Paris)
-    1: Arrondissement
-    2: IRIS
-    3: Rue
-    4: Immeuble
+        0 → Ville (Paris)          – paris_city.geojson
+        1 → Arrondissement         – paris_arrondissements.geojson
+        2 → IRIS (Quartier)        – paris_iris.geojson
+        3 → Rue                    – paris_streets.geojson
+        4 → Bâtiment               – paris_buildings.geojson
     """
     level = max(0, min(4, int(level)))
-    collection = iris_geojson()
-
-    if level == 0:
-        return _city_geojson(collection)
-
-    return collection
+    path = LEVEL_FILES.get(level)
+    if path is None or not path.exists():
+        # Fallback : arrondissements
+        path = LEVEL_FILES[1]
+    return _load_geojson(str(path))
 
 
 @lru_cache(maxsize=1)
 def iris_geojson() -> dict:
-    with PARIS_GEOJSON_PATH.open("r", encoding="utf-8") as fh:
-        return json.load(fh)
-
-
-def _city_geojson(collection: dict) -> dict:
-    bounds = None
-
-    for feature in collection.get("features", []):
-        feature_bounds = _feature_bounds(feature)
-        if feature_bounds is None:
-            continue
-        if bounds is None:
-            bounds = feature_bounds
-            continue
-
-        bounds = (
-            min(bounds[0], feature_bounds[0]),
-            min(bounds[1], feature_bounds[1]),
-            max(bounds[2], feature_bounds[2]),
-            max(bounds[3], feature_bounds[3]),
-        )
-
-    if bounds is None:
-        return {"type": "FeatureCollection", "features": []}
-
-    min_lon, min_lat, max_lon, max_lat = bounds
-    return {
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[
-                        [min_lon, min_lat],
-                        [max_lon, min_lat],
-                        [max_lon, max_lat],
-                        [min_lon, max_lat],
-                        [min_lon, min_lat],
-                    ]],
-                },
-                "properties": {
-                    "name": "Paris",
-                    "label": "Ville",
-                    "level": 0,
-                },
-            }
-        ],
-    }
-
-
-def _feature_bounds(feature: dict) -> tuple[float, float, float, float] | None:
-    geometry = feature.get("geometry") or {}
-    coordinates = geometry.get("coordinates")
-    if not coordinates:
-        return None
-
-    points: list[tuple[float, float]] = []
-
-    def collect(coords):
-        if isinstance(coords, list) and coords and isinstance(coords[0], (int, float)):
-            points.append((float(coords[0]), float(coords[1])))
-            return
-        for item in coords or []:
-            collect(item)
-
-    collect(coordinates)
-    if not points:
-        return None
-
-    lons = [point[0] for point in points]
-    lats = [point[1] for point in points]
-    return min(lons), min(lats), max(lons), max(lats)
+    """Rétro-compatibilité : retourne les arrondissements."""
+    return _load_geojson(str(LEVEL_FILES[1]))

@@ -1,109 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07111f" />
+    <meta name="description" content="Urban Data Explorer — Tableau de bord des données urbaines de Paris" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <title>Urban Data Explorer</title>
-    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero card">
-        <div class="hero-copy">
-          <p class="eyebrow">RNCP40875 - Bloc 1</p>
-          <h1>Urban Data Explorer</h1>
-          <p class="hero-text">
-            Une plateforme data Paris pensée comme une vraie démo métier :
-            catalogue multi-sources, datamarts d'arrondissement, streaming temps réel
-            et supervision de pipeline.
-          </p>
-          <div class="hero-actions">
-            <label class="token-field">
-              <span>API token</span>
-              <input id="token-input" type="password" placeholder="optionnel" />
-            </label>
-            <button id="token-save" type="button">Activer</button>
-          </div>
-        </div>
-        <div class="hero-panel">
-          <div class="panel-chip">Architecture data</div>
-          <ul class="checklist">
-            <li>Bronze / Silver / Gold</li>
-            <li>Polars + Spark + Hive</li>
-            <li>PostgreSQL + Cassandra + Kafka</li>
-            <li>API FastAPI sécurisable</li>
-          </ul>
-        </div>
-      </header>
-
-      <main class="layout">
-        <section class="metrics card" aria-label="Indicateurs clés">
-          <div class="metric"><span>Sources</span><strong id="metric-sources">--</strong></div>
-          <div class="metric"><span>Familles</span><strong id="metric-families">--</strong></div>
-          <div class="metric"><span>Arrondissements</span><strong id="metric-arrondissements">--</strong></div>
-          <div class="metric"><span>Dernier run</span><strong id="metric-pipeline">--</strong></div>
-        </section>
-
-        <section class="card large-panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Datamart</p>
-              <h2>Vue d'ensemble des arrondissements</h2>
-            </div>
-            <div class="filters">
-              <input id="source-search" type="search" placeholder="Filtrer les sources..." />
-              <select id="family-filter">
-                <option value="all">Toutes les familles</option>
-              </select>
-            </div>
-          </div>
-          <div id="dashboard-grid" class="district-grid"></div>
-        </section>
-
-        <aside class="sidebar">
-          <section class="card">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Supervision</p>
-                <h2>Pipeline</h2>
-              </div>
-            </div>
-            <div id="pipeline-output" class="stack"></div>
-          </section>
-
-          <section class="card">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Sources</p>
-                <h2>Catalogue</h2>
-              </div>
-            </div>
-            <p id="sources-count" class="muted">Chargement...</p>
-            <div id="sources-output" class="stack"></div>
-          </section>
-        </aside>
-
-        <section class="card">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Tendance</p>
-              <h2>Charge par mois</h2>
-            </div>
-          </div>
-          <div id="timeline-chart" class="chart"></div>
-        </section>
-
-        <section class="card">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Temps réel</p>
-              <h2>Flux d'événements</h2>
-            </div>
-          </div>
-          <div id="events-output" class="stack"></div>
-        </section>
-      </main>
-    </div>
-    <script src="app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
