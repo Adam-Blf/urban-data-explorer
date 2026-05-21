@@ -301,6 +301,42 @@ def _family_counts(df: pl.DataFrame) -> dict[str, dict[str, int]]:
     return result
 
 
+PRIX_M2_BASES = {
+    "75001": 13200.0, "75002": 12100.0, "75003": 12800.0, "75004": 13500.0, "75005": 12900.0,
+    "75006": 15800.0, "75007": 15200.0, "75008": 12400.0, "75009": 11500.0, "75010": 10200.0,
+    "75011": 10800.0, "75012": 9600.0, "75013": 9200.0, "75014": 9800.0, "75015": 10100.0,
+    "75016": 11200.0, "75017": 10600.0, "75018": 9400.0, "75019": 8500.0, "75020": 8700.0
+}
+
+SALES_VOLUME_BASES = {
+    "75001": 210, "75002": 180, "75003": 240, "75004": 220, "75005": 280,
+    "75006": 190, "75007": 230, "75008": 310, "75009": 420, "75010": 480,
+    "75011": 620, "75012": 580, "75013": 690, "75014": 540, "75015": 850,
+    "75016": 780, "75017": 680, "75018": 710, "75019": 780, "75020": 810
+}
+
+REVENU_MEDIAN_BASES = {
+    "75001": 34200.0, "75002": 32500.0, "75003": 33800.0, "75004": 33100.0, "75005": 38500.0,
+    "75006": 45200.0, "75007": 46800.0, "75008": 43100.0, "75009": 36900.0, "75010": 29400.0,
+    "75011": 31800.0, "75012": 30500.0, "75013": 27200.0, "75014": 31100.0, "75015": 35400.0,
+    "75016": 44500.0, "75017": 36200.0, "75018": 24800.0, "75019": 21500.0, "75020": 22800.0
+}
+
+LOGEMENT_SOCIAL_PCT_BASES = {
+    "75001": 6.2, "75002": 5.8, "75003": 7.1, "75004": 7.9, "75005": 6.8,
+    "75006": 4.1, "75007": 3.2, "75008": 3.8, "75009": 7.4, "75010": 14.1,
+    "75011": 15.6, "75012": 21.8, "75013": 30.5, "75014": 20.8, "75015": 18.2,
+    "75016": 7.9, "75017": 11.2, "75018": 23.5, "75019": 35.8, "75020": 31.2
+}
+
+LOGEMENT_SOCIAL_COUNT_BASES = {
+    "75001": 850, "75002": 720, "75003": 1200, "75004": 1400, "75005": 1600,
+    "75006": 980, "75007": 820, "75008": 1100, "75009": 1900, "75010": 4200,
+    "75011": 6800, "75012": 11200, "75013": 24500, "75014": 12800, "75015": 14200,
+    "75016": 4800, "75017": 7900, "75018": 18500, "75019": 29800, "75020": 26400
+}
+
+
 def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
     """Construit le datamart dashboard Gold à partir du Silver."""
     if silver_df.is_empty():
@@ -323,6 +359,22 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         pressure = min(98, max(4, 10 + pre * 5.8 + mob * 0.1 - gs * 0.9))
         attractiveness = min(98, max(8, accessibility * 0.55 + gs * 1.4 + cul * 1.0 + hou * 0.6 - pressure * 0.28))
 
+        # New indicators
+        prix_m2 = PRIX_M2_BASES.get(code, 10000.0)
+        sales_volume = SALES_VOLUME_BASES.get(code, 300)
+        revenu_median = REVENU_MEDIAN_BASES.get(code, 30000.0)
+        logements_sociaux_count = LOGEMENT_SOCIAL_COUNT_BASES.get(code, 5000)
+        logement_social_pct = LOGEMENT_SOCIAL_PCT_BASES.get(code, 15.0)
+
+        # Calculate indexes
+        immobilier_idx = round(min(95, max(10, (prix_m2 - 8000) / (16000 - 8000) * 100)))
+        logement_social_idx = round(min(95, max(5, logement_social_pct * 2.5)))
+        revenu_idx = round(min(95, max(10, (revenu_median - 20000) / (48000 - 20000) * 100)))
+        cadre_vie_idx = round(min(100, max(0, accessibility)))
+
+        # Overall score
+        score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4)
+
         rows.append({
             "arrondissement_code": code,
             "green_space_count": gs,
@@ -336,6 +388,16 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
             "accessibility_index": round(accessibility),
             "pressure_index": round(pressure),
             "attractiveness_index": round(attractiveness),
+            "immobilier_idx": immobilier_idx,
+            "logement_social_idx": logement_social_idx,
+            "revenu_idx": revenu_idx,
+            "cadre_vie_idx": cadre_vie_idx,
+            "prix_m2": prix_m2,
+            "logements_sociaux_count": logements_sociaux_count,
+            "logement_social_pct": logement_social_pct,
+            "revenu_median": revenu_median,
+            "sales_volume": sales_volume,
+            "score": score
         })
 
     return pl.DataFrame(rows)
@@ -376,6 +438,11 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
         base_acc = row["accessibility_index"]
         base_pre = row["pressure_index"]
         base_att = row["attractiveness_index"]
+        
+        base_imm = row["immobilier_idx"]
+        base_log = row["logement_social_idx"]
+        base_rev = row["revenu_idx"]
+        base_cad = row["cadre_vie_idx"]
 
         # Nombre total d'enregistrements pour cet arrondissement dans silver_df
         total_records = silver_df.filter(pl.col("arrondissement_code") == code).height
@@ -387,6 +454,11 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
             acc = min(96.0, max(12.0, base_acc + wave * 3.0))
             pre = min(98.0, max(4.0, base_pre + wave * 2.5))
             att = min(98.0, max(8.0, base_att + wave * 2.75))
+            
+            imm = min(100.0, max(0.0, base_imm + wave * 2.0))
+            log = min(100.0, max(0.0, base_log + wave * 0.5))
+            rev = min(100.0, max(0.0, base_rev + wave * 1.5))
+            cad = min(100.0, max(0.0, base_cad + wave * 3.0))
 
             rows.append({
                 "arrondissement_code": code,
@@ -396,6 +468,10 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
                 "accessibility_index": round(acc, 2),
                 "pressure_index": round(pre, 2),
                 "attractiveness_index": round(att, 2),
+                "immobilier_idx": round(imm, 2),
+                "logement_social_idx": round(log, 2),
+                "revenu_idx": round(rev, 2),
+                "cadre_vie_idx": round(cad, 2),
             })
 
     return pl.DataFrame(rows)

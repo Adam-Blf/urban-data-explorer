@@ -49,37 +49,41 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           <Filter size={14} /> Filtrage thématique
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-          {[
-            { id: 'all', name: 'Tous thèmes' },
-            { id: 'housing', name: 'Logement' },
-            { id: 'mobility', name: 'Mobilité' },
-            { id: 'education', name: 'Éducation' },
-            { id: 'green_space', name: 'Espaces Verts' },
-            { id: 'culture', name: 'Culture' },
-            { id: 'health', name: 'Santé' },
-            { id: 'public_service', name: 'Services publics' },
-            { id: 'pressure', name: 'Pression urbaine' }
-          ].map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setActiveFamily(f.id)}
-              className={`btn-tab ${activeFamily === f.id ? 'active' : ''}`}
-              style={{ fontSize: '12px', justifyContent: 'center' }}
-            >
-              {f.name}
-            </button>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <button
+            onClick={() => setActiveFamily('all')}
+            className={`btn-tab ${activeFamily === 'all' ? 'active' : ''}`}
+            style={{ fontSize: '12px', justifyContent: 'center', width: '100%', padding: '12px', fontWeight: 600 }}
+          >
+            Synthèse globale
+          </button>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+            {[
+              { id: 'immobilier', name: 'Marché Immobilier' },
+              { id: 'logement_social', name: 'Logement Social' },
+              { id: 'revenus', name: 'Revenus & Socio-Éco' },
+              { id: 'cadre_vie', name: 'Cadre de vie' }
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setActiveFamily(f.id)}
+                className={`btn-tab ${activeFamily === f.id ? 'active' : ''}`}
+                style={{ fontSize: '12px', justifyContent: 'center', padding: '8px 4px', height: '44px', textAlign: 'center', lineHeight: '1.2' }}
+              >
+                {f.name}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Gray-out Section Mock demonstration */}
+      {/* Consolidation Section */}
       <div className={`glass-panel ${activeFamily !== 'all' ? 'grayed-out' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.02)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h4 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-purple)', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Sparkles size={14} /> Indicateur croisé consolidé
         </h4>
-        <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-          Ce panneau n'est concerné que si aucun filtre thématique n'est activé. Il affiche les indices globaux consolidés.
+        <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+          Affiche le score global moyen des 4 catégories pour chaque arrondissement. Sélectionnez une catégorie ci-dessus pour colorer la carte par indicateur.
         </p>
       </div>
     </div>

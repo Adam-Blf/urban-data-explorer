@@ -60,11 +60,12 @@ def main():
         "Geocodage offline via point-in-polygon (IRIS) + fallback API adresse.data.gouv.fr."
     ))
 
-    pdf.chapter("4. Indicateurs personnalises", (
-        "1. Indice d'accessibilite: mobilite + services + transports\n"
-        "2. Indice de pression urbaine: chantiers + densite\n"
-        "3. Indice d'attractivite: culture + espaces verts + logement social\n"
-        "4. Score global de qualite de vie: ponderation des 3 indices"
+    pdf.chapter("4. Categories d'indicateurs et Score Global", (
+        "1. Immobilier & Prix : Indices de prix au m2 moyen et volumes de ventes (DVF).\n"
+        "2. Logement Social : Part (%) et volume des logements sociaux finances a Paris.\n"
+        "3. Revenus & Socio-Eco : Revenu median disponible par menage (INSEE).\n"
+        "4. Cadre de vie & Attractivite : Equilibre espaces verts, transports et accessibilite.\n"
+        "5. Synthese globale (Score) : Moyenne ponderee des 4 indices de categories."
     ))
 
     pdf.chapter("5. Granularite cartographique", (

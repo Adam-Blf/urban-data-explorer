@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 from collections import Counter
 from datetime import UTC, datetime, timedelta
 from functools import lru_cache
@@ -42,6 +43,41 @@ DISTRICTS = (
     {"code": "75020", "name": "Ménilmontant", "label": "20e"},
 )
 
+PRIX_M2_BASES = {
+    "75001": 13200.0, "75002": 12100.0, "75003": 12800.0, "75004": 13500.0, "75005": 12900.0,
+    "75006": 15800.0, "75007": 15200.0, "75008": 12400.0, "75009": 11500.0, "75010": 10200.0,
+    "75011": 10800.0, "75012": 9600.0, "75013": 9200.0, "75014": 9800.0, "75015": 10100.0,
+    "75016": 11200.0, "75017": 10600.0, "75018": 9400.0, "75019": 8500.0, "75020": 8700.0
+}
+
+SALES_VOLUME_BASES = {
+    "75001": 210, "75002": 180, "75003": 240, "75004": 220, "75005": 280,
+    "75006": 190, "75007": 230, "75008": 310, "75009": 420, "75010": 480,
+    "75011": 620, "75012": 580, "75013": 690, "75014": 540, "75015": 850,
+    "75016": 780, "75017": 680, "75018": 710, "75019": 780, "75020": 810
+}
+
+REVENU_MEDIAN_BASES = {
+    "75001": 34200.0, "75002": 32500.0, "75003": 33800.0, "75004": 33100.0, "75005": 38500.0,
+    "75006": 45200.0, "75007": 46800.0, "75008": 43100.0, "75009": 36900.0, "75010": 29400.0,
+    "75011": 31800.0, "75012": 30500.0, "75013": 27200.0, "75014": 31100.0, "75015": 35400.0,
+    "75016": 44500.0, "75017": 36200.0, "75018": 24800.0, "75019": 21500.0, "75020": 22800.0
+}
+
+LOGEMENT_SOCIAL_PCT_BASES = {
+    "75001": 6.2, "75002": 5.8, "75003": 7.1, "75004": 7.9, "75005": 6.8,
+    "75006": 4.1, "75007": 3.2, "75008": 3.8, "75009": 7.4, "75010": 14.1,
+    "75011": 15.6, "75012": 21.8, "75013": 30.5, "75014": 20.8, "75015": 18.2,
+    "75016": 7.9, "75017": 11.2, "75018": 23.5, "75019": 35.8, "75020": 31.2
+}
+
+LOGEMENT_SOCIAL_COUNT_BASES = {
+    "75001": 850, "75002": 720, "75003": 1200, "75004": 1400, "75005": 1600,
+    "75006": 980, "75007": 820, "75008": 1100, "75009": 1900, "75010": 4200,
+    "75011": 6800, "75012": 11200, "75013": 24500, "75014": 12800, "75015": 14200,
+    "75016": 4800, "75017": 7900, "75018": 18500, "75019": 29800, "75020": 26400
+}
+
 
 def clamp(value: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(maximum, value))
@@ -49,6 +85,47 @@ def clamp(value: float, minimum: float, maximum: float) -> float:
 
 def _digest(seed: str) -> float:
     return hashlib.sha1(seed.encode()).digest()[0] / 255.0
+
+
+def _normalize_code(raw: any) -> str | None:
+    """Normalise un code arrondissement vers le format 75001-75020."""
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text:
+        return None
+
+    # Format "75101" -> "75001"
+    match = re.match(r"^751(\d{2})$", text)
+    if match:
+        num = int(match.group(1))
+        if 1 <= num <= 20:
+            return f"750{num:02d}"
+
+    # Format "75001"-"75020" direct
+    match = re.match(r"^750(\d{2})$", text)
+    if match:
+        num = int(match.group(1))
+        if 1 <= num <= 20:
+            return text
+
+    # Format code postal "75001"-"75020"
+    match = re.match(r"^750(\d{2})$", text)
+    if match:
+        return text
+
+    # Format numérique simple "1"-"20"
+    match = re.match(r"^(\d{1,2})(?:e|er|ème)?$", text, re.IGNORECASE)
+    if match:
+        num = int(match.group(1))
+        if 1 <= num <= 20:
+            return f"750{num:02d}"
+
+    # Code INSEE commune "75056" -> non résolu ici (ville entière)
+    if text == "75056":
+        return None
+
+    return None
 
 
 @lru_cache(maxsize=1)
@@ -70,6 +147,68 @@ def source_catalog():
 def source_family_counts():
     counts = Counter(s.family for s in ALL_SOURCES)
     return {k: counts.get(k, 0) for k in FAMILIES}
+
+
+def _enrich_district_row(code: str, raw_row: dict) -> dict:
+    gs = int(raw_row.get("green_space_count", 0))
+    mob = int(raw_row.get("mobility_count", 0))
+    ps = int(raw_row.get("public_service_count", 0))
+    edu = int(raw_row.get("education_count", 0))
+    cul = int(raw_row.get("culture_count", 0))
+    hea = int(raw_row.get("health_count", 0))
+    hou = int(raw_row.get("housing_count", 0))
+    pre = int(raw_row.get("pressure_count", 0))
+    
+    acc = raw_row.get("accessibility_index", 50)
+    press = raw_row.get("pressure_index", 50)
+    attr = raw_row.get("attractiveness_index", 50)
+    
+    # New indicators
+    prix_m2 = PRIX_M2_BASES.get(code, 10000.0)
+    sales_volume = SALES_VOLUME_BASES.get(code, 300)
+    revenu_median = REVENU_MEDIAN_BASES.get(code, 30000.0)
+    logements_sociaux_count = LOGEMENT_SOCIAL_COUNT_BASES.get(code, 5000)
+    logement_social_pct = LOGEMENT_SOCIAL_PCT_BASES.get(code, 15.0)
+    
+    # Calculate indexes
+    immobilier_idx = round(clamp((prix_m2 - 8000) / (16000 - 8000) * 100, 10, 95))
+    logement_social_idx = round(clamp(logement_social_pct * 2.5, 5, 95))
+    revenu_idx = round(clamp((revenu_median - 20000) / (48000 - 20000) * 100, 10, 95))
+    cadre_vie_idx = round(clamp(acc, 0, 100))
+    
+    # Overall score is the mean of the 4 indices
+    score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4)
+    
+    return {
+        "code": code,
+        "name": raw_row["name"],
+        "label": raw_row["label"],
+        "x": raw_row.get("x", 0),
+        "y": raw_row.get("y", 0),
+        "family_counts": {
+            "green_space": gs,
+            "mobility": mob,
+            "public_service": ps,
+            "education": edu,
+            "culture": cul,
+            "health": hea,
+            "housing": hou,
+            "pressure": pre,
+        },
+        "accessibility_index": round(acc),
+        "pressure_index": round(press),
+        "attractiveness_index": round(attr),
+        "score": score,
+        "immobilier_idx": immobilier_idx,
+        "logement_social_idx": logement_social_idx,
+        "revenu_idx": revenu_idx,
+        "cadre_vie_idx": cadre_vie_idx,
+        "prix_m2": prix_m2,
+        "logements_sociaux_count": logements_sociaux_count,
+        "logement_social_pct": logement_social_pct,
+        "revenu_median": revenu_median,
+        "sales_volume": sales_volume,
+    }
 
 
 @lru_cache(maxsize=1)
@@ -110,34 +249,24 @@ def district_rows():
                 x = 300 + i * 25
                 y = 200 + int(math.sin(i) * 100)
                 
-                acc = row["accessibility_index"]
-                press = row["pressure_index"]
-                attr = row["attractiveness_index"]
-                score = round((acc + attr - press * 0.25) / 2)
-                
-                family_counts = {
-                    "green_space": int(row["green_space_count"]),
-                    "mobility": int(row["mobility_count"]),
-                    "public_service": int(row["public_service_count"]),
-                    "education": int(row["education_count"]),
-                    "culture": int(row["culture_count"]),
-                    "health": int(row["health_count"]),
-                    "housing": int(row["housing_count"]),
-                    "pressure": int(row["pressure_count"]),
-                }
-                
-                rows.append({
-                    "code": code,
+                raw_row = {
                     "name": district["name"],
                     "label": district["label"],
                     "x": x,
                     "y": y,
-                    "family_counts": family_counts,
-                    "accessibility_index": round(acc),
-                    "pressure_index": round(press),
-                    "attractiveness_index": round(attr),
-                    "score": score,
-                })
+                    "green_space_count": row["green_space_count"],
+                    "mobility_count": row["mobility_count"],
+                    "public_service_count": row["public_service_count"],
+                    "education_count": row["education_count"],
+                    "culture_count": row["culture_count"],
+                    "health_count": row["health_count"],
+                    "housing_count": row["housing_count"],
+                    "pressure_count": row["pressure_count"],
+                    "accessibility_index": row["accessibility_index"],
+                    "pressure_index": row["pressure_index"],
+                    "attractiveness_index": row["attractiveness_index"],
+                }
+                rows.append(_enrich_district_row(code, raw_row))
             
             if rows:
                 rows.sort(key=lambda r: r["code"])
@@ -166,34 +295,24 @@ def district_rows():
                 x = 300 + i * 25
                 y = 200 + int(math.sin(i) * 100)
                 
-                acc = row["accessibility_index"]
-                press = row["pressure_index"]
-                attr = row["attractiveness_index"]
-                score = round((acc + attr - press * 0.25) / 2)
-                
-                family_counts = {
-                    "green_space": int(row["green_space_count"]),
-                    "mobility": int(row["mobility_count"]),
-                    "public_service": int(row["public_service_count"]),
-                    "education": int(row["education_count"]),
-                    "culture": int(row["culture_count"]),
-                    "health": int(row["health_count"]),
-                    "housing": int(row["housing_count"]),
-                    "pressure": int(row["pressure_count"]),
-                }
-                
-                rows.append({
-                    "code": code,
+                raw_row = {
                     "name": district["name"],
                     "label": district["label"],
                     "x": x,
                     "y": y,
-                    "family_counts": family_counts,
-                    "accessibility_index": round(acc),
-                    "pressure_index": round(press),
-                    "attractiveness_index": round(attr),
-                    "score": score,
-                })
+                    "green_space_count": row["green_space_count"],
+                    "mobility_count": row["mobility_count"],
+                    "public_service_count": row["public_service_count"],
+                    "education_count": row["education_count"],
+                    "culture_count": row["culture_count"],
+                    "health_count": row["health_count"],
+                    "housing_count": row["housing_count"],
+                    "pressure_count": row["pressure_count"],
+                    "accessibility_index": row["accessibility_index"],
+                    "pressure_index": row["pressure_index"],
+                    "attractiveness_index": row["attractiveness_index"],
+                }
+                rows.append(_enrich_district_row(code, raw_row))
             
             if rows:
                 rows.sort(key=lambda r: r["code"])
@@ -240,20 +359,25 @@ def district_rows():
             - pressure * 0.28,
             8, 98,
         )
-        score = round((accessibility + attractiveness - pressure * 0.25) / 2)
-
-        rows.append({
-            "code": district["code"],
+        
+        raw_row = {
             "name": district["name"],
             "label": district["label"],
             "x": 300 + i * 25,
             "y": 200 + int(math.sin(i) * 100),
-            "family_counts": counts,
-            "accessibility_index": round(accessibility),
-            "pressure_index": round(pressure),
-            "attractiveness_index": round(attractiveness),
-            "score": score,
-        })
+            "green_space_count": counts["green_space"],
+            "mobility_count": counts["mobility"],
+            "public_service_count": counts["public_service"],
+            "education_count": counts["education"],
+            "culture_count": counts["culture"],
+            "health_count": counts["health"],
+            "housing_count": counts["housing"],
+            "pressure_count": counts["pressure"],
+            "accessibility_index": accessibility,
+            "pressure_index": pressure,
+            "attractiveness_index": attractiveness,
+        }
+        rows.append(_enrich_district_row(district["code"], raw_row))
 
     return rows
 
@@ -270,6 +394,13 @@ def city_overview():
         "pressure_index": round(sum(r["pressure_index"] for r in rows) / n),
         "attractiveness_index": round(sum(r["attractiveness_index"] for r in rows) / n),
         "source_family_counts": source_family_counts(),
+        "immobilier_idx": round(sum(r["immobilier_idx"] for r in rows) / n),
+        "logement_social_idx": round(sum(r["logement_social_idx"] for r in rows) / n),
+        "revenu_idx": round(sum(r["revenu_idx"] for r in rows) / n),
+        "cadre_vie_idx": round(sum(r["cadre_vie_idx"] for r in rows) / n),
+        "prix_m2": round(sum(r["prix_m2"] for r in rows) / n, 2),
+        "logement_social_pct": round(sum(r["logement_social_pct"] for r in rows) / n, 2),
+        "revenu_median": round(sum(r["revenu_median"] for r in rows) / n, 2),
     }
 
 
@@ -301,13 +432,20 @@ def timeline_rows():
                 month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                 label_str = f"{month_names[m - 1]} {y}"
                 
+                wave = math.sin((m - 1) / 12.0 * 2.0 * math.pi)
+                acc = float(row["accessibility_index"])
+                
                 rows.append({
                     "month": month_str,
                     "label": label_str,
                     "activity": int(row["activity"]),
-                    "accessibility_index": round(float(row["accessibility_index"]), 2),
+                    "accessibility_index": round(acc, 2),
                     "pressure_index": round(float(row["pressure_index"]), 2),
                     "attractiveness_index": round(float(row["attractiveness_index"]), 2),
+                    "immobilier_idx": round(clamp(60.0 + wave * 2.0, 0, 100), 2),
+                    "logement_social_idx": round(clamp(15.0 + wave * 0.5, 0, 100), 2),
+                    "revenu_idx": round(clamp(50.0 + wave * 1.5, 0, 100), 2),
+                    "cadre_vie_idx": round(clamp(acc, 0, 100), 2),
                 })
             if rows:
                 return rows
@@ -339,6 +477,9 @@ def timeline_rows():
                 month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                 label_str = f"{month_names[m - 1]} {y}"
                 
+                wave = math.sin((m - 1) / 12.0 * 2.0 * math.pi)
+                acc = float(row["accessibility_index"])
+                
                 rows.append({
                     "month": month_str,
                     "label": label_str,
@@ -346,6 +487,10 @@ def timeline_rows():
                     "accessibility_index": round(float(row["accessibility_index"]), 2),
                     "pressure_index": round(float(row["pressure_index"]), 2),
                     "attractiveness_index": round(float(row["attractiveness_index"]), 2),
+                    "immobilier_idx": round(clamp(60.0 + wave * 2.0, 0, 100), 2),
+                    "logement_social_idx": round(clamp(15.0 + wave * 0.5, 0, 100), 2),
+                    "revenu_idx": round(clamp(50.0 + wave * 1.5, 0, 100), 2),
+                    "cadre_vie_idx": round(clamp(acc, 0, 100), 2),
                 })
             if rows:
                 return rows
@@ -367,6 +512,10 @@ def timeline_rows():
             "accessibility_index": clamp(baseline["accessibility_index"] + wave * 3, 0, 100),
             "pressure_index": clamp(baseline["pressure_index"] + wave * 2.5, 0, 100),
             "attractiveness_index": clamp(baseline["attractiveness_index"] + wave * 2.75, 0, 100),
+            "immobilier_idx": round(clamp(baseline["immobilier_idx"] + wave * 2.0, 0, 100), 2),
+            "logement_social_idx": round(clamp(baseline["logement_social_idx"] + wave * 0.5, 0, 100), 2),
+            "revenu_idx": round(clamp(baseline["revenu_idx"] + wave * 1.5, 0, 100), 2),
+            "cadre_vie_idx": round(clamp(baseline["cadre_vie_idx"] + wave * 3.0, 0, 100), 2),
         })
 
     return rows
@@ -440,7 +589,8 @@ def _load_geojson(path: str) -> dict:
 
 
 def geojson_by_granularity(level: int) -> dict:
-    """Retourne le GeoJSON correspondant au niveau de granularité demandé.
+    """Retourne le GeoJSON correspondant au niveau de granularité demandé,
+    enrichi avec les métriques et indices calculés.
 
     Levels:
         0 → Ville (Paris)          – paris_city.geojson
@@ -452,9 +602,49 @@ def geojson_by_granularity(level: int) -> dict:
     level = max(0, min(4, int(level)))
     path = LEVEL_FILES.get(level)
     if path is None or not path.exists():
-        # Fallback : arrondissements
         path = LEVEL_FILES[1]
-    return _load_geojson(str(path))
+        
+    geojson = _load_geojson(str(path))
+    
+    # Enrichir avec les indicateurs
+    try:
+        districts = district_rows()
+        dist_map = {d["code"]: d for d in districts}
+        
+        # Modifier en place
+        for feature in geojson.get("features", []):
+            properties = feature.get("properties", {})
+            if not properties:
+                continue
+                
+            code = None
+            if level == 1:
+                code = properties.get("c_arinsee") or properties.get("c_ar") or properties.get("insee_com")
+            elif level == 2:
+                iris = properties.get("code_iris") or properties.get("c_iris") or properties.get("iris")
+                if isinstance(iris, str) and len(iris) >= 5:
+                    code = iris[:5]
+                    
+            if code:
+                code_str = _normalize_code(code)
+                if code_str and code_str in dist_map:
+                    d = dist_map[code_str]
+                    properties.update({
+                        "score": d["score"],
+                        "immobilier_idx": d["immobilier_idx"],
+                        "logement_social_idx": d["logement_social_idx"],
+                        "revenu_idx": d["revenu_idx"],
+                        "cadre_vie_idx": d["cadre_vie_idx"],
+                        "prix_m2": d["prix_m2"],
+                        "logements_sociaux_count": d["logements_sociaux_count"],
+                        "logement_social_pct": d["logement_social_pct"],
+                        "revenu_median": d["revenu_median"],
+                        "sales_volume": d["sales_volume"],
+                    })
+    except Exception as e:
+        print(f"Error enriching GeoJSON: {e}")
+        
+    return geojson
 
 
 @lru_cache(maxsize=1)

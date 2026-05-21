@@ -28,6 +28,15 @@ class DistrictRow(BaseModel):
     pressure_index: int
     attractiveness_index: int
     score: int
+    immobilier_idx: int = 0
+    logement_social_idx: int = 0
+    revenu_idx: int = 0
+    cadre_vie_idx: int = 0
+    prix_m2: float = 0.0
+    logements_sociaux_count: int = 0
+    logement_social_pct: float = 0.0
+    revenu_median: float = 0.0
+    sales_volume: int = 0
 
 
 class Overview(BaseModel):
@@ -38,6 +47,13 @@ class Overview(BaseModel):
     pressure_index: int
     attractiveness_index: int
     source_family_counts: dict[str, int] = {}
+    immobilier_idx: int = 0
+    logement_social_idx: int = 0
+    revenu_idx: int = 0
+    cadre_vie_idx: int = 0
+    prix_m2: float = 0.0
+    logement_social_pct: float = 0.0
+    revenu_median: float = 0.0
 
 
 class TimelinePoint(BaseModel):
@@ -47,6 +63,10 @@ class TimelinePoint(BaseModel):
     accessibility_index: float
     pressure_index: float
     attractiveness_index: float
+    immobilier_idx: float = 0.0
+    logement_social_idx: float = 0.0
+    revenu_idx: float = 0.0
+    cadre_vie_idx: float = 0.0
 
 
 class EventRow(BaseModel):

@@ -19,6 +19,7 @@ export default function App() {
   const [granularity, setGranularity] = useState<number>(1);
   const [activeFamily, setActiveFamily] = useState<string>('all');
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [comparedDistrict, setComparedDistrict] = useState<string | null>(null);
 
   // API Data
   const [districts, setDistricts] = useState<District[]>([]);
@@ -47,7 +48,7 @@ export default function App() {
       console.warn('API non disponible, utilisation des données locales de secours.', err);
       setIsConnected(false);
 
-      // Fallback local mock data (keeping the a-bit-of-life version from original)
+      // Fallback local mock data with 4 categories indices and raw values
       setOverview({
         source_count: 19,
         family_count: 8,
@@ -58,11 +59,31 @@ export default function App() {
         source_family_counts: {
           housing: 3, mobility: 4, education: 3, green_space: 2,
           culture: 2, health: 1, public_service: 2, pressure: 2
-        }
+        },
+        immobilier_idx: 65,
+        logement_social_idx: 22,
+        revenu_idx: 55,
+        cadre_vie_idx: 68,
+        prix_m2: 11200.0,
+        logement_social_pct: 14.5,
+        revenu_median: 32000.0,
       });
 
       const mockDistricts = Array.from({ length: 20 }, (_, i) => {
         const code = `750${(i + 1).toString().padStart(2, '0')}`;
+        const prix = 8000 + (i * 400) % 8000;
+        const pct = 3.0 + (i * 2.5) % 35;
+        const count = Math.round(pct * 500);
+        const income = 20000 + (i * 1500) % 28000;
+        const vol = 150 + (i * 35) % 700;
+        const base_acc = 55 + (i * 2) % 30;
+
+        const immobilier_idx = Math.round(((prix - 8000) / 8000) * 100);
+        const logement_social_idx = Math.round(pct * 2.5);
+        const revenu_idx = Math.round(((income - 20000) / 28000) * 100);
+        const cadre_vie_idx = Math.round(base_acc);
+        const score = Math.round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx) / 4);
+
         return {
           code,
           name: `Arrondissement ${i + 1}`,
@@ -71,10 +92,19 @@ export default function App() {
             housing: 5 + (i % 3), mobility: 6 + (i % 2), education: 4, green_space: 3,
             culture: 2, health: 2, public_service: 3, pressure: 4
           },
-          accessibility_index: 55 + (i * 2) % 30,
+          accessibility_index: base_acc,
           pressure_index: 30 + (i * 3) % 40,
           attractiveness_index: 60 + (i * 2.5) % 35,
-          score: 62 + i % 15
+          score,
+          immobilier_idx,
+          logement_social_idx,
+          revenu_idx,
+          cadre_vie_idx,
+          prix_m2: prix,
+          logements_sociaux_count: count,
+          logement_social_pct: pct,
+          revenu_median: income,
+          sales_volume: vol
         };
       });
       setDistricts(mockDistricts);
@@ -85,7 +115,11 @@ export default function App() {
         activity: 80 + i * 2,
         accessibility_index: 65 + Math.sin(i) * 3,
         pressure_index: 40 + Math.cos(i) * 2,
-        attractiveness_index: 70 + Math.sin(i * 0.5) * 4
+        attractiveness_index: 70 + Math.sin(i * 0.5) * 4,
+        immobilier_idx: 65 + Math.sin(i * 0.4) * 2,
+        logement_social_idx: 22 + Math.cos(i * 0.3) * 0.5,
+        revenu_idx: 55 + Math.sin(i * 0.5) * 1.5,
+        cadre_vie_idx: 65 + Math.sin(i) * 3
       })));
     }
   };
@@ -112,8 +146,11 @@ export default function App() {
         setShowSettings={setShowSettings}
         selectedDistrict={selectedDistrict}
         setSelectedDistrict={setSelectedDistrict}
+        comparedDistrict={comparedDistrict}
+        setComparedDistrict={setComparedDistrict}
         granularity={granularity}
         setGranularity={setGranularity}
+        activeFamily={activeFamily}
       />
 
       <Header
@@ -140,6 +177,9 @@ export default function App() {
 
       <DataPanel
         selectedDistrict={selectedDistrict}
+        setSelectedDistrict={setSelectedDistrict}
+        comparedDistrict={comparedDistrict}
+        setComparedDistrict={setComparedDistrict}
         districts={districts}
         overview={overview}
         timeline={timeline}

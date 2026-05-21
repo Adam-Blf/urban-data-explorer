@@ -2,7 +2,7 @@
 
 Ce document présente les résultats théoriques et de référence des tests requis par le critère d'évaluation **C1.1 (Concevoir et développer une base de données relationnelle... Des tests de charge sont réalisés confirmant l'intégrité et la performance de la base de données)**.
 
-**Date du test de référence** : 2026-05-21 12:54:59
+**Date du test de référence** : 2026-05-21 13:52:13
 **Base de données** : PostgreSQL 15 (Docker)
 
 ---

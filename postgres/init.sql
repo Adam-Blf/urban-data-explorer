@@ -83,7 +83,17 @@ CREATE TABLE IF NOT EXISTS fact_arrondissement_dashboard (
   pressure_count INTEGER NOT NULL DEFAULT 0,
   accessibility_index DOUBLE PRECISION NOT NULL DEFAULT 0,
   pressure_index DOUBLE PRECISION NOT NULL DEFAULT 0,
-  attractiveness_index DOUBLE PRECISION NOT NULL DEFAULT 0
+  attractiveness_index DOUBLE PRECISION NOT NULL DEFAULT 0,
+  immobilier_idx INTEGER NOT NULL DEFAULT 0,
+  logement_social_idx INTEGER NOT NULL DEFAULT 0,
+  revenu_idx INTEGER NOT NULL DEFAULT 0,
+  cadre_vie_idx INTEGER NOT NULL DEFAULT 0,
+  prix_m2 DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  logements_sociaux_count INTEGER NOT NULL DEFAULT 0,
+  logement_social_pct DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  revenu_median DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  sales_volume INTEGER NOT NULL DEFAULT 0,
+  score INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS fact_arrondissement_timeline (
@@ -94,6 +104,10 @@ CREATE TABLE IF NOT EXISTS fact_arrondissement_timeline (
   accessibility_index DOUBLE PRECISION NOT NULL DEFAULT 0,
   pressure_index DOUBLE PRECISION NOT NULL DEFAULT 0,
   attractiveness_index DOUBLE PRECISION NOT NULL DEFAULT 0,
+  immobilier_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  logement_social_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  revenu_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  cadre_vie_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   PRIMARY KEY (arrondissement_code, year, month)
 );
 
