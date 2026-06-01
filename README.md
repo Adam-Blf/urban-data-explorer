@@ -1,4 +1,12 @@
-# Urban Data Explorer — Paris
+# Urban Data Explorer · Paris
+
+<!-- adam-badges:start -->
+[![commits](https://img.shields.io/github/commit-activity/t/Adam-Blf/urban-data-explorer?color=001329&label=commits&style=flat-square)](https://github.com/Adam-Blf/urban-data-explorer/commits)
+[![visites](https://hits.sh/github.com/Adam-Blf/urban-data-explorer.svg?style=flat-square&label=visites&color=001329)](https://hits.sh/github.com/Adam-Blf/urban-data-explorer/)
+[![last commit](https://img.shields.io/github/last-commit/Adam-Blf/urban-data-explorer?color=D4A437&style=flat-square&label=dernier%20push)](https://github.com/Adam-Blf/urban-data-explorer/commits)
+[![top language](https://img.shields.io/github/languages/top/Adam-Blf/urban-data-explorer?style=flat-square)](https://github.com/Adam-Blf/urban-data-explorer)
+[![license](https://img.shields.io/github/license/Adam-Blf/urban-data-explorer?style=flat-square&color=D4A437)](LICENSE)
+<!-- adam-badges:end -->
 
 <!-- Certification & Project Status Badges -->
 <div align="center">
@@ -36,38 +44,28 @@ Ce projet valide les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ing�
 
 ---
 
-## 🚀 Architecture Technique
+## Architecture
 
-Le projet intègre une stack moderne, optimisée et résiliente, conçue pour fonctionner de manière locale-first ou distribuée :
+Stack médaillon locale-first ou distribuée, du CSV Open Data à la cartographie 3D.
 
-```
-                 ┌──────────────────────────────────────┐
-                 │          Open Data Paris CSV         │
-                 └──────────────────┬───────────────────┘
-                                    │
-                                    ▼ (Batch ETL)
-                       ┌─────────────────────────┐
-                       │     Polars Engine       │
-                       └────────────┬────────────┘
-                                    │
-       ┌────────────────────────────┼────────────────────────────┐
-       ▼ (Bronze Layer)             ▼ (Silver Layer)             ▼ (Gold Layer)
-┌──────────────┐             ┌──────────────┐             ┌──────────────┐
-│  HDFS/Parquet│             │  HDFS/Parquet│             │  PostgreSQL  │
-└──────────────┘             └──────────────┘             └──────────────┘
-                                                                 ▲
-                                                                 │
-                                ┌────────────────────────────────┘
-                                │ (API Rest)
-                       ┌─────────────────┐
-                       │ FastAPI Backend │
-                       └────────┬────────┘
-                                │
-                                ▼ (Cartographie & KPIs)
-                    ┌────────────────────────┐
-                    │ Frontend React/TS/Vite │
-                    │ MapBox (3D) + MapLibre │
-                    └────────────────────────┘
+```mermaid
+flowchart TB
+    SRC["Open Data Paris<br/>DVF · INSEE · Vélib · chantiers"]
+    KAFKA["Kafka<br/>streaming/producer · consumer"]
+    ETL["ETL Polars<br/>etl/processing · scraper · catalog"]
+    BRONZE["Bronze<br/>Parquet · HDFS"]
+    SILVER["Silver<br/>Parquet · géocodage IRIS point-in-polygon"]
+    GOLD["Gold · PostgreSQL<br/>schéma en étoile · indicateurs"]
+    CASS["Cassandra<br/>snapshots streaming"]
+    API["FastAPI<br/>api/main · routers · /docs"]
+    FRONT["Frontend React/TS/Vite<br/>MapBox 3D · MapLibre 2D · KPIs"]
+
+    SRC --> ETL
+    SRC --> KAFKA --> CASS
+    ETL --> BRONZE --> SILVER --> GOLD
+    GOLD --> API
+    CASS --> API
+    API --> FRONT
 ```
 
 1. **ETL & Data Lake (C2.3, C2.4)** : Logique Bronze → Silver → Gold implémentée avec **Polars** (moteur ultra-rapide en Rust), avec géocodage offline par point-in-polygon sur les zones IRIS de Paris.
