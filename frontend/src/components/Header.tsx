@@ -1,10 +1,12 @@
 import React from 'react';
-import { Building2, Settings, Sliders, BarChart2 } from 'lucide-react';
+import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box } from 'lucide-react';
 
 interface HeaderProps {
   isConnected: boolean;
   mapMode: '2d' | '3d';
   setMapMode: (mode: '2d' | '3d') => void;
+  theme: 'light' | 'dark';
+  setTheme: (t: 'light' | 'dark') => void;
   showSettings: boolean;
   setShowSettings: (show: boolean) => void;
   showControlPanel: boolean;
@@ -13,10 +15,37 @@ interface HeaderProps {
   setShowDataPanel: (show: boolean) => void;
 }
 
+/* Bloc-marque de l'État : drapeau tricolore + « RÉPUBLIQUE FRANÇAISE » */
+const StateBrand: React.FC = () => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', height: '24px', marginBottom: '4px' }} aria-hidden="true">
+        <span style={{ width: '14px', background: '#000091' }} />
+        <span style={{ width: '14px', background: '#ffffff' }} />
+        <span style={{ width: '14px', background: '#e1000f' }} />
+      </div>
+      <span style={{ fontSize: '11px', fontWeight: 700, lineHeight: 1.15, letterSpacing: '0.02em', color: 'var(--text-title)', textTransform: 'uppercase' }}>
+        République<br />Française
+      </span>
+    </div>
+    <div style={{ width: '1px', height: '44px', background: 'var(--border)' }} />
+    <div>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '19px', fontWeight: 800, color: 'var(--text-title)', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+        Urban Data Explorer
+      </h1>
+      <p style={{ fontSize: '12px', color: 'var(--text-mention)', fontWeight: 400, marginTop: '1px' }}>
+        Observatoire socio-urbain · Paris
+      </p>
+    </div>
+  </div>
+);
+
 export const Header: React.FC<HeaderProps> = ({
   isConnected,
   mapMode,
   setMapMode,
+  theme,
+  setTheme,
   showSettings,
   setShowSettings,
   showControlPanel,
@@ -25,57 +54,95 @@ export const Header: React.FC<HeaderProps> = ({
   setShowDataPanel
 }) => {
   return (
-    <header className="glass-panel" style={{ position: 'absolute', top: '20px', left: '20px', right: '20px', height: '70px', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', pointerEvents: 'auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div style={{ background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))', padding: '10px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(6, 182, 212, 0.4)' }}>
-          <Building2 size={24} style={{ color: '#fff' }} />
-        </div>
-        <div>
-          <h1 style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '0.5px' }}>URBAN DATA EXPLORER</h1>
-          <p style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 500 }}>RECHERCHE & DÉVELOPPEMENT PARIS — BLOC 1</p>
-        </div>
-      </div>
+    <header
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '72px',
+        zIndex: 20,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 24px',
+        background: 'var(--bg)',
+        borderBottom: '1px solid var(--border)',
+        boxShadow: 'var(--shadow-raised)',
+      }}
+    >
+      <StateBrand />
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-        <div className="flex items-center gap-2" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: isConnected ? 'var(--success)' : 'var(--warning)', boxShadow: isConnected ? '0 0 8px var(--success)' : '0 0 8px var(--warning)' }} />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-            {isConnected ? 'CONNEXION LIVE (POSTGRESQL/CASSANDRA)' : 'MODE LOCAL-FIRST (OFFLINE)'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        {/* État de la source de données */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} title={isConnected ? 'Connexion aux bases de données active' : 'Données locales de secours'}>
+          <span
+            className={isConnected ? '' : 'blink-soft'}
+            style={{ width: '8px', height: '8px', borderRadius: '50%', background: isConnected ? 'var(--success)' : 'var(--warning)', flexShrink: 0 }}
+          />
+          <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-mention)' }}>
+            {isConnected ? 'Données live · PostgreSQL / Cassandra' : 'Mode local · hors ligne'}
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
+
+        {/* Panneaux */}
+        <div style={{ display: 'flex', gap: '6px' }}>
           <button
             onClick={() => setShowControlPanel(!showControlPanel)}
-            className={`btn-tab ${showControlPanel ? 'active' : ''}`}
-            title="Afficher/Masquer le panneau de filtres"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            className={`dsfr-btn dsfr-btn--tertiary ${showControlPanel ? 'is-active' : ''}`}
+            title="Afficher / masquer les filtres"
           >
-            <Sliders size={18} />
-            <span>Filtres</span>
+            <SlidersHorizontal size={16} /> Filtres
           </button>
           <button
             onClick={() => setShowDataPanel(!showDataPanel)}
-            className={`btn-tab ${showDataPanel ? 'active' : ''}`}
-            title="Afficher/Masquer le panneau de statistiques"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            className={`dsfr-btn dsfr-btn--tertiary ${showDataPanel ? 'is-active' : ''}`}
+            title="Afficher / masquer les indicateurs"
           >
-            <BarChart2 size={18} />
-            <span>Données</span>
+            <BarChart3 size={16} /> Indicateurs
           </button>
+        </div>
+
+        {/* Mode de carte (segmenté) */}
+        <div style={{ display: 'flex', border: '1px solid var(--border)' }}>
           <button
             onClick={() => setMapMode('2d')}
-            className={`btn-tab ${mapMode === '2d' ? 'active' : ''}`}
+            className={`dsfr-btn dsfr-btn--tertiary ${mapMode === '2d' ? 'is-active' : ''}`}
+            style={{ borderRadius: 0 }}
+            title="Carte 2D · fond de plan IGN"
           >
-            2D MapLibre
+            <Map size={16} /> 2D · IGN
           </button>
           <button
             onClick={() => setMapMode('3d')}
-            className={`btn-tab ${mapMode === '3d' ? 'active' : ''}`}
+            className={`dsfr-btn dsfr-btn--tertiary ${mapMode === '3d' ? 'is-active' : ''}`}
+            style={{ borderRadius: 0 }}
+            title="Carte 3D · extrusion des bâtiments"
           >
-            3D Mapbox
+            <Box size={16} /> 3D
           </button>
-          <button onClick={() => setShowSettings(!showSettings)} className="btn-tab" style={{ padding: '8px' }}>
+        </div>
+
+        {/* Thème & paramètres */}
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <button
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            className="dsfr-btn dsfr-btn--tertiary"
+            style={{ padding: '8px' }}
+            title={theme === 'light' ? 'Passer en thème sombre' : 'Passer en thème clair'}
+            aria-label="Changer de thème"
+          >
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className={`dsfr-btn dsfr-btn--tertiary ${showSettings ? 'is-active' : ''}`}
+            style={{ padding: '8px' }}
+            title="Paramètres"
+            aria-label="Paramètres"
+          >
             <Settings size={18} />
           </button>
         </div>

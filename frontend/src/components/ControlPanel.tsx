@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Filter, Sparkles, X } from 'lucide-react';
+import { Layers, Filter, Info, X } from 'lucide-react';
 
 interface ControlPanelProps {
   granularity: number;
@@ -10,116 +10,109 @@ interface ControlPanelProps {
   onClose?: () => void;
 }
 
+const GRANULARITIES = [
+  { level: 0, name: 'Ville (Paris)', desc: 'Métriques consolidées globales' },
+  { level: 1, name: 'Arrondissement', desc: 'Découpage administratif principal' },
+  { level: 2, name: 'IRIS (quartier)', desc: 'Maille socio-économique INSEE' },
+  { level: 3, name: 'Rue', desc: 'Réseau viaire et équipements' },
+  { level: 4, name: 'Bâtiment', desc: 'Extrusion 3D des hauteurs' },
+];
+
+const FAMILIES = [
+  { id: 'immobilier', name: 'Marché immobilier' },
+  { id: 'logement_social', name: 'Logement social' },
+  { id: 'revenus', name: 'Revenus & socio-éco' },
+  { id: 'cadre_vie', name: 'Cadre de vie' },
+  { id: 'environnement', name: 'Environnement', fullWidth: true },
+];
+
 export const ControlPanel: React.FC<ControlPanelProps> = ({
   granularity,
   setGranularity,
   activeFamily,
   setActiveFamily,
   style,
-  onClose
+  onClose,
 }) => {
   return (
-    <div 
-      className="glass-panel" 
-      style={{ 
-        position: 'absolute', 
-        top: '110px', 
-        left: '20px', 
-        bottom: '20px', 
-        width: '380px', 
-        zIndex: 10, 
-        padding: '24px', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: '24px', 
+    <aside
+      className="dsfr-surface"
+      style={{
+        position: 'absolute',
+        top: '88px',
+        bottom: '16px',
+        width: '380px',
+        zIndex: 15,
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
         overflowY: 'auto',
-        ...style 
+        ...style,
       }}
     >
-      {/* Configuration Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '-8px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>Configuration</h2>
+      {/* En-tête */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <span className="dsfr-eyebrow">Paramétrage</span>
+          <h2 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-title)', marginTop: '2px' }}>
+            Filtres & granularité
+          </h2>
+        </div>
         {onClose && (
-          <button 
-            onClick={onClose}
-            className="btn-tab"
-            style={{ 
-              padding: '6px', 
-              background: 'none', 
-              border: 'none', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            title="Masquer"
-          >
+          <button onClick={onClose} className="dsfr-btn dsfr-btn--tertiary" style={{ padding: '6px' }} title="Masquer" aria-label="Masquer le panneau">
             <X size={16} />
           </button>
         )}
       </div>
 
-      {/* Granularity Selector */}
-      <div>
-        <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Layers size={14} /> Granularité progressive
+      {/* Granularité */}
+      <section>
+        <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-title)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Layers size={15} style={{ color: 'var(--blue-france)' }} /> Granularité progressive
         </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {[
-            { level: 0, name: 'Ville (Paris)', desc: 'Métriques consolidées globales' },
-            { level: 1, name: 'Arrondissement', desc: 'Découpage administratif principal' },
-            { level: 2, name: 'IRIS (Quartier)', desc: 'Maille socio-économique INSEE' },
-            { level: 3, name: 'Rue', desc: 'Réseau viaire et équipements' },
-            { level: 4, name: 'Bâtiment', desc: 'Extrusion 3D des hauteurs' }
-          ].map((g) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {GRANULARITIES.map((g) => (
             <button
               key={g.level}
               onClick={() => setGranularity(g.level)}
-              className={`btn-tab ${granularity === g.level ? 'active' : ''}`}
-              style={{ width: '100%', justifyContent: 'flex-start', textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '10px 14px' }}
+              className={`dsfr-segment ${granularity === g.level ? 'is-active' : ''}`}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1px' }}
             >
               <span style={{ fontSize: '13px', fontWeight: 600 }}>{g.name}</span>
-              <span style={{ fontSize: '10px', opacity: 0.8, fontWeight: 400 }}>{g.desc}</span>
+              <span style={{ fontSize: '11px', opacity: 0.85, fontWeight: 400 }}>{g.desc}</span>
             </button>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* Thematic Filters */}
-      <div>
-        <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Filter size={14} /> Filtrage thématique
+      {/* Filtrage thématique */}
+      <section>
+        <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-title)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Filter size={15} style={{ color: 'var(--blue-france)' }} /> Filtrage thématique
         </h3>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <button
             onClick={() => setActiveFamily('all')}
-            className={`btn-tab ${activeFamily === 'all' ? 'active' : ''}`}
-            style={{ fontSize: '12px', justifyContent: 'center', width: '100%', padding: '12px', fontWeight: 600 }}
+            className={`dsfr-segment ${activeFamily === 'all' ? 'is-active' : ''}`}
+            style={{ textAlign: 'center', fontWeight: 600 }}
           >
             Synthèse globale
           </button>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-            {[
-              { id: 'immobilier', name: 'Marché Immobilier' },
-              { id: 'logement_social', name: 'Logement Social' },
-              { id: 'revenus', name: 'Revenus & Socio-Éco' },
-              { id: 'cadre_vie', name: 'Cadre de vie' },
-              { id: 'environnement', name: 'Environnement', fullWidth: true }
-            ].map((f) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
+            {FAMILIES.map((f) => (
               <button
                 key={f.id}
                 onClick={() => setActiveFamily(f.id)}
-                className={`btn-tab ${activeFamily === f.id ? 'active' : ''}`}
+                className={`dsfr-segment ${activeFamily === f.id ? 'is-active' : ''}`}
                 style={{
-                  fontSize: '12px',
-                  justifyContent: 'center',
-                  padding: '8px 4px',
-                  height: '44px',
                   textAlign: 'center',
-                  lineHeight: '1.2',
-                  gridColumn: f.fullWidth ? 'span 2' : 'auto'
+                  justifyContent: 'center',
+                  padding: '10px 6px',
+                  minHeight: '46px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gridColumn: f.fullWidth ? 'span 2' : 'auto',
                 }}
               >
                 {f.name}
@@ -127,17 +120,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Consolidation Section */}
-      <div className={`glass-panel ${activeFamily !== 'all' ? 'grayed-out' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.02)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <h4 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-purple)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Sparkles size={14} /> Indicateur croisé consolidé
-        </h4>
-        <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-          Affiche le score global moyen des 5 catégories pour chaque arrondissement. Sélectionnez une catégorie ci-dessus pour colorer la carte par indicateur.
+      {/* Note explicative */}
+      <div className="dsfr-card--alt dsfr-accent-left" style={{ padding: '14px 16px', display: 'flex', gap: '10px' }}>
+        <Info size={16} style={{ color: 'var(--blue-france)', flexShrink: 0, marginTop: '1px' }} />
+        <p style={{ fontSize: '12px', color: 'var(--text-default)', lineHeight: 1.5 }}>
+          La <strong style={{ color: 'var(--text-title)' }}>synthèse globale</strong> colore la carte par score moyen des 5 catégories.
+          Sélectionnez une thématique pour appliquer une coloration choroplèthe dédiée.
         </p>
       </div>
-    </div>
+    </aside>
   );
 };
