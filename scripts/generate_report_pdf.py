@@ -228,7 +228,7 @@ def main():
         "Notre objectif : transformer des donnees publiques dispersees en un outil d'aide a la "
         "decision clair, fiable et agreable a utiliser."
     )
-    pdf.kpi_row([("16", "sources Open Data"), ("8", "familles de donnees"),
+    pdf.kpi_row([("24", "sources de donnees"), ("8", "familles de donnees"),
                  ("20", "arrondissements"), ("5", "niveaux de zoom")])
 
     # ── 2. Demarche & binome ────────────────────────────────────────────
@@ -268,17 +268,18 @@ def main():
     pdf.bullet("API & interface : ", "FastAPI cote serveur, React et cartographie cote ecran (fond de plan IGN).")
 
     # ── 4. Donnees ──────────────────────────────────────────────────────
-    pdf.h1(4, "Les donnees : richesse et qualite")
+    pdf.h1(4, "Les donnees : richesse, reel et qualite")
     pdf.body(
-        "Nous integrons 16 sources Open Data de la Ville de Paris, regroupees en 8 familles : mobilite, "
-        "education, logement, culture, sante, espaces verts, services publics et pression urbaine. Le defi "
-        "principal a ete de relier chaque donnee a son arrondissement, meme quand l'information n'etait pas "
-        "fournie."
+        "Nous integrons 24 sources, regroupees en 8 familles : mobilite, education, logement, culture, sante, "
+        "espaces verts, services publics et pression urbaine. Deux sources de reference nationales alimentent "
+        "le coeur logement avec des valeurs reelles :"
     )
-    pdf.bullet("Notre solution : ", "un geocodage qui fonctionne hors ligne, capable de retrouver l'arrondissement "
-               "a partir des coordonnees geographiques, sans dependre d'un service externe.")
-    pdf.bullet("Filet de securite : ", "si besoin, un appel a l'API nationale d'adresses prend le relais.")
-    pdf.bullet("Tracabilite : ", "chaque donnee porte une etiquette de qualite indiquant comment elle a ete rattachee.")
+    pdf.bullet("DVF (data.gouv.fr) : ", "les vraies transactions immobilieres 2023 de Paris donnent le prix au m2 "
+               "median et le volume de ventes par arrondissement.")
+    pdf.bullet("INSEE Filosofi 2020 : ", "le vrai revenu median des menages par quartier IRIS, agrege par arrondissement.")
+    pdf.bullet("Geocodage hors ligne : ", "on retrouve l'arrondissement a partir des coordonnees, sans service externe ; "
+               "l'API nationale d'adresses sert de filet de securite.")
+    pdf.bullet("Tracabilite qualite : ", "chaque donnee porte une etiquette (reelle ou de reference, et mode de rattachement).")
 
     # ── 5. Ce que nous demontrons ───────────────────────────────────────
     pdf.add_page()
@@ -298,7 +299,8 @@ def main():
                "local-first garantit la continuite meme sans cluster.")
     pdf.ln(1)
     pdf.eyebrow("Traiter et exposer la donnee")
-    pdf.bullet("C2.1 · API : ", "FastAPI rend les donnees accessibles et fournit une documentation interactive (/docs).")
+    pdf.bullet("C2.1 · API : ", "FastAPI rend les donnees accessibles, documentees (/docs), avec authentification JWT "
+               "(roles viewer/admin) et quotas par IP (anonyme 120, connecte 600 req/min).")
     pdf.bullet("C2.2 · Streaming : ", "Kafka collecte les flux urbains en temps reel et les transmet a la base d'evenements.")
     pdf.bullet("C2.3 · Transformation : ", "Polars fusionne des sources heterogenes et les structure pour l'analyse.")
     pdf.bullet("C2.4 · Optimisation : ", "formats compresses et index garantissent un acces rapide, mesure par nos tests.")
@@ -336,7 +338,8 @@ def main():
     pdf.body(
         "Chaque jeu de donnees est expose par une API FastAPI qui se documente toute seule. Depuis le "
         "navigateur, on visualise et on teste en direct toutes les routes : etat du projet, catalogue des "
-        "sources, indicateurs, contours geographiques et flux d'evenements."
+        "sources, indicateurs, contours geographiques et flux d'evenements. L'API est protegee par une "
+        "authentification JWT (roles viewer/admin) et un quota de requetes par IP."
     )
     banner = ASSETS / "ude-api-banner.png"
     if banner.exists():
@@ -379,10 +382,10 @@ def main():
          ["C1.2", "Cassandra pour les evenements (tri par date, purge 7 jours)"],
          ["C1.3", "Lac de donnees Bronze/Silver/Gold en Parquet"],
          ["C1.4", "Docker multi-services + mode local-first resilient"],
-         ["C2.1", "API FastAPI documentee et accessible"],
+         ["C2.1", "API FastAPI documentee + auth JWT (roles) + quotas par IP"],
          ["C2.2", "Streaming Kafka temps reel vers Cassandra"],
-         ["C2.3", "Fusion et structuration des sources avec Polars"],
-         ["C2.4", "Formats compresses et index pour un acces rapide"]],
+         ["C2.3", "Fusion de sources reelles (DVF + INSEE Filosofi) avec Polars"],
+         ["C2.4", "Parquet + index + drapeau qualite data_source (reel/reference)"]],
         [30, 150],
     )
 

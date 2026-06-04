@@ -207,7 +207,7 @@ def build():
     rect(s, Inches(8.4), Inches(1.7), Inches(0.1), Inches(4.6), BLUE)
     textbox(s, Inches(8.75), Inches(2.0), Inches(3.5), Inches(4), [
         [("CHIFFRES CLÉS", 12, True, MENTION)],
-        [("16", 34, True, BLUE)], [("sources Open Data intégrées", 12, False, GREY)],
+        [("24", 34, True, BLUE)], [("sources de données intégrées", 12, False, GREY)],
         [("8", 34, True, BLUE)], [("familles thématiques", 12, False, GREY)],
         [("20", 34, True, BLUE)], [("arrondissements analysés", 12, False, GREY)],
         [("5", 34, True, BLUE)], [("niveaux de granularité", 12, False, GREY)],
@@ -245,24 +245,23 @@ def build():
     s = new_slide(prs)
     content_header(s, "Données", "Sources Open Data & géocodage")
     bullets(s, Inches(0.85), Inches(1.7), Inches(7.0), Inches(5), [
-        ("16 sources Open Data Paris ", "réparties en 8 familles : mobilité, éducation, logement, culture, santé, espaces verts, services publics, pression urbaine."),
-        ("Formats hétérogènes : ", "CSV (Vélib, Belib, écoles, logements sociaux, marchés…) et GeoJSON (arrondissements, IRIS, rues, bâtiments)."),
-        ("Géocodage offline : ", "point-in-polygon (ray-casting) sur les contours IRIS pour rattacher chaque point à son arrondissement, sans appel réseau."),
-        ("Fallback : ", "API adresse.data.gouv.fr/reverse si l'arrondissement reste introuvable."),
-        ("Qualité : ", "drapeau quality_flag (matched / geocoded_iris / geocoded_api / code_only) pour la traçabilité."),
-    ], size=14, gap=11)
+        ("24 sources, 8 familles : ", "mobilité, éducation, logement, culture, santé, espaces verts, services publics, pression urbaine."),
+        ("Sources réelles : ", "DVF 2023 (prix immobilier) et INSEE Filosofi 2020 (revenus) alimentent le cœur logement."),
+        ("Géocodage offline : ", "point-in-polygon (ray-casting) sur les contours IRIS, sans appel réseau ; fallback API adresse.data.gouv.fr."),
+        ("Qualité tracée : ", "drapeaux quality_flag (rattachement) et data_source (réel / référence)."),
+    ], size=14, gap=12)
     rect(s, Inches(8.4), Inches(1.7), Inches(4.05), Inches(4.6), LIGHT, line=BORDER)
     rect(s, Inches(8.4), Inches(1.7), Inches(0.1), Inches(4.6), RED)
     textbox(s, Inches(8.75), Inches(2.0), Inches(3.5), Inches(4.1), [
         [("RÉPARTITION PAR FAMILLE", 11, True, MENTION)],
-        [("Mobilité", 13, True, INK), ("   7 sources", 13, False, GREY)],
-        [("Éducation", 13, True, INK), ("   3 sources", 13, False, GREY)],
-        [("Logement", 13, True, INK), ("   1 source", 13, False, GREY)],
-        [("Culture", 13, True, INK), ("   1 source", 13, False, GREY)],
-        [("Santé", 13, True, INK), ("   1 source", 13, False, GREY)],
-        [("Espaces verts", 13, True, INK), ("   1 source", 13, False, GREY)],
-        [("Services publics", 13, True, INK), ("   1 source", 13, False, GREY)],
-        [("Pression urbaine", 13, True, INK), ("   1 source", 13, False, GREY)],
+        [("Mobilité", 13, True, INK), ("   7", 13, False, GREY)],
+        [("Logement", 13, True, INK), ("   3", 13, False, GREY)],
+        [("Éducation", 13, True, INK), ("   3", 13, False, GREY)],
+        [("Espaces verts", 13, True, INK), ("   3", 13, False, GREY)],
+        [("Services publics", 13, True, INK), ("   3", 13, False, GREY)],
+        [("Culture", 13, True, INK), ("   2", 13, False, GREY)],
+        [("Santé", 13, True, INK), ("   2", 13, False, GREY)],
+        [("Pression urbaine", 13, True, INK), ("   1", 13, False, GREY)],
     ], space_after=6)
     footer(s, 5)
 
@@ -328,11 +327,11 @@ def build():
     s = new_slide(prs)
     content_header(s, "C2.1 · API REST", "FastAPI : exposition des données")
     bullets(s, Inches(0.85), Inches(1.7), Inches(6.5), Inches(5), [
-        ("Technologie adaptée : ", "FastAPI (ASGI, Pydantic v2), performance et documentation automatique."),
-        ("Routeurs métier : ", "health, catalog, datamarts, pipeline, events, repo."),
-        ("Données accessibles : ", "dashboard, timeline, GeoJSON par granularité, événements."),
-        ("Documentation : ", "Swagger interactif sur /docs, schéma OpenAPI sur /openapi.json."),
-        ("Inter-services : ", "CORS configuré ; briques d'authentification (python-jose / passlib) intégrées."),
+        ("Technologie adaptée : ", "FastAPI (ASGI, Pydantic v2), documentation auto (Swagger /docs)."),
+        ("Routeurs métier : ", "health, auth, catalog, datamarts, pipeline, events, repo."),
+        ("Authentification JWT : ", "OAuth2, rôles viewer / admin, jeton signé HS256 (60 min)."),
+        ("Autorisations & quotas : ", "route admin protégée ; limite par IP (anonyme 120, connecté 600 req/min → 429)."),
+        ("CORS restreint : ", "à l'origine du frontend (variable UDE_CORS_ORIGINS)."),
     ], size=13, gap=10)
     # capture reelle du Swagger /docs
     api_img = ROOT / "ude-api.png"
@@ -373,12 +372,12 @@ def build():
     s = new_slide(prs)
     content_header(s, "Restitution", "Indicateurs Gold & score de synthèse")
     cards = [
-        ("Marché immobilier", "Prix au m² & volumes de ventes"),
+        ("Marché immobilier", "Prix au m² réel & ventes (DVF 2023)"),
         ("Logement social", "Part (%) & nombre de logements"),
-        ("Revenus & socio-éco", "Revenu médian par ménage (INSEE)"),
-        ("Cadre de vie", "Accessibilité, transports, équipements"),
-        ("Environnement", "Espaces verts & nature en ville"),
-        ("Score global", "Moyenne des 5 indices /100"),
+        ("Revenus", "Revenu médian réel (INSEE Filosofi)"),
+        ("Accessibilité", "m² achetables / an de revenu (prix ÷ revenu)"),
+        ("Cadre de vie & env.", "Transports, équipements, espaces verts"),
+        ("Score global", "Moyenne des indices /100"),
     ]
     x0, y0 = Inches(0.85), Inches(1.8)
     cw, ch = Inches(3.75), Inches(1.7)
@@ -433,10 +432,10 @@ def build():
         ("C1.2 NoSQL", "Cassandra events_by_type, TTL 7 j"),
         ("C1.3 Data Lake", "Bronze/Silver/Gold Parquet sur HDFS"),
         ("C1.4 Scalabilité", "Docker Compose 11 services, local-first"),
-        ("C2.1 API", "FastAPI documentée /docs"),
+        ("C2.1 API", "FastAPI /docs + auth JWT (rôles) + quotas par IP"),
         ("C2.2 Streaming", "Producteur/consommateur Kafka"),
-        ("C2.3 Transformation", "Polars, jointures spatiales IRIS"),
-        ("C2.4 Optimisation", "Parquet, index, p95 < 4 ms"),
+        ("C2.3 Transformation", "Polars + sources réelles DVF / INSEE Filosofi"),
+        ("C2.4 Optimisation", "Parquet, index, p95 < 4 ms, qualité tracée"),
     ]
     add_table(s, Inches(0.85), Inches(1.7), Inches(11.6), rows, col0_w=3.3, fs=13)
     footer(s, 15)
