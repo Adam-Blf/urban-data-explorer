@@ -135,3 +135,14 @@ Les données de synthèse sont classées en 4 catégories d'indicateurs comparat
 | **C2.2** | Développer un programme de collecte en temps réel (Streaming) | Ingestion continue des données (Vélib, chantiers) à l'aide d'un couple Producteur/Consommateur Kafka. | **Conforme** |
 | **C2.3** | Écrire des scripts de transformation et d'agrégation | Pipelines de nettoyage, fusion de sources hétérogènes (DVF, INSEE) et jointures géographiques spatiales (IRIS) via Polars. | **Conforme** |
 | **C2.4** | Optimiser les performances de traitement et stockage | Utilisation systématique de fichiers Parquet (Silver/Gold) et optimisation des requêtes PostgreSQL. | **Conforme** |
+
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=Adam-Blf%2Furban-data-explorer&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&legend=top-left" />
+ </picture>
+</a>
