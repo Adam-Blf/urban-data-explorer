@@ -1,11 +1,19 @@
-# Urban Data Explorer — Paris
+# Urban Data Explorer · Paris
+
+<!-- adam-badges:start -->
+[![commits](https://img.shields.io/github/commit-activity/t/Adam-Blf/urban-data-explorer?color=001329&label=commits&style=flat-square)](https://github.com/Adam-Blf/urban-data-explorer/commits)
+[![visites](https://hits.sh/github.com/Adam-Blf/urban-data-explorer.svg?style=flat-square&label=visites&color=001329)](https://hits.sh/github.com/Adam-Blf/urban-data-explorer/)
+[![last commit](https://img.shields.io/github/last-commit/Adam-Blf/urban-data-explorer?color=D4A437&style=flat-square&label=dernier%20push)](https://github.com/Adam-Blf/urban-data-explorer/commits)
+[![top language](https://img.shields.io/github/languages/top/Adam-Blf/urban-data-explorer?style=flat-square)](https://github.com/Adam-Blf/urban-data-explorer)
+[![license](https://img.shields.io/github/license/Adam-Blf/urban-data-explorer?style=flat-square&color=D4A437)](LICENSE)
+<!-- adam-badges:end -->
 
 <!-- Certification & Project Status Badges -->
 <div align="center">
 
 [![RNCP40875 - Bloc 1](https://img.shields.io/badge/RNCP40875-Bloc_1-brightgreen?style=for-the-badge)](https://www.francecompetences.fr/recherche/rncp/40875/)
+[![Version](https://img.shields.io/badge/version-1.1.0-000091?style=for-the-badge)](#)
 [![Evaluation Grid](https://img.shields.io/badge/Bloc_1_RNCP-Conforme_20%2F20-success?style=for-the-badge)](#)
-[![Data Ingested](https://img.shields.io/badge/Data_Ingested-310k_records-blue?style=for-the-badge)](#)
 
 </div>
 
@@ -24,15 +32,17 @@
 [![Apache Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=flat-square&logo=apache-kafka&logoColor=white)](#)
 [![Apache Spark](https://img.shields.io/badge/Apache_Spark-E25A1C?style=flat-square&logo=apache-spark&logoColor=white)](#)
 [![Mapbox](https://img.shields.io/badge/Mapbox-000000?style=flat-square&logo=mapbox&logoColor=white)](#)
-[![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=flat-square&logo=duckdb&logoColor=black)](#)
+[![MapLibre](https://img.shields.io/badge/MapLibre-396CB2?style=flat-square&logo=maplibre&logoColor=white)](#)
+[![IGN](https://img.shields.io/badge/IGN_G%C3%A9oplateforme-000091?style=flat-square)](#)
+[![DSFR](https://img.shields.io/badge/Design-DSFR_%C3%89tat-000091?style=flat-square)](#)
 
 </div>
 
 ---
 
-Un dashboard interactif haut de gamme pour l'exploration en temps réel et en différé des indicateurs urbains de Paris.
+Un tableau de bord cartographique pour l'exploration, en temps réel et en différé, des indicateurs socio-urbains de Paris. L'interface adopte les codes du **Système de Design de l'État (DSFR)** : police Marianne, bleu France, fond de plan **IGN Géoplateforme**, thèmes clair/sombre et accessibilité WCAG AA.
 
-Ce projet valide les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ingénierie des Données)**.
+Projet réalisé en binôme par **Adam Beloucif & Émilien Morice**, validant les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ingénierie des Données)**, certificateur Efrei · Paris Panthéon-Assas Université.
 
 ---
 
@@ -40,34 +50,26 @@ Ce projet valide les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ing�
 
 Le projet intègre une stack moderne, optimisée et résiliente, conçue pour fonctionner de manière locale-first ou distribuée :
 
-```
-                 ┌──────────────────────────────────────┐
-                 │          Open Data Paris CSV         │
-                 └──────────────────┬───────────────────┘
-                                    │
-                                    ▼ (Batch ETL)
-                       ┌─────────────────────────┐
-                       │     Polars Engine       │
-                       └────────────┬────────────┘
-                                    │
-       ┌────────────────────────────┼────────────────────────────┐
-       ▼ (Bronze Layer)             ▼ (Silver Layer)             ▼ (Gold Layer)
-┌──────────────┐             ┌──────────────┐             ┌──────────────┐
-│  HDFS/Parquet│             │  HDFS/Parquet│             │  PostgreSQL  │
-└──────────────┘             └──────────────┘             └──────────────┘
-                                                                 ▲
-                                                                 │
-                                ┌────────────────────────────────┘
-                                │ (API Rest)
-                       ┌─────────────────┐
-                       │ FastAPI Backend │
-                       └────────┬────────┘
-                                │
-                                ▼ (Cartographie & KPIs)
-                    ┌────────────────────────┐
-                    │ Frontend React/TS/Vite │
-                    │ MapBox (3D) + MapLibre │
-                    └────────────────────────┘
+```mermaid
+flowchart TD
+    OD["Open Data Paris · 16 sources<br/>CSV + GeoJSON"]
+    OD -->|"ETL batch · Polars"| BRONZE["Bronze<br/>Parquet brut"]
+    BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
+    SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
+    SILVER -.-> LAKE[("Data Lake<br/>HDFS / Parquet")]
+    GOLD --> PG[("PostgreSQL<br/>schema en etoile")]
+    PROD["Producteur Kafka<br/>flux urbains temps reel"] --> KAFKA{{"Kafka"}}
+    KAFKA --> CONS["Consommateur"] --> CASS[("Cassandra<br/>events · TTL 7 jours")]
+    PG --> API["FastAPI<br/>API REST · /docs"]
+    CASS --> API
+    API --> FE["Frontend React / TypeScript<br/>charte DSFR"]
+    FE --> M2["MapLibre 2D<br/>fond IGN"]
+    FE --> M3["Mapbox 3D<br/>extrusion batiments"]
+
+    classDef store fill:#e3e3fd,stroke:#000091,color:#161616;
+    classDef proc fill:#f6f6f6,stroke:#929292,color:#161616;
+    class PG,CASS,LAKE store;
+    class BRONZE,SILVER,GOLD,API,FE proc;
 ```
 
 1. **ETL & Data Lake (C2.3, C2.4)** : Logique Bronze → Silver → Gold implémentée avec **Polars** (moteur ultra-rapide en Rust), avec géocodage offline par point-in-polygon sur les zones IRIS de Paris.
@@ -125,6 +127,21 @@ Les données de synthèse sont classées en 4 catégories d'indicateurs comparat
 5. **Synthèse Globale (Score)** : Moyenne pondérée des 4 indices de catégories pour chaque arrondissement.
 
 ---
+
+## 🎨 Interface (refonte DSFR)
+
+L'interface a été refondue aux codes du Système de Design de l'État : bloc-marque « République Française », police Marianne, bleu France `#000091`, rouge Marianne `#E1000F`, encadrés nets et choroplèthe séquentielle. Fond de plan **IGN Géoplateforme** en 2D, **Mapbox** en 3D, thèmes clair et sombre, contrastes WCAG AA.
+
+![Aperçu de l'interface](ude-light.png)
+
+## 📑 Livrables de soutenance
+
+Les supports sont générés de façon reproductible (charte DSFR + co-branding Efrei) :
+
+```bash
+python scripts/generate_report_pdf.py     # -> rapport.pdf (rapport de soutenance)
+python scripts/generate_slides_pptx.py     # -> soutenance.pptx (support oral, 16 slides)
+```
 
 ## 🏛️ Alignement avec la Grille d'Évaluation RNCP40875 (Bloc 1)
 
