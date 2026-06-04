@@ -370,9 +370,19 @@ LOGEMENT_SOCIAL_COUNT_BASES = {
 
 
 def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
-    """Construit le datamart dashboard Gold à partir du Silver."""
+    """Construit le datamart dashboard Gold à partir du Silver.
+
+    Prix immobilier (DVF 2023) et revenu médian (INSEE Filosofi 2020) sont
+    chargés depuis les sources réelles si disponibles ; sinon, on retombe
+    sur les valeurs de référence.
+    """
     if silver_df.is_empty():
         return pl.DataFrame()
+
+    # Sources externes réelles (vides si fichiers absents -> fallback)
+    from .external import load_dvf_prices, load_filosofi_income
+    dvf = load_dvf_prices()
+    filo = load_filosofi_income()
 
     counts = _family_counts(silver_df)
     rows = []
@@ -391,12 +401,14 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         pressure = min(98, max(4, 10 + pre * 5.8 + mob * 0.1 - gs * 0.9))
         attractiveness = min(98, max(8, accessibility * 0.55 + gs * 1.4 + cul * 1.0 + hou * 0.6 - pressure * 0.28))
 
-        # New indicators
-        prix_m2 = PRIX_M2_BASES.get(code, 10000.0)
-        sales_volume = SALES_VOLUME_BASES.get(code, 300)
-        revenu_median = REVENU_MEDIAN_BASES.get(code, 30000.0)
+        # New indicators · prix & revenus réels (DVF / Filosofi) si dispo, sinon référence
+        dvf_row = dvf.get(code)
+        prix_m2 = dvf_row["prix_m2"] if dvf_row else PRIX_M2_BASES.get(code, 10000.0)
+        sales_volume = dvf_row["sales_volume"] if dvf_row else SALES_VOLUME_BASES.get(code, 300)
+        revenu_median = filo.get(code, REVENU_MEDIAN_BASES.get(code, 30000.0))
         logements_sociaux_count = LOGEMENT_SOCIAL_COUNT_BASES.get(code, 5000)
         logement_social_pct = LOGEMENT_SOCIAL_PCT_BASES.get(code, 15.0)
+        data_source = "real" if dvf_row else "reference"
 
         # Calculate indexes
         immobilier_idx = round(min(95, max(10, (prix_m2 - 8000) / (16000 - 8000) * 100)))
@@ -404,6 +416,13 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         revenu_idx = round(min(95, max(10, (revenu_median - 20000) / (48000 - 20000) * 100)))
         cadre_vie_idx = round(min(100, max(0, accessibility)))
         environnement_idx = round(min(95, max(20, gs * 7.5)))
+
+        # Accessibilite au logement (KPI demande par l'enonce) : on relie le prix
+        # au revenu. m2_abordables = revenu annuel median / prix au m2 = combien de
+        # m2 un menage peut "acheter" avec une annee de revenu (plus haut = plus accessible).
+        m2_abordables = round(revenu_median / prix_m2, 2) if prix_m2 else 0.0
+        # Indice 0-100 : 4 m2/an de revenu = tres accessible (100), 0 = inaccessible.
+        accessibilite_idx = round(min(100, max(0, m2_abordables / 4.0 * 100)))
 
         # Overall score
         score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx + environnement_idx) / 5)
@@ -431,7 +450,10 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
             "logement_social_pct": logement_social_pct,
             "revenu_median": revenu_median,
             "sales_volume": sales_volume,
-            "score": score
+            "score": score,
+            "m2_abordables": m2_abordables,
+            "accessibilite_idx": accessibilite_idx,
+            "data_source": data_source,
         })
 
     return pl.DataFrame(rows)
