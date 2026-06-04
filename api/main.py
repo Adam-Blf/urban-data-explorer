@@ -16,7 +16,7 @@ tags_metadata = [
 
 app = FastAPI(
     title="Urban Data Explorer",
-    description="API backend pour le dashboard Paris – logement, mobilité, éducation, culture, espaces verts.",
+    description="API backend pour le dashboard Paris · logement, mobilité, éducation, culture, espaces verts.",
     version="4.0.0",
     openapi_tags=tags_metadata,
 )
