@@ -7,6 +7,8 @@ import { DataPanel } from './components/DataPanel';
 import { MapViewport } from './components/MapViewport';
 import { SettingsDrawer } from './components/SettingsDrawer';
 
+type Theme = 'light' | 'dark';
+
 export default function App() {
   // Config & Modes
   const [mapMode, setMapMode] = useState<'2d' | '3d'>('2d');
@@ -14,6 +16,15 @@ export default function App() {
     return localStorage.getItem('ude_mapbox_token') || '';
   });
   const [showSettings, setShowSettings] = useState(false);
+
+  // Thème DSFR (clair par défaut, codes officiels)
+  const [theme, setTheme] = useState<Theme>(() => {
+    return (localStorage.getItem('ude_theme') as Theme) || 'light';
+  });
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('ude_theme', theme);
+  }, [theme]);
 
   // Granularities & Filters
   const [granularity, setGranularity] = useState<number>(1);
@@ -147,10 +158,11 @@ export default function App() {
   const maxActivity = timeline.length ? Math.max(...timeline.map(t => t.activity)) : 100;
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#07090e' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: 'var(--bg)' }}>
       <MapViewport
         mapMode={mapMode}
         mapboxToken={mapboxToken}
+        theme={theme}
         setShowSettings={setShowSettings}
         selectedDistrict={selectedDistrict}
         setSelectedDistrict={setSelectedDistrict}
@@ -165,6 +177,8 @@ export default function App() {
         isConnected={isConnected}
         mapMode={mapMode}
         setMapMode={setMapMode}
+        theme={theme}
+        setTheme={setTheme}
         showSettings={showSettings}
         setShowSettings={setShowSettings}
         showControlPanel={showControlPanel}
@@ -186,9 +200,9 @@ export default function App() {
         activeFamily={activeFamily}
         setActiveFamily={setActiveFamily}
         style={{
-          right: showControlPanel ? (showDataPanel ? '480px' : '20px') : '-400px',
-          left: 'auto',
-          transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          left: showControlPanel ? '16px' : '-420px',
+          right: 'auto',
+          transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
         onClose={() => setShowControlPanel(false)}
       />
@@ -205,7 +219,7 @@ export default function App() {
         activeFamily={activeFamily}
         maxActivity={maxActivity}
         style={{
-          right: showDataPanel ? '20px' : '-460px',
+          right: showDataPanel ? '16px' : '-480px',
           transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
         onClose={() => setShowDataPanel(false)}

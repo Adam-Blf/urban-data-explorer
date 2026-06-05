@@ -3,12 +3,27 @@ __pycache__/
 .env
 data/raw/downloads/*.csv
 data/raw/downloads/*.json
+data/raw/downloads/*.csv.gz
+data/raw/downloads/*.zip
 data/eda/
 node_modules/
 frontend/dist/
 frontend/node_modules/
 .vite/
-rapport.pdf
+soutenance-maj.pptx
 *.egg-info/
 .claude/
 scratch/
+
+# Artefacts d'inspection (Playwright MCP)
+**/.playwright-mcp/
+
+# Defense en profondeur secrets (regle 2026-04-22)
+*.token
+*.pem
+*secret*
+ghp_*
+github_pat_*
+sbp_*
+.env.*
+!.env.example

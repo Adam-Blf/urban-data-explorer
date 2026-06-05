@@ -48,7 +48,7 @@ ALL_SOURCES: list[SourceSpec] = [
     # ── Mobilité ──────────────────────────────────────────────────────────
     SourceSpec(
         source_id="velib_stations",
-        title="Velib' – Localisation des stations",
+        title="Velib' · Localisation des stations",
         family="mobility",
         catalog_url="https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/",
         geo_point_column="coordonnees_geo",
@@ -56,7 +56,7 @@ ALL_SOURCES: list[SourceSpec] = [
     ),
     SourceSpec(
         source_id="velib_disponibilite",
-        title="Velib' – Disponibilite temps reel",
+        title="Velib' · Disponibilite temps reel",
         family="mobility",
         catalog_url="https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/",
         geo_point_column="coordonnees_geo",
@@ -72,7 +72,7 @@ ALL_SOURCES: list[SourceSpec] = [
     ),
     SourceSpec(
         source_id="stationnement_voie_publique_emplacements",
-        title="Stationnement sur voie publique – Emplacements",
+        title="Stationnement sur voie publique · Emplacements",
         family="mobility",
         catalog_url="https://opendata.paris.fr/explore/dataset/stationnement-voie-publique-emplacements/",
         geo_point_column="geo_point_2d",
@@ -80,7 +80,7 @@ ALL_SOURCES: list[SourceSpec] = [
     ),
     SourceSpec(
         source_id="stationnement_voie_publique_emprises",
-        title="Stationnement sur voie publique – Emprises",
+        title="Stationnement sur voie publique · Emprises",
         family="mobility",
         catalog_url="https://opendata.paris.fr/explore/dataset/stationnement-sur-voie-publique-emprises/",
         geo_point_column="geo_point_2d",
@@ -88,7 +88,7 @@ ALL_SOURCES: list[SourceSpec] = [
     ),
     SourceSpec(
         source_id="belib",
-        title="Belib' – Bornes de recharge electrique",
+        title="Belib' · Bornes de recharge electrique",
         family="mobility",
         catalog_url="https://opendata.paris.fr/explore/dataset/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/",
         geo_point_column="coordonneesxy",
@@ -147,7 +147,7 @@ ALL_SOURCES: list[SourceSpec] = [
     # ── Culture ───────────────────────────────────────────────────────────
     SourceSpec(
         source_id="que_faire_a_paris",
-        title="Que faire a Paris – Evenements culturels",
+        title="Que faire a Paris · Evenements culturels",
         family="culture",
         catalog_url="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/",
         geo_point_column="lat_lon",
@@ -158,7 +158,7 @@ ALL_SOURCES: list[SourceSpec] = [
     # ── Santé ─────────────────────────────────────────────────────────────
     SourceSpec(
         source_id="sanisettesparis",
-        title="Sanisettes – Toilettes publiques",
+        title="Sanisettes · Toilettes publiques",
         family="health",
         catalog_url="https://opendata.paris.fr/explore/dataset/sanisettesparis/",
         geo_point_column="geo_point_2d",
@@ -186,6 +186,80 @@ ALL_SOURCES: list[SourceSpec] = [
         geo_point_column="geo_point_2d",
         arrondissement_candidates=("cp_arrondissement",),
         address_candidates=("voie",),
+    ),
+
+    # ── Sources ajoutees (equilibrage des familles) ─────────────────────────
+    SourceSpec(
+        source_id="defibrillateurs",
+        title="Defibrillateurs installes a Paris",
+        family="health",
+        catalog_url="https://opendata.paris.fr/explore/dataset/defibrillateurs/",
+        geo_point_column="geo_point_2d",
+        arrondissement_candidates=("code_post", "commune"),
+        address_candidates=("adr_post",),
+    ),
+    SourceSpec(
+        source_id="jardins_partages",
+        title="Jardins partages",
+        family="green_space",
+        catalog_url="https://opendata.paris.fr/explore/dataset/jardins-partages/",
+        geo_point_column="geo_point_2d",
+        arrondissement_candidates=("arrondissement",),
+        address_candidates=("adresse",),
+    ),
+    SourceSpec(
+        source_id="ilots_de_fraicheur",
+        title="Ilots de fraicheur · espaces verts frais",
+        family="green_space",
+        catalog_url="https://opendata.paris.fr/explore/dataset/ilots-de-fraicheur-espaces-verts-frais/",
+        geo_point_column="geo_point_2d",
+        arrondissement_candidates=("arrondissement",),
+        address_candidates=("adresse",),
+    ),
+    SourceSpec(
+        source_id="lieux_de_tournage",
+        title="Lieux de tournage a Paris",
+        family="culture",
+        catalog_url="https://opendata.paris.fr/explore/dataset/lieux-de-tournage-a-paris/",
+        geo_point_column="geo_point_2d",
+        arrondissement_candidates=("ardt_lieu",),
+        address_candidates=("adresse_lieu",),
+    ),
+    SourceSpec(
+        source_id="fontaines_a_boire",
+        title="Fontaines a boire",
+        family="public_service",
+        catalog_url="https://opendata.paris.fr/explore/dataset/fontaines-a-boire/",
+        geo_point_column="geo_point_2d",
+        arrondissement_candidates=("commune",),
+        address_candidates=("voie",),
+    ),
+    SourceSpec(
+        source_id="commerces_semaest",
+        title="Commerces Semaest (revitalisation commerciale)",
+        family="public_service",
+        catalog_url="https://opendata.paris.fr/explore/dataset/commerces-semaest/",
+        geo_point_column="xy",
+        arrondissement_candidates=("cp",),
+        address_candidates=("adresse",),
+    ),
+
+    # ── Sources externes reelles (chargees par etl/external.py) ─────────────
+    SourceSpec(
+        source_id="dvf_transactions",
+        title="DVF · Demandes de valeurs foncieres (transactions immobilieres 75, 2023)",
+        family="housing",
+        catalog_url="https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
+        provider="DGFiP / data.gouv.fr",
+        metadata_only=True,
+    ),
+    SourceSpec(
+        source_id="filosofi_revenus",
+        title="INSEE Filosofi · Revenu median disponible par IRIS (2020)",
+        family="housing",
+        catalog_url="https://www.insee.fr/fr/statistiques/7233950",
+        provider="INSEE",
+        metadata_only=True,
     ),
 ]
 

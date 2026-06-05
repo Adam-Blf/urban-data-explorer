@@ -1,140 +1,350 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
+/* =====================================================================
+   Système de Design — inspiré du DSFR (Système de Design de l'État)
+   Police Marianne · Bleu France #000091 · Rouge Marianne #E1000F
+   Réf. codes : https://www.systeme-de-design.gouv.fr
+   ===================================================================== */
+
+/* ── Polices officielles (Marianne + Spectral), vendorisées local ──── */
+@font-face {
+  font-family: 'Marianne';
+  src: url('/fonts/Marianne-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Marianne';
+  src: url('/fonts/Marianne-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Marianne';
+  src: url('/fonts/Marianne-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Marianne';
+  src: url('/fonts/Marianne-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spectral';
+  src: url('/fonts/Spectral-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spectral';
+  src: url('/fonts/Spectral-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Jetons de couleur · thème clair (défaut) ──────────────────────── */
 :root {
-  --font-sans: 'Outfit', sans-serif;
-  
-  /* Color Palette - Cyber / Urban Dark Theme */
-  --bg-main: #0a0c10;
-  --bg-card: rgba(18, 22, 30, 0.7);
-  --bg-card-hover: rgba(26, 32, 44, 0.8);
-  --border-card: rgba(255, 255, 255, 0.06);
-  --border-card-hover: rgba(255, 255, 255, 0.12);
-  
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  
-  --accent-cyan: #06b6d4;
-  --accent-blue: #3b82f6;
-  --accent-purple: #8b5cf6;
-  --accent-pink: #ec4899;
-  
-  --glow-cyan: rgba(6, 182, 212, 0.15);
-  --glow-purple: rgba(139, 92, 246, 0.15);
-  
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --font-sans: 'Marianne', 'Segoe UI', system-ui, sans-serif;
+  --font-serif: 'Spectral', Georgia, serif;
+
+  /* Bleu France & Rouge Marianne */
+  --blue-france: #000091;
+  --blue-france-hover: #1212ff;
+  --blue-france-active: #2323ff;
+  --blue-france-975: #f5f5fe;
+  --blue-france-950: #ececfe;
+  --blue-france-925: #e3e3fd;
+  --blue-france-850: #cacafb;
+  --red-marianne: #e1000f;          /* usage graphique (barres, drapeau) ≥ 3:1 */
+  --red-marianne-text: #ce0500;     /* usage texte sur fond clair · AA 5:1 */
+  --red-marianne-925: #fee9ea;
+
+  /* Fonds & texte */
+  --bg: #ffffff;
+  --bg-alt: #f6f6f6;
+  --bg-contrast: #eeeeee;
+  --bg-overlay: rgba(255, 255, 255, 0.92);
+  --text-title: #161616;
+  --text-default: #3a3a3a;
+  --text-mention: #666666;
+  --text-inverted: #ffffff;
+  --border: #dddddd;
+  --border-strong: #929292;
+
+  /* Fonctionnel */
+  --success: #18753c;
+  --success-bg: #b8fec9;
+  --warning: #b34000;
+  --error: #ce0500;
+  --info: #0063cb;
+
+  /* Échelle séquentielle data-viz (bleu France, ColorBrewer-like) */
+  --seq-0: #e3e3fd;
+  --seq-1: #b1b1f9;
+  --seq-2: #8585f6;
+  --seq-3: #4d4dde;
+  --seq-4: #000091;
+
+  /* Ombres : DSFR = quasi nulles, juste un raised discret */
+  --shadow-raised: 0 2px 6px 0 rgba(0, 0, 18, 0.16);
+  --shadow-overlay: 0 8px 16px 0 rgba(0, 0, 18, 0.16);
+}
+
+/* ── Thème sombre DSFR ─────────────────────────────────────────────── */
+:root[data-theme='dark'] {
+  --blue-france: #8585f6;
+  --blue-france-hover: #b1b1f9;
+  --blue-france-active: #cacafb;
+  --blue-france-975: #1b1b35;
+  --blue-france-950: #21213f;
+  --blue-france-925: #272747;
+  --blue-france-850: #38386b;
+  --red-marianne: #f95c5e;
+  --red-marianne-text: #f95c5e;     /* AA sur fond sombre #161616 ≈ 5.9:1 */
+  --red-marianne-925: #3a2222;
+
+  --bg: #161616;
+  --bg-alt: #1e1e1e;
+  --bg-contrast: #242424;
+  --bg-overlay: rgba(22, 22, 22, 0.92);
+  --text-title: #ffffff;
+  --text-default: #cecece;
+  --text-mention: #929292;
+  --text-inverted: #161616;
+  --border: #353535;
+  --border-strong: #5e5e5e;
+
+  --success: #27a658;
+  --warning: #fc5d00;
+  --error: #ff5655;
+  --info: #518fff;
+
+  --seq-0: #272747;
+  --seq-1: #38386b;
+  --seq-2: #5b5bd6;
+  --seq-3: #8585f6;
+  --seq-4: #b1b1f9;
+
+  --shadow-raised: 0 2px 6px 0 rgba(0, 0, 0, 0.4);
+  --shadow-overlay: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text-default);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
 }
 
-/* Scrollbar customizations */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ── Barre de défilement sobre ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-mention); }
+
+/* ── Surface / encadré DSFR (net, sans flou) ───────────────────────── */
+.dsfr-surface {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-overlay);
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+.dsfr-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+.dsfr-card--alt {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+/* Liseré bleu France à gauche (accent éditorial) */
+.dsfr-accent-left {
+  box-shadow: inset 4px 0 0 0 var(--blue-france);
 }
 
-/* Glassmorphism Classes */
-.glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-card);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-panel:hover {
-  border-color: var(--border-card-hover);
-  background: var(--bg-card-hover);
-}
-
-.glass-panel-glow {
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 16px var(--glow-cyan);
-}
-
-/* Micro-animations */
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-.pulse-element {
-  animation: pulse-glow 3s infinite ease-in-out;
-}
-
-/* Gray-out styles when not active or concerned */
-.grayed-out {
-  opacity: 0.25;
-  filter: grayscale(1);
-  pointer-events: none;
-  transition: all 0.4s ease;
-}
-
-/* Custom interactive UI buttons */
-.btn-tab {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+/* ── Boutons DSFR ──────────────────────────────────────────────────── */
+.dsfr-btn {
+  font-family: var(--font-sans);
   font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  color: var(--blue-france);
+  background: transparent;
 }
 
-.btn-tab:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.1);
+/* Primaire : fond bleu France */
+.dsfr-btn--primary {
+  background: var(--blue-france);
+  color: var(--text-inverted);
+}
+.dsfr-btn--primary:hover { background: var(--blue-france-hover); }
+.dsfr-btn--primary:active { background: var(--blue-france-active); }
+
+/* Secondaire : contour bleu France */
+.dsfr-btn--secondary {
+  background: transparent;
+  border-color: var(--blue-france);
+  color: var(--blue-france);
+}
+.dsfr-btn--secondary:hover { background: var(--blue-france-975); }
+
+/* Tertiaire : sans contour, fond au survol */
+.dsfr-btn--tertiary {
+  background: transparent;
+  color: var(--blue-france);
+}
+.dsfr-btn--tertiary:hover { background: var(--blue-france-975); }
+
+/* État sélectionné (onglet actif) */
+.dsfr-btn.is-active {
+  background: var(--blue-france);
+  color: var(--text-inverted);
+  border-color: var(--blue-france);
 }
 
-.btn-tab.active {
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+.dsfr-btn:focus-visible {
+  outline: 2px solid var(--blue-france);
+  outline-offset: 2px;
 }
 
-/* Map Containers */
+/* ── Onglet de segmentation (granularité, familles) ────────────────── */
+.dsfr-segment {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-default);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.dsfr-segment:hover {
+  background: var(--blue-france-975);
+  border-color: var(--blue-france-850);
+}
+.dsfr-segment.is-active {
+  background: var(--blue-france);
+  border-color: var(--blue-france);
+  color: var(--text-inverted);
+}
+.dsfr-segment:focus-visible {
+  outline: 2px solid var(--blue-france);
+  outline-offset: 2px;
+}
+
+/* ── Étiquette / badge DSFR ────────────────────────────────────────── */
+.dsfr-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 5px 8px;
+  background: var(--blue-france-925);
+  color: var(--blue-france);
+  white-space: nowrap;
+}
+.dsfr-tag--neutral { background: var(--bg-contrast); color: var(--text-default); }
+.dsfr-tag--success { background: var(--success-bg); color: var(--success); }
+
+/* ── Champ de saisie / select DSFR (fond gris + liseré bas) ────────── */
+.dsfr-input,
+.dsfr-select {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  width: 100%;
+  padding: 8px 10px;
+  color: var(--text-title);
+  background: var(--bg-contrast);
+  border: 0;
+  border-bottom: 2px solid var(--text-mention);
+  outline: none;
+}
+.dsfr-input:focus,
+.dsfr-select:focus {
+  outline: 2px solid var(--blue-france);
+  outline-offset: 2px;
+  border-bottom-color: var(--blue-france);
+}
+
+/* ── Titres ────────────────────────────────────────────────────────── */
+.dsfr-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-mention);
+}
+
+/* Chiffres alignés (data) */
+.tabular { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+
+/* ── Pastille d'état (connexion) ──────────────────────────────────── */
+.dsfr-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Animations sobres ─────────────────────────────────────────────── */
+@keyframes blink-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.blink-soft { animation: blink-soft 2s infinite ease-in-out; }
+
+/* État grisé (catégorie non concernée) */
+.is-dimmed {
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+/* Respect de la préférence « mouvement réduit » (a11y) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .blink-soft { animation: none !important; }
+}
+
+/* ── Carte ─────────────────────────────────────────────────────────── */
 .map-viewport {
   position: absolute;
   top: 0;
@@ -144,9 +354,9 @@ body {
   z-index: 1;
 }
 
-/* Legend & Layer Control styles */
-.map-overlay-panel {
-  position: absolute;
-  z-index: 10;
-  pointer-events: auto;
+/* Atténue le contrôle d'attribution MapLibre/Mapbox pour rester sobre */
+.maplibregl-ctrl-attrib,
+.mapboxgl-ctrl-attrib {
+  font-family: var(--font-sans) !important;
+  font-size: 10px !important;
 }
