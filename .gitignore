@@ -10,6 +10,12 @@ node_modules/
 frontend/dist/
 frontend/node_modules/
 .vite/
+
+# Artefacts de build PyInstaller (exe local tout-en-un)
+/build/
+/dist/
+*.spec
+ude.exe
 soutenance-maj.pptx
 *.egg-info/
 .claude/

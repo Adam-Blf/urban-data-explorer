@@ -1,6 +1,12 @@
 import { District, Overview, TimelinePoint, EventLog } from '../types';
 
-const API_BASE = 'http://localhost:8000';
+// Base API resolue au build :
+//  - dev      -> http://localhost:8000 (defaut en mode dev)
+//  - Vercel   -> URL du service Render (variable VITE_API_BASE)
+//  - exe local-> '' (meme origine : l'exe sert l'API + le front)
+const API_BASE =
+  import.meta.env.VITE_API_BASE ??
+  (import.meta.env.DEV ? 'http://localhost:8000' : '');
 
 export const api = {
   async checkHealth(): Promise<boolean> {
