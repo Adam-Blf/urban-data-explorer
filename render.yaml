@@ -1,0 +1,20 @@
+# Blueprint Render · API Urban Data Explorer (FastAPI, local-first).
+# Deploiement : connecter le repo sur https://dashboard.render.com/blueprints
+# ou `render blueprint launch`. L'API tourne sans base de donnees.
+services:
+  - type: web
+    name: ude-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: UDE_JWT_SECRET
+        generateValue: true            # secret JWT genere par Render
+      - key: UDE_CORS_ORIGINS
+        sync: false                    # a renseigner : URL du front Vercel

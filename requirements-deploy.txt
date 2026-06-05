@@ -1,0 +1,12 @@
+# Dependances runtime de l'API en mode local-first (Render).
+# Les drivers DB/streaming (cassandra, kafka, scrapling) sont exclus : l'API
+# calcule ses donnees sans conteneur. Voir requirements.txt pour la stack complete.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+python-dotenv==1.0.1
+polars==1.24.0
+pyarrow==19.0.1
+python-jose[cryptography]==3.3.0
+python-multipart==0.0.18
+requests==2.32.3
