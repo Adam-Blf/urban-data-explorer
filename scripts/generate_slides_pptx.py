@@ -460,6 +460,29 @@ def build():
     if efrei_w.exists():
         s.shapes.add_picture(str(efrei_w), Inches(10.6), Inches(6.45), width=Inches(2.2))
 
+    # ── Notes de l'orateur · minutage pour 10 minutes ───────────────────
+    # (annexe = diapos de reserve pour les questions, non comptees dans les 10 min)
+    NOTES = [
+        "[~0:30] Accroche : Paris, le logement, des donnees dispersees. On a construit l'observatoire qui les reunit.",
+        "[~0:20] Plan rapide. Annoncer la demo live a la fin.",
+        "[~1:00] Probleme metier + chiffres cles (24 sources, 20 arrondissements). Pourquoi une gouvernance en a besoin.",
+        "[~1:00] Le voyage de la donnee : Bronze/Silver/Gold, Polars, puis API et carte. Insister sur le bout-en-bout.",
+        "[~1:00] Sources : 24, equilibrees. Surtout : prix DVF et revenus INSEE REELS. Geocodage hors ligne.",
+        "[~0:40] C1.1 : etoile PostgreSQL + tests de charge (1190 req/s, p95 3,5 ms).",
+        "[~0:30] C1.2 : Cassandra pour le flux, tri par date, purge 7 jours.",
+        "[~0:40] C1.3/C1.4 : Data Lake Parquet, Docker, healthchecks, volumes persistants, local-first.",
+        "[~0:50] C2.1 : API FastAPI, auth JWT + quotas par IP. Montrer /docs en demo.",
+        "[~0:30] C2.2 : Kafka temps reel vers Cassandra.",
+        "[~0:40] C2.3/C2.4 : fusion sources reelles, Parquet, index, qualite tracee.",
+        "[~0:40] Indicateurs Gold dont l'accessibilite prix/revenus (KPI demande).",
+        "[~1:00] DEMO LIVE : carte, choix d'un arrondissement, comparaison, theme sombre.",
+        "[Annexe] Accessibilite / theme sombre si question.",
+        "[~0:30] Grille : on coche C1.1 a C2.4.",
+        "[~0:30] Conclusion : solution complete, reelle, soignee. Merci. Questions.",
+    ]
+    for slide, note in zip(prs.slides, NOTES):
+        slide.notes_slide.notes_text_frame.text = note
+
     out = ROOT / "soutenance.pptx"
     try:
         prs.save(str(out))

@@ -178,6 +178,7 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 - **Autorisations** : route `/auth/me` réservée au rôle `admin` (401 sans jeton, 403 si rôle insuffisant).
 - **Quotas** : fenêtre glissante par IP — 120 req·min anonyme, 600 req·min authentifié, sinon `429 Too Many Requests`.
 - **CORS restreint** à l'origine du frontend (`UDE_CORS_ORIGINS`).
+- **API filtrable** : `GET /datamarts/dashboard?arrondissement=75011&score_min=70&sort=score`.
 
 ## 🏛️ Alignement avec la Grille d'Évaluation RNCP40875 (Bloc 1)
 
@@ -186,6 +187,7 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 | **C1.1** | Concevoir et structurer une base de données relationnelle | Modèle relationnel en étoile mis en place dans [postgres/init.sql](file:///c:/Users/adamb/Documents/urban-data-explorer/postgres/init.sql). Script de test de charge : [scripts/test_load_postgres.py](file:///c:/Users/adamb/Documents/urban-data-explorer/scripts/test_load_postgres.py). | **Conforme** |
 | **C1.2** | Concevoir et structurer une base de données non-relationnelle (NoSQL) | Modélisation orientée requêtes dans Cassandra pour stocker les snapshots d'événements de streaming ([cassandra/schema.cql](file:///c:/Users/adamb/Documents/urban-data-explorer/cassandra/schema.cql)). | **Conforme** |
 | **C1.3** | Configurer et requêter un cluster de stockage (Data Lake) | Architecture de stockage Bronze → Silver → Gold organisée par répertoires et fichiers Parquet optimisés. | **Conforme** |
+| **C1.4** | Architecturer des infrastructures scalables et résilientes | Docker Compose : `restart: unless-stopped`, **healthchecks** (postgres, cassandra, api), démarrage ordonné (`depends_on: service_healthy`), **volumes persistants**, profils `streaming`/`lake`. Mode local-first hors ligne. [ADR](docs/ADR/0001-architecture-data.md). | **Conforme** |
 | **C2.1** | Développer une API Rest pour exposer les données | API FastAPI (`api/main.py`) documentée via Swagger (`/docs`). **Authentification JWT** (OAuth2, rôles viewer/admin) et **quotas par IP** (anonyme 120 / authentifié 600 req·min) dans [`api/security.py`](api/security.py). | **Conforme** |
 | **C2.2** | Développer un programme de collecte en temps réel (Streaming) | Ingestion continue des données (Vélib, chantiers) à l'aide d'un couple Producteur/Consommateur Kafka. | **Conforme** |
 | **C2.3** | Écrire des scripts de transformation et d'agrégation | Polars : nettoyage, normalisation des codes, jointures spatiales IRIS et **fusion de sources réelles** (DVF 2023 + INSEE Filosofi 2020) dans [`etl/external.py`](etl/external.py) + [`etl/processing.py`](etl/processing.py). | **Conforme** |

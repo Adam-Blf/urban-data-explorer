@@ -16,14 +16,22 @@ services:
       retries: 10
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data        # persistance -> resilience aux redemarrages
 
   cassandra:
     image: cassandra:4.1
     restart: unless-stopped
     ports:
       - "9042:9042"
+    healthcheck:                               # sonde de sante -> demarrage ordonne
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+      start_period: 60s
     volumes:
       - ./scripts:/scripts:ro
+      - cassandradata:/var/lib/cassandra        # persistance -> resilience
 
   api:
     build:
@@ -31,8 +39,10 @@ services:
       dockerfile: api/Dockerfile
     restart: unless-stopped
     depends_on:
-      - postgres
-      - cassandra
+      postgres:
+        condition: service_healthy              # ne demarre qu'une fois la base prete
+      cassandra:
+        condition: service_healthy
     env_file:
       - .env
     ports:
@@ -42,10 +52,14 @@ services:
       interval: 15s
       timeout: 5s
       retries: 10
+      start_period: 20s
 
   frontend:
     build: ./frontend
     restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
     ports:
       - "8080:80"
 
@@ -135,3 +149,8 @@ services:
       - "10000:10000"
     volumes:
       - ./hive/ddl:/hive/ddl:ro
+
+# Volumes nommes : les donnees survivent a "docker compose down" (resilience C1.4)
+volumes:
+  pgdata:
+  cassandradata:

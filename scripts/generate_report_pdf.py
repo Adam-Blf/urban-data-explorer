@@ -295,12 +295,13 @@ def main():
                "au plus ancien et s'effacent automatiquement au bout de 7 jours.")
     pdf.bullet("C1.3 · Lac de donnees : ", "les fichiers Parquet organisent les donnees variees par etape, de maniere "
                "performante et econome.")
-    pdf.bullet("C1.4 · Scalabilite : ", "grace a Docker, l'architecture peut grandir service par service ; le mode "
-               "local-first garantit la continuite meme sans cluster.")
+    pdf.bullet("C1.4 · Scalabilite & resilience : ", "Docker Compose avec redemarrage automatique, sondes de sante "
+               "(postgres, cassandra, api), demarrage ordonne et volumes persistants ; le mode local-first garantit "
+               "la continuite meme sans cluster.")
     pdf.ln(1)
     pdf.eyebrow("Traiter et exposer la donnee")
-    pdf.bullet("C2.1 · API : ", "FastAPI rend les donnees accessibles, documentees (/docs), avec authentification JWT "
-               "(roles viewer/admin) et quotas par IP (anonyme 120, connecte 600 req/min).")
+    pdf.bullet("C2.1 · API : ", "FastAPI accessible et documentee (/docs), filtrable (par arrondissement, score), "
+               "avec authentification JWT (roles viewer/admin) et quotas par IP (anonyme 120, connecte 600 req/min).")
     pdf.bullet("C2.2 · Streaming : ", "Kafka collecte les flux urbains en temps reel et les transmet a la base d'evenements.")
     pdf.bullet("C2.3 · Transformation : ", "Polars fusionne des sources heterogenes et les structure pour l'analyse.")
     pdf.bullet("C2.4 · Optimisation : ", "formats compresses et index garantissent un acces rapide, mesure par nos tests.")
