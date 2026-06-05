@@ -46,13 +46,13 @@ Projet réalisé en binôme par **Adam Beloucif & Émilien Morice**, validant le
 
 ---
 
-## 🚀 Architecture Technique
+## Architecture
 
-Le projet intègre une stack moderne, optimisée et résiliente, conçue pour fonctionner de manière locale-first ou distribuée :
+Stack médaillon locale-first ou distribuée, du CSV Open Data à la cartographie 3D.
 
 ```mermaid
 flowchart TD
-    OD["Open Data Paris · 16 sources<br/>CSV + GeoJSON"]
+    OD["Open Data Paris · 24 sources<br/>CSV + GeoJSON · DVF + INSEE"]
     OD -->|"ETL batch · Polars"| BRONZE["Bronze<br/>Parquet brut"]
     BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
     SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
@@ -192,3 +192,14 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 | **C2.2** | Développer un programme de collecte en temps réel (Streaming) | Ingestion continue des données (Vélib, chantiers) à l'aide d'un couple Producteur/Consommateur Kafka. | **Conforme** |
 | **C2.3** | Écrire des scripts de transformation et d'agrégation | Polars : nettoyage, normalisation des codes, jointures spatiales IRIS et **fusion de sources réelles** (DVF 2023 + INSEE Filosofi 2020) dans [`etl/external.py`](etl/external.py) + [`etl/processing.py`](etl/processing.py). | **Conforme** |
 | **C2.4** | Optimiser les performances de traitement et stockage | Parquet colonnaire (Silver/Gold), index PostgreSQL (p95 < 4 ms), drapeau qualité `data_source` (`real`/`reference`) sur chaque enregistrement Gold. | **Conforme** |
+
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=Adam-Blf%2Furban-data-explorer&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Adam-Blf/urban-data-explorer&type=date&legend=top-left" />
+ </picture>
+</a>
