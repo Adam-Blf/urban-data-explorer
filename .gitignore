@@ -33,3 +33,4 @@ github_pat_*
 sbp_*
 .env.*
 !.env.example
+.vercel
