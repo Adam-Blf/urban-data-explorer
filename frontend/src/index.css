@@ -9,11 +9,32 @@
 @import "tailwindcss";
 
 /* ====================================================================
+   0. FONTS · Gilroy (officielle EFREI, display) + Poppins (corps)
+   ==================================================================== */
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ====================================================================
    1. DESIGN TOKENS · Light theme (default)
    ==================================================================== */
 
 :root {
   /* -- Typography ---------------------------------------------------- */
+  /* Gilroy (police officielle EFREI) sur les titres/marque, Poppins sur le corps */
+  --font-display: 'Gilroy', 'Poppins', 'Arial', sans-serif;
   --font-sans:  'Poppins', 'Arial', 'Helvetica Neue', sans-serif;
   --font-serif: 'Poppins', 'Arial', 'Helvetica Neue', sans-serif;
 
@@ -635,4 +656,12 @@ body {
     transition-duration:       0.001ms !important;
   }
   .blink-soft { animation: none !important; }
+}
+
+/* ====================================================================
+   Police officielle EFREI · Gilroy (ExtraBold) sur titres et marque
+   ==================================================================== */
+h1, h2, h3, h4,
+.dsfr-eyebrow {
+  font-family: var(--font-display);
 }
