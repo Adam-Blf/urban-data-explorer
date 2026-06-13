@@ -51,6 +51,17 @@ export interface TimelinePoint {
   environnement_idx: number;
 }
 
+export interface QualityEntry {
+  dataset: string;
+  row_count?: number;
+  column_count?: number;
+  completeness_pct?: number;
+  out_of_range_count?: number;
+  freshness_days?: number | null;
+  checked_at: string;
+  error?: string;
+}
+
 export interface EventLog {
   event_id: string;
   event_type: string;

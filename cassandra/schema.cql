@@ -1,8 +1,11 @@
 -- Cassandra schema – C1.2: Base NoSQL pour événements streaming
 -- Partitionnement par event_type, tri par event_time DESC pour lectures récentes
 
+-- replication_factor: 3 cibles un cluster 3 nœuds (voir docs/HA.md).
+-- En local (1 nœud), Cassandra accepte RF=3 mais n'écrit que sur 1 nœud réel ;
+-- aucun changement de code applicatif n'est nécessaire pour passer en HA.
 CREATE KEYSPACE IF NOT EXISTS ude
-  WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+  WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 3};
 
 USE ude;
 

@@ -1,4 +1,4 @@
-import { District, Overview, TimelinePoint, EventLog } from '../types';
+import { District, Overview, TimelinePoint, EventLog, QualityEntry } from '../types';
 
 // Base API resolue au build :
 //  - dev      -> http://localhost:8000 (defaut en mode dev)
@@ -52,5 +52,11 @@ export const api = {
     const res = await fetch(`${API_BASE}/datamarts/geojson/${level}`);
     if (!res.ok) throw new Error(`Failed to fetch geojson level ${level}`);
     return res.json();
-  }
+  },
+
+  async fetchQuality(): Promise<QualityEntry[]> {
+    const res = await fetch(`${API_BASE}/pipeline/quality`);
+    if (!res.ok) throw new Error('Failed to fetch quality report');
+    return res.json();
+  },
 };

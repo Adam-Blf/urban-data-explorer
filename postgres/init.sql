@@ -1,6 +1,23 @@
 \connect ude
 
 -- ==========================================================================
+-- Extension pgvector – recherche sémantique sur les textes des arrondissements
+-- Nécessite pgvector (image pgvector/pgvector ou extension installée)
+-- ==========================================================================
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Table de descriptions textuelles avec vecteur TF-IDF (64 dims)
+-- Colonisée au démarrage de l'API via api/search.py seed()
+CREATE TABLE IF NOT EXISTS district_embeddings (
+  code_arrondissement TEXT PRIMARY KEY REFERENCES dim_arrondissement(code_arrondissement) DEFERRABLE INITIALLY DEFERRED,
+  description TEXT NOT NULL,
+  embedding vector(64)
+);
+
+CREATE INDEX IF NOT EXISTS idx_district_embeddings_vector
+  ON district_embeddings USING ivfflat (embedding vector_cosine_ops) WITH (lists = 4);
+
+-- ==========================================================================
 -- Modèle en étoile – Urban Data Explorer
 -- C1.1: Base relationnelle normalisée, intégrité des données
 -- ==========================================================================

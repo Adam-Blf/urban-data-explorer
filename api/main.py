@@ -8,8 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .routers import auth, catalog, datamarts, events, health, pipeline, repo
+from .routers import auth, catalog, datamarts, events, health, pipeline, repo, search
 from .security import check_quota
+from .observability import metrics_endpoint, prometheus_middleware
 
 # Mode exe local-first : si UDE_STATIC_DIR pointe vers un build front (dist),
 # l'API sert aussi la SPA -> un seul processus, meme origine, hors ligne.
@@ -23,6 +24,7 @@ tags_metadata = [
     {"name": "pipeline", "description": "Dernier run du pipeline."},
     {"name": "events", "description": "Derniers événements simulés."},
     {"name": "repo", "description": "Badges de préparation du repo."},
+    {"name": "search", "description": "Recherche sémantique TF-IDF sur les arrondissements (pgvector ou mémoire)."},
 ]
 
 app = FastAPI(
@@ -43,13 +45,20 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type"],
 )
 
+# Prometheus instrumentation middleware (wraps every request)
+app.middleware("http")(prometheus_middleware)
+
 app.include_router(health.router)
 app.include_router(auth.router)
+
+# Prometheus metrics scrape endpoint (no auth – internal/Docker only)
+app.add_api_route("/metrics", metrics_endpoint, include_in_schema=False, tags=["health"])
 app.include_router(catalog.router)
 app.include_router(datamarts.router)
 app.include_router(pipeline.router)
 app.include_router(events.router)
 app.include_router(repo.router)
+app.include_router(search.router)
 
 
 @app.get("/", tags=["health"])
