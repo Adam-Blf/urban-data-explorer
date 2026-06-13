@@ -1,103 +1,236 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/*
+  Urban Data Explorer · Design System
+  EFREI Paris brand identity · efrei.fr
+
+  Architecture: Tokens → Base → Surfaces → Buttons → Controls → Inputs
+              → Labels → Map → Popups → Utilities → Animations
+*/
+
 @import "tailwindcss";
 
-/* =====================================================================
-   Système de Design — identité visuelle EFREI Paris
-   Primary #163767 · Accent #FF43B8 · Secondary #0C78B4
-   efrei.fr brand DA
-   ===================================================================== */
+/* ====================================================================
+   1. DESIGN TOKENS · Light theme (default)
+   ==================================================================== */
 
-/* ── Jetons de couleur · thème clair (défaut) ──────────────────────── */
 :root {
-  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-serif: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  /* -- Typography ---------------------------------------------------- */
+  --font-sans:  'Poppins', 'Arial', 'Helvetica Neue', sans-serif;
+  --font-serif: 'Poppins', 'Arial', 'Helvetica Neue', sans-serif;
 
-  /* Bleu primaire EFREI */
-  --blue-france: #163767;
-  --blue-france-hover: #1e4b8a;
-  --blue-france-active: #0C78B4;
-  --blue-france-975: #EFF6FF;
-  --blue-france-950: #DBEAFE;
-  --blue-france-925: #BFDBFE;
-  --blue-france-850: #93C5FD;
+  /* -- EFREI brand palette ------------------------------------------- */
+  --c-primary:        #163767;   /* EFREI deep blue */
+  --c-primary-hover:  #1e4b8a;
+  --c-primary-active: #0C78B4;
+  --c-accent:         #FF43B8;   /* EFREI signature pink */
+  --c-accent-on:      #D4008A;   /* accessible pink on light surfaces */
+  --c-secondary:      #0C78B4;   /* bright blue */
 
-  /* Accent rose EFREI (remplace Rouge Marianne) */
-  --red-marianne: #FF43B8;
-  --red-marianne-text: #D4008A;
-  --red-marianne-925: #FFF0F9;
+  /* -- Semantic color roles ------------------------------------------ */
+  --c-bg:           #FFFFFF;
+  --c-bg-subtle:    #F4F4F4;
+  --c-bg-elevated:  #FFFFFF;
+  --c-bg-overlay:   rgba(255, 255, 255, 0.96);
 
-  /* Fonds & texte */
-  --bg: #ffffff;
-  --bg-alt: #F4F4F4;
-  --bg-contrast: #eeeeee;
-  --bg-overlay: rgba(255, 255, 255, 0.92);
-  --text-title: #212121;
-  --text-default: #3a3a3a;
-  --text-mention: #5A6B82;
-  --text-inverted: #ffffff;
-  --border: #dddddd;
-  --border-strong: #929292;
+  --c-ink:           #212121;
+  --c-ink-secondary: #3a3a3a;
+  --c-ink-muted:     #5A6B82;
+  --c-ink-faint:     #8A9BB0;
+  --c-ink-inverse:   #FFFFFF;
 
-  /* Fonctionnel */
-  --success: #18753c;
-  --success-bg: #b8fec9;
-  --warning: #b34000;
-  --error: #ce0500;
-  --info: #0C78B4;
+  --c-border:        rgba(22, 55, 103, 0.12);
+  --c-border-strong: rgba(22, 55, 103, 0.24);
 
-  /* Échelle séquentielle data-viz (bleu EFREI) */
+  /* -- Functional states --------------------------------------------- */
+  --c-success:    #18753c;
+  --c-success-bg: #e6f8ed;
+  --c-warning:    #b34000;
+  --c-warning-bg: #fff3e0;
+  --c-error:      #ce0500;
+  --c-info:       #0C78B4;
+
+  /* -- Data visualisation sequence · light --------------------------- */
   --seq-0: #DBEAFE;
   --seq-1: #7EC8E3;
   --seq-2: #0C78B4;
   --seq-3: #1a4d8a;
   --seq-4: #163767;
 
-  /* Ombres */
-  --shadow-raised: 0 2px 6px 0 rgba(22, 55, 103, 0.12);
-  --shadow-overlay: 0 8px 16px 0 rgba(22, 55, 103, 0.14);
+  /* -- Typographic scale · modular ratio ≥ 1.25 ----------------------
+     xs  → sm  → md  → lg  → xl    → 2xl   → 3xl
+     11    14    16    18    22      25      31  (px)
+     Heading jumps: 14→18 (1.28), 18→22 (1.22~), 22→25 (1.14~ok for sub),
+     25→31 (1.24~). Large text (22+) only needs ≥ 3:1 contrast.           */
+  --text-2xs: 0.6875rem;   /* 11px · captions, timestamps */
+  --text-xs:  0.75rem;     /* 12px · supporting text */
+  --text-sm:  0.875rem;    /* 14px · body */
+  --text-md:  1rem;        /* 16px · strong body */
+  --text-lg:  1.125rem;    /* 18px · subheading */
+  --text-xl:  1.375rem;    /* 22px · section title */
+  --text-2xl: 1.5625rem;   /* 25px · panel title */
+  --text-3xl: 1.953rem;    /* 31px · display */
+
+  /* -- Font weights (Poppins) ---------------------------------------- */
+  --fw-light:  300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semi:   600;
+  --fw-bold:   700;
+  --fw-black:  800;
+
+  /* -- Spacing scale · 4px grid ------------------------------------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+
+  /* -- Border radius ------------------------------------------------- */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-full: 9999px;
+
+  /* -- Shadows ------------------------------------------------------- */
+  --shadow-sm:  0 1px 3px rgba(22, 55, 103, 0.08),  0 1px 2px rgba(22, 55, 103, 0.04);
+  --shadow-md:  0 4px 16px rgba(22, 55, 103, 0.10),  0 2px 4px rgba(22, 55, 103, 0.06);
+  --shadow-lg:  0 12px 40px rgba(22, 55, 103, 0.14), 0 4px 8px rgba(22, 55, 103, 0.06);
+
+  /* Legacy aliases referenced by framer-motion inline styles */
+  --shadow-raised:  var(--shadow-sm);
+  --shadow-overlay: var(--shadow-md);
+
+  /* -- Z-index semantic scale ---------------------------------------- */
+  --z-base:     1;    /* map canvas */
+  --z-legend:  12;    /* map overlays (legend, level badge) */
+  --z-panel:   15;    /* side panels (control, data) */
+  --z-header:  20;    /* top header bar */
+  --z-dropdown:40;    /* dropdowns, select menus */
+  --z-sticky:  50;    /* sticky toolbars */
+  --z-modal:   80;    /* modals, drawers */
+  --z-toast:   90;    /* notifications */
+  --z-tooltip:100;    /* tooltip layer */
+
+  /* -- Legacy token aliases · component inline styles depend on these - */
+  --blue-france:        #163767;
+  --blue-france-hover:  #1e4b8a;
+  --blue-france-active: #0C78B4;
+  --blue-france-975:    rgba(22, 55, 103, 0.06);
+  --blue-france-950:    #DBEAFE;
+  --blue-france-925:    rgba(22, 55, 103, 0.08);
+  --blue-france-850:    rgba(22, 55, 103, 0.18);
+  --red-marianne:       #FF43B8;
+  --red-marianne-text:  #D4008A;
+  --red-marianne-925:   rgba(255, 67, 184, 0.08);
+  --bg:            #FFFFFF;
+  --bg-alt:        #F4F4F4;
+  --bg-contrast:   #F4F4F4;
+  --bg-overlay:    rgba(255, 255, 255, 0.96);
+  --text-title:    #212121;
+  --text-default:  #3a3a3a;
+  --text-mention:  #5A6B82;
+  --text-inverted: #FFFFFF;
+  --border:        rgba(22, 55, 103, 0.12);
+  --border-strong: rgba(22, 55, 103, 0.24);
+  --success:       #18753c;
+  --success-bg:    #e6f8ed;
+  --warning:       #b34000;
+  --error:         #ce0500;
+  --info:          #0C78B4;
+
+  color-scheme: light;
 }
 
-/* ── Thème sombre EFREI ─────────────────────────────────────────────── */
+/* ====================================================================
+   2. DARK THEME · EFREI navy surfaces
+   ==================================================================== */
+
 :root[data-theme='dark'] {
-  --blue-france: #0C78B4;
-  --blue-france-hover: #3498DB;
-  --blue-france-active: #5DADE2;
-  --blue-france-975: #0B1B34;
-  --blue-france-950: #0d2040;
-  --blue-france-925: #102347;
-  --blue-france-850: #1a3a6e;
+  /* Brand shifts in dark context */
+  --c-primary:        #0C78B4;
+  --c-primary-hover:  #3498DB;
+  --c-primary-active: #5DADE2;
+  --c-accent:         #FF43B8;
+  --c-accent-on:      #FF43B8;
 
-  --red-marianne: #FF43B8;
-  --red-marianne-text: #FF43B8;
-  --red-marianne-925: #3d0a2a;
+  /* Surfaces: deep navy depth stack */
+  --c-bg:           #051832;   /* map background, deepest layer */
+  --c-bg-subtle:    #0B1B34;   /* panels, cards */
+  --c-bg-elevated:  #0d2040;   /* inputs, nested cards */
+  --c-bg-overlay:   rgba(5, 24, 50, 0.96);
 
-  --bg: #051832;
-  --bg-alt: #0B1B34;
-  --bg-contrast: #0f2444;
-  --bg-overlay: rgba(5, 24, 50, 0.92);
-  --text-title: #ffffff;
-  --text-default: #CBD5E1;
-  --text-mention: #7A9BBE;
-  --text-inverted: #051832;
-  --border: #1e3a5f;
-  --border-strong: #2d5a8e;
+  /* Ink: high contrast on navy */
+  --c-ink:           #F0F4F8;
+  --c-ink-secondary: #CBD5E1;
+  --c-ink-muted:     #7A9BBE;
+  --c-ink-faint:     #4a6b8e;
+  --c-ink-inverse:   #051832;
 
-  --success: #27a658;
-  --warning: #fc5d00;
-  --error: #ff5655;
-  --info: #3498DB;
+  --c-border:        rgba(12, 120, 180, 0.20);
+  --c-border-strong: rgba(12, 120, 180, 0.35);
 
+  /* Functional */
+  --c-success:    #27a658;
+  --c-success-bg: rgba(39, 166, 88, 0.12);
+  --c-warning:    #fc5d00;
+  --c-warning-bg: rgba(252, 93, 0, 0.12);
+  --c-error:      #ff5655;
+  --c-info:       #3498DB;
+
+  /* Data viz sequence · dark */
   --seq-0: #102347;
   --seq-1: #1a4d8a;
   --seq-2: #0C78B4;
   --seq-3: #3498DB;
   --seq-4: #5DADE2;
 
-  --shadow-raised: 0 2px 6px 0 rgba(0, 0, 0, 0.4);
-  --shadow-overlay: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
+  /* Shadows on dark: stronger opacity */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg:  0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-raised:  var(--shadow-sm);
+  --shadow-overlay: var(--shadow-md);
+
+  /* Legacy alias sync */
+  --blue-france:        #0C78B4;
+  --blue-france-hover:  #3498DB;
+  --blue-france-active: #5DADE2;
+  --blue-france-975:    rgba(12, 120, 180, 0.12);
+  --blue-france-950:    #0d2040;
+  --blue-france-925:    rgba(12, 120, 180, 0.15);
+  --blue-france-850:    rgba(12, 120, 180, 0.28);
+  --red-marianne:       #FF43B8;
+  --red-marianne-text:  #FF43B8;
+  --red-marianne-925:   rgba(255, 67, 184, 0.12);
+  --bg:            #051832;
+  --bg-alt:        #0B1B34;
+  --bg-contrast:   #0d2040;
+  --bg-overlay:    rgba(5, 24, 50, 0.96);
+  --text-title:    #F0F4F8;
+  --text-default:  #CBD5E1;
+  --text-mention:  #7A9BBE;
+  --text-inverted: #051832;
+  --border:        rgba(12, 120, 180, 0.20);
+  --border-strong: rgba(12, 120, 180, 0.35);
+  --success:       #27a658;
+  --success-bg:    rgba(39, 166, 88, 0.12);
+  --warning:       #fc5d00;
+  --error:         #ff5655;
+  --info:          #3498DB;
+
+  color-scheme: dark;
 }
 
-* {
+/* ====================================================================
+   3. BASE RESET
+   ==================================================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -105,245 +238,361 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg);
-  color: var(--text-default);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-normal);
+  line-height: 1.55;
+  background-color: var(--c-bg);
+  color: var(--c-ink-secondary);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
 }
 
-/* ── Barre de défilement sobre ─────────────────────────────────────── */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 0; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-mention); }
+/* ====================================================================
+   4. SCROLLBAR
+   ==================================================================== */
 
-/* ── Surface / encadré (net, sans flou) ───────────────────────────── */
+::-webkit-scrollbar          { width: 5px; height: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--c-border-strong); border-radius: var(--r-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--c-ink-muted); }
+
+/* ====================================================================
+   5. SURFACES
+   ==================================================================== */
+
+/* Panel surface: slight elevation above the map */
 .dsfr-surface {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-overlay);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
 }
 
+/* Dark: panels sit above the #051832 map at #0B1B34 */
+:root[data-theme='dark'] .dsfr-surface {
+  background: var(--c-bg-subtle);
+}
+
+/* Card: tighter container inside a panel */
 .dsfr-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
 }
 
+:root[data-theme='dark'] .dsfr-card {
+  background: var(--c-bg-subtle);
+}
+
+/* Alt card: slightly recessed */
 .dsfr-card--alt {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
+  background: var(--c-bg-subtle);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
 }
 
-/* Liseré bleu EFREI à gauche (accent éditorial) */
+:root[data-theme='dark'] .dsfr-card--alt {
+  background: var(--c-bg-elevated);
+}
+
+/*
+  Active / focused card highlight.
+  Design decision: NO border-left / border-right color stripe.
+  Alternative treatment: primary-color outline + diffuse glow shadow,
+  giving clear visual focus without a cliché side rail.
+*/
 .dsfr-accent-left {
-  box-shadow: inset 4px 0 0 0 var(--blue-france);
+  outline: 1.5px solid var(--c-primary);
+  outline-offset: -1px;
+  box-shadow: 0 0 0 3px rgba(22, 55, 103, 0.06), var(--shadow-sm);
 }
 
-/* ── Boutons ──────────────────────────────────────────────────────── */
+:root[data-theme='dark'] .dsfr-accent-left {
+  box-shadow: 0 0 0 3px rgba(12, 120, 180, 0.16), var(--shadow-sm);
+}
+
+/* ====================================================================
+   6. BUTTONS
+   ==================================================================== */
+
 .dsfr-btn {
   font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 8px 14px;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  padding: 7px var(--sp-3);
   border: 1px solid transparent;
+  border-radius: var(--r-md);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-  color: var(--blue-france);
-  background: transparent;
-  border-radius: 4px;
-}
-
-/* Primaire : fond bleu EFREI */
-.dsfr-btn--primary {
-  background: var(--blue-france);
-  color: var(--text-inverted);
-}
-.dsfr-btn--primary:hover { background: var(--blue-france-hover); }
-.dsfr-btn--primary:active { background: var(--blue-france-active); }
-
-/* Secondaire : contour bleu EFREI */
-.dsfr-btn--secondary {
-  background: transparent;
-  border-color: var(--blue-france);
-  color: var(--blue-france);
-}
-.dsfr-btn--secondary:hover { background: var(--blue-france-975); }
-
-/* Tertiaire : sans contour, fond au survol */
-.dsfr-btn--tertiary {
-  background: transparent;
-  color: var(--blue-france);
-  border-radius: 4px;
-}
-.dsfr-btn--tertiary:hover { background: var(--blue-france-975); }
-
-/* État sélectionné (onglet actif) */
-.dsfr-btn.is-active {
-  background: var(--blue-france);
-  color: var(--text-inverted);
-  border-color: var(--blue-france);
+  gap: 6px;
+  white-space: nowrap;
+  letter-spacing: 0;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease-out,
+    border-color     0.15s ease-out,
+    color            0.15s ease-out,
+    box-shadow       0.15s ease-out;
 }
 
 .dsfr-btn:focus-visible {
-  outline: 2px solid var(--blue-france);
+  outline: 2px solid var(--c-primary);
   outline-offset: 2px;
 }
 
-/* ── Onglet de segmentation ────────────────────────────────────────── */
+/* Primary: filled EFREI blue */
+.dsfr-btn--primary {
+  background: var(--c-primary);
+  color: var(--c-ink-inverse);
+  border-color: var(--c-primary);
+}
+.dsfr-btn--primary:hover {
+  background: var(--c-primary-hover);
+  border-color: var(--c-primary-hover);
+  box-shadow: var(--shadow-sm);
+}
+.dsfr-btn--primary:active {
+  background: var(--c-primary-active);
+  border-color: var(--c-primary-active);
+}
+
+/* Secondary: outlined */
+.dsfr-btn--secondary {
+  background: transparent;
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.dsfr-btn--secondary:hover {
+  background: var(--blue-france-975);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Tertiary: ghost, muted by default */
+.dsfr-btn--tertiary {
+  background: transparent;
+  color: var(--c-ink-muted);
+  border-color: transparent;
+}
+.dsfr-btn--tertiary:hover {
+  background: var(--blue-france-975);
+  color: var(--c-primary);
+}
+
+/* Pressed / active state used by panel toggles and map mode selector */
+.dsfr-btn.is-active {
+  background: var(--c-primary);
+  color: var(--c-ink-inverse);
+  border-color: var(--c-primary);
+}
+
+/* ====================================================================
+   7. SEGMENTED CONTROLS
+   ==================================================================== */
+
 .dsfr-segment {
   font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
   text-align: left;
   width: 100%;
-  padding: 10px 12px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text-default);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  color: var(--c-ink-secondary);
   cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease-out,
+    border-color     0.15s ease-out,
+    color            0.15s ease-out;
 }
+
+:root[data-theme='dark'] .dsfr-segment {
+  background: var(--c-bg-elevated);
+}
+
 .dsfr-segment:hover {
   background: var(--blue-france-975);
-  border-color: var(--blue-france-850);
+  border-color: var(--c-primary);
+  color: var(--c-primary);
 }
+
 .dsfr-segment.is-active {
-  background: var(--blue-france);
-  border-color: var(--blue-france);
-  color: var(--text-inverted);
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: var(--c-ink-inverse);
+  font-weight: var(--fw-semi);
 }
+
 .dsfr-segment:focus-visible {
-  outline: 2px solid var(--blue-france);
+  outline: 2px solid var(--c-primary);
   outline-offset: 2px;
 }
 
-/* ── Étiquette / badge ─────────────────────────────────────────────── */
+/* ====================================================================
+   8. TAGS / BADGES
+   ==================================================================== */
+
 .dsfr-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-semi);
   line-height: 1;
-  padding: 4px 8px;
+  padding: 3px 8px;
   background: var(--blue-france-925);
-  color: var(--blue-france);
-  border-radius: 99px;
+  color: var(--c-primary);
+  border-radius: var(--r-full);
   white-space: nowrap;
+  letter-spacing: 0;
 }
-.dsfr-tag--neutral { background: var(--bg-contrast); color: var(--text-default); }
-.dsfr-tag--success { background: var(--success-bg); color: var(--success); }
 
-/* ── Champ de saisie / select ──────────────────────────────────────── */
+.dsfr-tag--neutral {
+  background: var(--c-bg-subtle);
+  color: var(--c-ink-muted);
+}
+
+.dsfr-tag--success {
+  background: var(--c-success-bg);
+  color: var(--c-success);
+}
+
+/* ====================================================================
+   9. FORM INPUTS
+   ==================================================================== */
+
 .dsfr-input,
 .dsfr-select {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-normal);
   width: 100%;
-  padding: 8px 10px;
-  color: var(--text-title);
+  padding: var(--sp-2) var(--sp-3);
+  color: var(--c-ink);
   background: var(--bg-contrast);
-  border: 0;
-  border-bottom: 2px solid var(--text-mention);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
   outline: none;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
 }
+
+.dsfr-select {
+  appearance: none;
+  cursor: pointer;
+  /* muted grey chevron for light mode */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6B82' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+/* Lighter chevron on dark navy backgrounds */
+:root[data-theme='dark'] .dsfr-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A9BBE' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
 .dsfr-input:focus,
 .dsfr-select:focus {
-  outline: 2px solid var(--blue-france);
-  outline-offset: 2px;
-  border-bottom-color: var(--blue-france);
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--blue-france-925);
 }
 
-/* ── Titres ────────────────────────────────────────────────────────── */
+/* ====================================================================
+   10. METADATA LABELS (class: .dsfr-eyebrow)
+   Design decision: removed tiny-uppercase-tracked eyebrow pattern.
+   Replaced with a clean primary-colored small label, no uppercase,
+   no letter-spacing gimmick.
+   ==================================================================== */
+
 .dsfr-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-mention);
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-semi);
+  line-height: 1.4;
+  color: var(--c-primary);
+  letter-spacing: 0;
 }
 
-/* Chiffres alignés (data) */
-.tabular { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+/* ====================================================================
+   11. STATUS INDICATOR
+   ==================================================================== */
 
-/* ── Pastille d'état (connexion) ──────────────────────────────────── */
 .dsfr-status-dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--r-full);
   flex-shrink: 0;
 }
 
-/* ── Animations sobres ─────────────────────────────────────────────── */
-@keyframes blink-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-.blink-soft { animation: blink-soft 2s infinite ease-in-out; }
+/* ====================================================================
+   12. MAP
+   ==================================================================== */
 
-/* État grisé (catégorie non concernée) */
-.is-dimmed {
-  opacity: 0.4;
-  transition: opacity 0.3s ease;
-}
-
-/* Respect de la préférence « mouvement réduit » (a11y) */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-  .blink-soft { animation: none !important; }
-}
-
-/* ── Carte ─────────────────────────────────────────────────────────── */
 .map-viewport {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 
-/* Atténue le contrôle d'attribution MapLibre/Mapbox */
+/* Attribution control: match body font */
 .maplibregl-ctrl-attrib,
 .mapboxgl-ctrl-attrib {
   font-family: var(--font-sans) !important;
   font-size: 10px !important;
 }
 
-/* ── Popup hover ────────────────────────────────────────────────────── */
+/* ====================================================================
+   13. HOVER POPUP
+   ==================================================================== */
+
 .ude-popup .maplibregl-popup-content {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-overlay);
-  border-radius: 6px;
-  padding: 10px 14px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
   font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--text-default);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-normal);
+  color: var(--c-ink-secondary);
   min-width: 160px;
   max-width: 260px;
+  line-height: 1.5;
 }
 
+/* Arrow tip: hidden, we rely on position + shadow for context */
 .ude-popup .maplibregl-popup-tip {
   display: none;
 }
 
-/* Visually hidden helper for SVG text alternatives */
+/* ====================================================================
+   14. UTILITIES
+   ==================================================================== */
+
+/* Tabular numerals for data values */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Screen reader only · a11y */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -354,4 +603,36 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Visually de-emphasised (inactive category filter) */
+.is-dimmed {
+  opacity: 0.35;
+  transition: opacity 0.25s ease-out;
+}
+
+/* ====================================================================
+   15. ANIMATIONS
+   All transitions use ease-out curves. Every keyframe has a
+   prefers-reduced-motion counterpart (no motion, instant state).
+   ==================================================================== */
+
+@keyframes blink-soft {
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.3; }
+}
+
+.blink-soft {
+  animation: blink-soft 2s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.001ms !important;
+    animation-iteration-count: 1       !important;
+    transition-duration:       0.001ms !important;
+  }
+  .blink-soft { animation: none !important; }
 }
