@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import json
 import re
-from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -20,7 +19,7 @@ from typing import Any
 import polars as pl
 import requests
 
-from .catalog import ALL_SOURCES, FAMILIES, SourceSpec
+from .catalog import FAMILIES, SourceSpec
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "raw" / "downloads"

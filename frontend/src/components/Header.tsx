@@ -15,25 +15,37 @@ interface HeaderProps {
   setShowDataPanel: (show: boolean) => void;
 }
 
-/* Bloc-marque de l'État : drapeau tricolore + « RÉPUBLIQUE FRANÇAISE » */
-const StateBrand: React.FC = () => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-      <div style={{ display: 'flex', height: '24px', marginBottom: '4px' }} aria-hidden="true">
-        <span style={{ width: '14px', background: '#000091' }} />
-        <span style={{ width: '14px', background: '#ffffff' }} />
-        <span style={{ width: '14px', background: '#e1000f' }} />
-      </div>
-      <span style={{ fontSize: '11px', fontWeight: 700, lineHeight: 1.15, letterSpacing: '0.02em', color: 'var(--text-title)', textTransform: 'uppercase' }}>
-        République<br />Française
-      </span>
-    </div>
-    <div style={{ width: '1px', height: '44px', background: 'var(--border)' }} />
+/* Bloc-marque EFREI : logo + titre application */
+const EfreiBrand: React.FC<{ theme: 'light' | 'dark' }> = ({ theme }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    <a
+      href="https://efrei.fr"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="EFREI Paris"
+      style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
+    >
+      <img
+        src={theme === 'dark' ? '/Logo-Efrei-Blanc.png' : '/Logo-Efrei-CMJN.png'}
+        alt="EFREI Paris"
+        height={36}
+        style={{ height: '36px', width: 'auto', display: 'block' }}
+      />
+    </a>
+    <div style={{ width: '1px', height: '40px', background: 'var(--border)' }} aria-hidden="true" />
     <div>
-      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '19px', fontWeight: 800, color: 'var(--text-title)', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+      <h1
+        style={{
+          fontSize: '18px',
+          fontWeight: 700,
+          color: 'var(--text-title)',
+          letterSpacing: '-0.02em',
+          lineHeight: 1.1,
+        }}
+      >
         Urban Data Explorer
       </h1>
-      <p style={{ fontSize: '12px', color: 'var(--text-mention)', fontWeight: 400, marginTop: '1px' }}>
+      <p style={{ fontSize: '12px', color: 'var(--text-mention)', fontWeight: 400, marginTop: '2px' }}>
         Observatoire socio-urbain · Paris
       </p>
     </div>
@@ -66,12 +78,12 @@ export const Header: React.FC<HeaderProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 24px',
-        background: 'var(--bg)',
-        borderBottom: '1px solid var(--border)',
+        background: theme === 'dark' ? 'var(--bg-alt)' : 'var(--bg)',
+        borderBottom: `2px solid ${theme === 'dark' ? 'var(--border)' : '#163767'}`,
         boxShadow: 'var(--shadow-raised)',
       }}
     >
-      <StateBrand />
+      <EfreiBrand theme={theme} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         {/* État de la source de données — aria-live pour annoncer les changements */}
@@ -114,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Mode de carte (segmenté) */}
-        <div role="group" aria-label="Mode de carte" style={{ display: 'flex', border: '1px solid var(--border)' }}>
+        <div role="group" aria-label="Mode de carte" style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: '6px', overflow: 'hidden' }}>
           <button
             onClick={() => setMapMode('2d')}
             className={`dsfr-btn dsfr-btn--tertiary ${mapMode === '2d' ? 'is-active' : ''}`}

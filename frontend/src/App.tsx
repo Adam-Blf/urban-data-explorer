@@ -17,7 +17,7 @@ export default function App() {
   });
   const [showSettings, setShowSettings] = useState(false);
 
-  // Thème DSFR (clair par défaut, codes officiels)
+  // Thème EFREI (clair par défaut)
   const [theme, setTheme] = useState<Theme>(() => {
     return (localStorage.getItem('ude_theme') as Theme) || 'light';
   });
