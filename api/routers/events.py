@@ -34,4 +34,7 @@ def recent_events(limit: int = 50, event_type: str = "service_snapshot"):
         return result
     except Exception:
         from ..data import recent_events as mock_events
-        return [EventRow(**e) for e in mock_events()]
+        events = mock_events()
+        # Respecter les paramètres de filtre et de limite dans le mode fallback
+        filtered = [e for e in events if e.get("event_type") == event_type]
+        return [EventRow(**e) for e in filtered[:limit]]

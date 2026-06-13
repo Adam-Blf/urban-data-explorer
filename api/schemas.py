@@ -38,6 +38,9 @@ class DistrictRow(BaseModel):
     logement_social_pct: float = 0.0
     revenu_median: float = 0.0
     sales_volume: int = 0
+    m2_abordables: float = 0.0
+    accessibilite_idx: int = 0
+    data_source: str = "reference"
 
 
 class Overview(BaseModel):
