@@ -158,3 +158,68 @@ def test_catalog_sources(app_client):
     data = r.json()
     assert isinstance(data, list)
     assert len(data) == 24  # 24 sources dans le catalogue
+
+
+# ── /metrics (Prometheus scrape endpoint) ─────────────────────────────────────
+
+def test_metrics_responds_200(app_client):
+    """Le scrape endpoint Prometheus doit répondre 200 sans authentification."""
+    r = app_client.get("/metrics")
+    assert r.status_code == 200
+
+
+def test_metrics_content_type(app_client):
+    """La réponse doit être au format texte Prometheus."""
+    r = app_client.get("/metrics")
+    assert "text/plain" in r.headers.get("content-type", "")
+
+
+def test_metrics_contains_ude_counters(app_client):
+    """La réponse doit exposer les compteurs ude_http_requests_total."""
+    # Émettre au moins une requête pour peupler les compteurs
+    app_client.get("/health")
+    r = app_client.get("/metrics")
+    body = r.text
+    assert "ude_http_requests_total" in body
+    assert "ude_http_request_duration_seconds" in body
+
+
+# ── /search/semantic ──────────────────────────────────────────────────────────
+
+def test_semantic_search_responds_200(app_client):
+    """La recherche sémantique doit répondre 200 avec un terme quelconque."""
+    r = app_client.get("/search/semantic?q=musée")
+    assert r.status_code == 200
+
+
+def test_semantic_search_returns_list(app_client):
+    r = app_client.get("/search/semantic?q=parc nature")
+    data = r.json()
+    assert isinstance(data, list)
+    assert len(data) > 0
+
+
+def test_semantic_search_result_schema(app_client):
+    """Chaque résultat doit avoir code, description et score."""
+    r = app_client.get("/search/semantic?q=logement")
+    data = r.json()
+    assert len(data) >= 1
+    first = data[0]
+    assert "code" in first
+    assert "description" in first
+    assert "score" in first
+    # Le score de similarité cosinus est dans [0, 1]
+    assert 0.0 <= first["score"] <= 1.0
+
+
+def test_semantic_search_top_k(app_client):
+    """Le paramètre top_k doit limiter le nombre de résultats."""
+    r = app_client.get("/search/semantic?q=tourisme&top_k=3")
+    assert r.status_code == 200
+    assert len(r.json()) == 3
+
+
+def test_semantic_search_missing_q(app_client):
+    """Un appel sans ?q= doit retourner 422 (validation Pydantic)."""
+    r = app_client.get("/search/semantic")
+    assert r.status_code == 422
