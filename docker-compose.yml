@@ -89,6 +89,35 @@ services:
     volumes:
       - ./scripts:/scripts:ro
 
+  velib-producer:
+    build:
+      context: .
+      dockerfile: streaming/Dockerfile
+    profiles: ["streaming"]
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    env_file:
+      - .env
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    command: ["python", "-m", "streaming.velib_producer"]
+
+  consumer:
+    build:
+      context: .
+      dockerfile: streaming/Dockerfile
+    profiles: ["streaming"]
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    env_file:
+      - .env
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - CASSANDRA_HOST=cassandra
+    command: ["python", "-m", "streaming.consumer"]
+
   # ── Monitoring – Prometheus + Grafana (profil optionnel) ─────────────────
   prometheus:
     image: prom/prometheus:v2.53.0
