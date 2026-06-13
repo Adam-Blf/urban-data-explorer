@@ -32,20 +32,20 @@ interface ThemeColors {
 
 const THEME_COLORS: Record<Theme, ThemeColors> = {
   light: {
-    seq: [0, '#e3e3fd', 35, '#8585f6', 70, '#4d4dde', 100, '#000091'],
-    fallback: 'rgba(0, 0, 145, 0.08)',
-    sel: '#000091',
-    comp: '#e1000f',
-    line: '#6a6af4',
-    buildings: '#8585f6',
+    seq: [0, '#DBEAFE', 35, '#7EC8E3', 70, '#0C78B4', 100, '#163767'],
+    fallback: 'rgba(22, 55, 103, 0.08)',
+    sel: '#163767',
+    comp: '#FF43B8',
+    line: '#0C78B4',
+    buildings: '#0C78B4',
   },
   dark: {
-    seq: [0, '#272747', 35, '#5b5bd6', 70, '#8585f6', 100, '#b1b1f9'],
-    fallback: 'rgba(133, 133, 246, 0.10)',
-    sel: '#b1b1f9',
-    comp: '#f95c5e',
-    line: '#8585f6',
-    buildings: '#5b5bd6',
+    seq: [0, '#102347', 35, '#1a4d8a', 70, '#0C78B4', 100, '#5DADE2'],
+    fallback: 'rgba(12, 120, 180, 0.10)',
+    sel: '#5DADE2',
+    comp: '#FF43B8',
+    line: '#0C78B4',
+    buildings: '#1a4d8a',
   },
 };
 
@@ -574,8 +574,8 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   const currentStyle = LEVEL_STYLES[granularity] || LEVEL_STYLES[1];
   const legendInfo = getLegendDetails(activeFamily);
   const seqGradient = theme === 'dark'
-    ? 'linear-gradient(to right, #272747, #5b5bd6, #8585f6, #b1b1f9)'
-    : 'linear-gradient(to right, #e3e3fd, #8585f6, #4d4dde, #000091)';
+    ? 'linear-gradient(to right, #102347, #1a4d8a, #0C78B4, #5DADE2)'
+    : 'linear-gradient(to right, #DBEAFE, #7EC8E3, #0C78B4, #163767)';
 
   return (
     <>
