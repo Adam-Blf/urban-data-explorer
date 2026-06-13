@@ -74,11 +74,17 @@ export const Header: React.FC<HeaderProps> = ({
       <StateBrand />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        {/* État de la source de données */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} title={isConnected ? 'Connexion aux bases de données active' : 'Données locales de secours'}>
+        {/* État de la source de données — aria-live pour annoncer les changements */}
+        <div
+          role="status"
+          aria-live="polite"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          title={isConnected ? 'Connexion aux bases de données active' : 'Données locales de secours'}
+        >
           <span
             className={isConnected ? '' : 'blink-soft'}
             style={{ width: '8px', height: '8px', borderRadius: '50%', background: isConnected ? 'var(--success)' : 'var(--warning)', flexShrink: 0 }}
+            aria-hidden="true"
           />
           <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-mention)' }}>
             {isConnected ? 'Données live · PostgreSQL / Cassandra' : 'Mode local · hors ligne'}
@@ -92,6 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setShowControlPanel(!showControlPanel)}
             className={`dsfr-btn dsfr-btn--tertiary ${showControlPanel ? 'is-active' : ''}`}
+            aria-pressed={showControlPanel}
             title="Afficher / masquer les filtres"
           >
             <SlidersHorizontal size={16} /> Filtres
@@ -99,6 +106,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setShowDataPanel(!showDataPanel)}
             className={`dsfr-btn dsfr-btn--tertiary ${showDataPanel ? 'is-active' : ''}`}
+            aria-pressed={showDataPanel}
             title="Afficher / masquer les indicateurs"
           >
             <BarChart3 size={16} /> Indicateurs
@@ -106,10 +114,11 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Mode de carte (segmenté) */}
-        <div style={{ display: 'flex', border: '1px solid var(--border)' }}>
+        <div role="group" aria-label="Mode de carte" style={{ display: 'flex', border: '1px solid var(--border)' }}>
           <button
             onClick={() => setMapMode('2d')}
             className={`dsfr-btn dsfr-btn--tertiary ${mapMode === '2d' ? 'is-active' : ''}`}
+            aria-pressed={mapMode === '2d'}
             style={{ borderRadius: 0 }}
             title="Carte 2D · fond de plan IGN"
           >
@@ -118,6 +127,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setMapMode('3d')}
             className={`dsfr-btn dsfr-btn--tertiary ${mapMode === '3d' ? 'is-active' : ''}`}
+            aria-pressed={mapMode === '3d'}
             style={{ borderRadius: 0 }}
             title="Carte 3D · extrusion des bâtiments"
           >
@@ -133,12 +143,14 @@ export const Header: React.FC<HeaderProps> = ({
             style={{ padding: '8px' }}
             title={theme === 'light' ? 'Passer en thème sombre' : 'Passer en thème clair'}
             aria-label="Changer de thème"
+            aria-pressed={theme === 'dark'}
           >
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </button>
           <button
             onClick={() => setShowSettings(!showSettings)}
             className={`dsfr-btn dsfr-btn--tertiary ${showSettings ? 'is-active' : ''}`}
+            aria-pressed={showSettings}
             style={{ padding: '8px' }}
             title="Paramètres"
             aria-label="Paramètres"
