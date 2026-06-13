@@ -20,4 +20,17 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Split heavy map libraries into dedicated chunks so the main bundle
+        // stays well under the 500 kB Vite warning threshold.
+        manualChunks(id) {
+          if (id.includes('maplibre-gl')) return 'vendor-maplibre';
+          if (id.includes('mapbox-gl')) return 'vendor-mapbox';
+          if (id.includes('framer-motion')) return 'vendor-motion';
+        },
+      },
+    },
+  },
 })
