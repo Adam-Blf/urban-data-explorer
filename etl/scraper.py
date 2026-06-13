@@ -6,7 +6,7 @@ des jeux de données de l'Open Data Paris.
 import logging
 import requests
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 from etl.catalog import SourceSpec
 
