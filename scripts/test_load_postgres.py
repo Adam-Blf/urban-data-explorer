@@ -26,13 +26,20 @@ QUERIES_PER_USER = 50
 DOCS_DIR = Path(__file__).resolve().parents[1] / "docs"
 
 def get_connection():
-    return psycopg2.connect(
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT,
-        dbname=POSTGRES_DB,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-    )
+    import pytest
+    try:
+        return psycopg2.connect(
+            host=POSTGRES_HOST,
+            port=POSTGRES_PORT,
+            dbname=POSTGRES_DB,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+        )
+    except psycopg2.OperationalError:
+        pytest.skip(
+            "PostgreSQL indisponible -- test d'integration ignore "
+            "(necessite la base live, ex. docker-compose up postgres)."
+        )
 
 def test_integrity():
     """Vérifie le respect des contraintes d'intégrité de la base de données."""
