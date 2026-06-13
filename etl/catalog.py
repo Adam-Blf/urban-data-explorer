@@ -30,7 +30,7 @@ class SourceSpec:
 
 
 # ---------------------------------------------------------------------------
-# Catalogue des 15 sources, organisées par famille thématique
+# Catalogue des 24 sources, organisées par famille thématique
 # ---------------------------------------------------------------------------
 
 ALL_SOURCES: list[SourceSpec] = [

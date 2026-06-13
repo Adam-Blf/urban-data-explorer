@@ -93,7 +93,11 @@ CREATE TABLE IF NOT EXISTS fact_arrondissement_dashboard (
   logement_social_pct DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   revenu_median DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   sales_volume INTEGER NOT NULL DEFAULT 0,
-  score INTEGER NOT NULL DEFAULT 0
+  score INTEGER NOT NULL DEFAULT 0,
+  environnement_idx INTEGER NOT NULL DEFAULT 0,
+  m2_abordables DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  accessibilite_idx INTEGER NOT NULL DEFAULT 0,
+  data_source TEXT NOT NULL DEFAULT 'reference'
 );
 
 CREATE TABLE IF NOT EXISTS fact_arrondissement_timeline (
@@ -108,6 +112,7 @@ CREATE TABLE IF NOT EXISTS fact_arrondissement_timeline (
   logement_social_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   revenu_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   cadre_vie_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+  environnement_idx DOUBLE PRECISION NOT NULL DEFAULT 0.0,
   PRIMARY KEY (arrondissement_code, year, month)
 );
 
