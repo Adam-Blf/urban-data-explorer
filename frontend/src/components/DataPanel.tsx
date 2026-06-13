@@ -1,5 +1,6 @@
-import React from 'react';
-import { TrendingUp, Activity, X } from 'lucide-react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { TrendingUp, Activity, X, Play, Pause } from 'lucide-react';
 import { District, Overview, TimelinePoint, EventLog } from '../types';
 
 interface DataPanelProps {
@@ -12,8 +13,7 @@ interface DataPanelProps {
   timeline: TimelinePoint[];
   events: EventLog[];
   activeFamily: string;
-  maxActivity: number;
-  style?: React.CSSProperties;
+  isVisible: boolean;
   onClose?: () => void;
 }
 
@@ -59,7 +59,7 @@ const Gauge: React.FC<{ label: string; raw: string | null; idx?: number; color: 
   </div>
 );
 
-export const DataPanel: React.FC<DataPanelProps> = ({
+export const DataPanel = React.memo<DataPanelProps>(function DataPanel({
   selectedDistrict,
   setSelectedDistrict,
   comparedDistrict,
@@ -69,17 +69,84 @@ export const DataPanel: React.FC<DataPanelProps> = ({
   timeline,
   events,
   activeFamily,
-  style,
+  isVisible,
   onClose,
-}) => {
-  const selectedA = districts.find((d) => d.code === selectedDistrict);
-  const selectedB = districts.find((d) => d.code === comparedDistrict);
+}) {
+  const panelRef = useRef<HTMLElement>(null);
 
-  const avgScore = districts.length
-    ? Math.round(districts.reduce((acc, d) => acc + d.score, 0) / districts.length)
-    : 58;
+  /* Timeline replay state */
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playIndex, setPlayIndex] = useState<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const prefersReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    []
+  );
 
-  const indicators = [
+  /* inert via DOM */
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    if (!isVisible) el.setAttribute('inert', '');
+    else el.removeAttribute('inert');
+  }, [isVisible]);
+
+  /* Cleanup interval on unmount */
+  useEffect(() => {
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, []);
+
+  /* Stop playback when timeline changes */
+  useEffect(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsPlaying(false);
+    setPlayIndex(null);
+  }, [timeline]);
+
+  const togglePlay = useCallback(() => {
+    if (isPlaying) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      setIsPlaying(false);
+      return;
+    }
+
+    if (prefersReducedMotion) {
+      setPlayIndex(timeline.length - 1);
+      return;
+    }
+
+    const startIdx = playIndex !== null && playIndex < timeline.length - 1 ? playIndex : 0;
+    setPlayIndex(startIdx);
+    setIsPlaying(true);
+
+    let i = startIdx;
+    intervalRef.current = setInterval(() => {
+      i++;
+      if (i >= timeline.length) {
+        clearInterval(intervalRef.current!);
+        intervalRef.current = null;
+        setIsPlaying(false);
+      } else {
+        setPlayIndex(i);
+      }
+    }, 600);
+  }, [isPlaying, playIndex, timeline.length, prefersReducedMotion]);
+
+  const selectedA = useMemo(
+    () => districts.find((d) => d.code === selectedDistrict),
+    [districts, selectedDistrict]
+  );
+  const selectedB = useMemo(
+    () => districts.find((d) => d.code === comparedDistrict),
+    [districts, comparedDistrict]
+  );
+
+  const avgScore = useMemo(
+    () => districts.length ? Math.round(districts.reduce((acc, d) => acc + d.score, 0) / districts.length) : 58,
+    [districts]
+  );
+
+  const indicators = useMemo(() => [
     {
       id: 'score', label: 'Score global de synthèse', familyId: 'all',
       idxA: selectedA?.score, idxB: selectedB?.score, idxAvg: avgScore,
@@ -122,18 +189,36 @@ export const DataPanel: React.FC<DataPanelProps> = ({
       rawB: selectedB ? `${selectedB.family_counts.green_space || 0} espaces verts` : null,
       rawAvg: 'Espaces verts : moyen',
     },
-  ];
+  ], [selectedA, selectedB, avgScore, overview]);
 
-  const activeTimelineMax = timeline.length
-    ? Math.max(...timeline.map((t) => getTimelineValue(t, activeFamily)))
-    : 100;
+  /* Fix: avoid 388/(length-1) division by zero when timeline has 1 point */
+  const divisor = Math.max(1, timeline.length - 1);
+
+  const activeTimelineMax = useMemo(
+    () => timeline.length ? Math.max(...timeline.map((t) => getTimelineValue(t, activeFamily))) : 100,
+    [timeline, activeFamily]
+  );
+
+  const timelineLabel = getTimelineLabel(activeFamily);
+  const svgDescText = timeline.length
+    ? `${timeline.length} points de ${timeline[0]?.label} à ${timeline[timeline.length - 1]?.label}`
+    : 'Aucune donnée';
+
+  /* SVG coordinate helper */
+  const cx = (idx: number) => idx * (388 / divisor);
+  const cy = (val: number) => 76 - (val / activeTimelineMax) * 60;
 
   return (
-    <aside
+    <motion.aside
+      ref={panelRef}
       className="dsfr-surface"
+      initial={false}
+      animate={{ x: isVisible ? 0 : 480 }}
+      transition={{ type: 'tween', ease: [0.4, 0, 0.2, 1], duration: 0.3 }}
       style={{
         position: 'absolute',
         top: '88px',
+        right: '16px',
         bottom: '16px',
         width: '420px',
         zIndex: 15,
@@ -142,7 +227,6 @@ export const DataPanel: React.FC<DataPanelProps> = ({
         flexDirection: 'column',
         gap: '18px',
         overflowY: 'auto',
-        ...style,
       }}
     >
       {/* En-tête : sélection & comparaison */}
@@ -172,7 +256,9 @@ export const DataPanel: React.FC<DataPanelProps> = ({
           </div>
         </div>
         <p style={{ fontSize: '12px', color: 'var(--text-mention)', marginTop: '4px', lineHeight: 1.4 }}>
-          {selectedA ? 'Comparez ce secteur à un autre arrondissement ou à la moyenne parisienne.' : 'Sélectionnez un arrondissement sur la carte pour démarrer l’analyse.'}
+          {selectedA
+            ? 'Comparez ce secteur à un autre arrondissement ou à la moyenne parisienne.'
+            : "Sélectionnez un arrondissement sur la carte pour démarrer l'analyse."}
         </p>
 
         {selectedDistrict && (
@@ -244,44 +330,106 @@ export const DataPanel: React.FC<DataPanelProps> = ({
 
       {/* Tendance temporelle */}
       <div className="dsfr-card" style={{ padding: '14px' }}>
-        <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <TrendingUp size={14} style={{ color: 'var(--blue-france)' }} /> {getTimelineLabel(activeFamily)}
-        </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <TrendingUp size={14} style={{ color: 'var(--blue-france)' }} /> {timelineLabel}
+          </h3>
+          {timeline.length > 1 && (
+            <button
+              onClick={togglePlay}
+              aria-pressed={isPlaying}
+              className="dsfr-btn dsfr-btn--tertiary"
+              style={{ padding: '4px 8px', fontSize: '11px', gap: '4px' }}
+              title={isPlaying ? 'Pause' : 'Lecture'}
+            >
+              {isPlaying ? <Pause size={12} /> : <Play size={12} />}
+              {isPlaying ? 'Pause' : 'Lecture'}
+            </button>
+          )}
+        </div>
         <div style={{ width: '100%', height: '84px', position: 'relative' }}>
           {timeline.length > 0 ? (
-            <svg width="100%" height="100%" viewBox="0 0 388 84" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--blue-france)" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="var(--blue-france)" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              {/* lignes de repère */}
-              {[0, 0.5, 1].map((g) => (
-                <line key={g} x1="0" x2="388" y1={8 + g * 64} y2={8 + g * 64} stroke="var(--border)" strokeWidth="1" />
-              ))}
-              <path
-                d={`M 0 76 ${timeline.map((t, idx) => `L ${idx * (388 / (timeline.length - 1))} ${76 - (getTimelineValue(t, activeFamily) / activeTimelineMax) * 60}`).join(' ')} L 388 76 Z`}
-                fill="url(#trend-fill)"
-              />
-              <path
-                d={timeline.map((t, idx) => `${idx === 0 ? 'M' : 'L'} ${idx * (388 / (timeline.length - 1))} ${76 - (getTimelineValue(t, activeFamily) / activeTimelineMax) * 60}`).join(' ')}
-                fill="none"
-                stroke="var(--blue-france)"
-                strokeWidth="2"
-              />
-              {timeline.map((t, idx) => (
-                <circle
-                  key={idx}
-                  cx={idx * (388 / (timeline.length - 1))}
-                  cy={76 - (getTimelineValue(t, activeFamily) / activeTimelineMax) * 60}
-                  r="2.5"
-                  fill="var(--bg)"
-                  stroke="var(--blue-france)"
-                  strokeWidth="1.5"
+            <>
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 388 84"
+                preserveAspectRatio="none"
+                role="img"
+                aria-labelledby="trend-title trend-desc"
+              >
+                <title id="trend-title">{timelineLabel}</title>
+                <desc id="trend-desc">{svgDescText}</desc>
+                <defs>
+                  <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--blue-france)" stopOpacity="0.18" />
+                    <stop offset="100%" stopColor="var(--blue-france)" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Lignes de repère */}
+                {[0, 0.5, 1].map((g) => (
+                  <line key={g} x1="0" x2="388" y1={8 + g * 64} y2={8 + g * 64} stroke="var(--border)" strokeWidth="1" aria-hidden="true" />
+                ))}
+                <path
+                  d={`M 0 76 ${timeline.map((t, idx) => `L ${cx(idx)} ${cy(getTimelineValue(t, activeFamily))}`).join(' ')} L 388 76 Z`}
+                  fill="url(#trend-fill)"
+                  aria-hidden="true"
                 />
-              ))}
-            </svg>
+                <path
+                  d={timeline.map((t, idx) => `${idx === 0 ? 'M' : 'L'} ${cx(idx)} ${cy(getTimelineValue(t, activeFamily))}`).join(' ')}
+                  fill="none"
+                  stroke="var(--blue-france)"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                />
+                {/* Cursor line for playback */}
+                {playIndex !== null && (
+                  <line
+                    x1={cx(playIndex)}
+                    x2={cx(playIndex)}
+                    y1="0"
+                    y2="84"
+                    stroke="var(--blue-france)"
+                    strokeWidth="1"
+                    strokeDasharray="3 2"
+                    opacity="0.6"
+                    aria-hidden="true"
+                  />
+                )}
+                {/* Active point label */}
+                {playIndex !== null && timeline[playIndex] && (
+                  <text
+                    x={Math.min(Math.max(cx(playIndex), 24), 364)}
+                    y="14"
+                    textAnchor="middle"
+                    fontSize="9.5"
+                    fill="var(--text-title)"
+                    fontFamily="var(--font-sans)"
+                    fontWeight="600"
+                    aria-hidden="true"
+                  >
+                    {timeline[playIndex].label} · {getTimelineValue(timeline[playIndex], activeFamily).toFixed(0)}
+                  </text>
+                )}
+                {/* Data points */}
+                {timeline.map((t, idx) => (
+                  <circle
+                    key={idx}
+                    cx={cx(idx)}
+                    cy={cy(getTimelineValue(t, activeFamily))}
+                    r={playIndex === idx ? 4 : 2.5}
+                    fill={playIndex === idx ? 'var(--blue-france)' : 'var(--bg)'}
+                    stroke="var(--blue-france)"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  />
+                ))}
+              </svg>
+              {/* Text alternative for screen readers */}
+              <span className="sr-only">
+                {timeline.map((t) => `${t.label}: ${getTimelineValue(t, activeFamily).toFixed(0)}`).join(', ')}
+              </span>
+            </>
           ) : (
             <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: 'var(--text-mention)', fontSize: '12px' }}>
               Chargement des tendances…
@@ -290,6 +438,9 @@ export const DataPanel: React.FC<DataPanelProps> = ({
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-mention)', marginTop: '6px' }}>
           <span>{timeline[0]?.label || 'Début'}</span>
+          {playIndex !== null && timeline[playIndex] && (
+            <span style={{ color: 'var(--blue-france)', fontWeight: 600 }}>{timeline[playIndex].label}</span>
+          )}
           <span>{timeline[timeline.length - 1]?.label || 'Fin'}</span>
         </div>
       </div>
@@ -298,7 +449,7 @@ export const DataPanel: React.FC<DataPanelProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Activity size={14} className="blink-soft" style={{ color: 'var(--red-marianne)' }} />
-          Flux d’ingestion · événements Cassandra
+          Flux d'ingestion · événements Cassandra
         </h3>
         <div className="dsfr-card--alt" style={{ padding: '4px 12px', overflowY: 'auto', maxHeight: '140px' }}>
           {events.length > 0 ? (
@@ -315,11 +466,11 @@ export const DataPanel: React.FC<DataPanelProps> = ({
             ))
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-mention)', fontSize: '11px', padding: '16px 0' }}>
-              En attente d’événements Kafka…
+              En attente d'événements Kafka…
             </div>
           )}
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
-};
+});

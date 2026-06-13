@@ -18,9 +18,9 @@ import time
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
 
+import jwt as pyjwt
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
 
 # ════════════════════════════════════════════════════════════════════════
 # 1) CONFIGURATION · les réglages, regroupés en haut pour être faciles à trouver
@@ -85,14 +85,15 @@ def create_access_token(username: str, role: str) -> str:
     """Fabrique un jeton JWT signe (contient l'utilisateur, son role, l'expiration)."""
     expire = datetime.now(timezone.utc) + timedelta(minutes=TOKEN_TTL_MIN)
     payload = {"sub": username, "role": role, "exp": expire}
-    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    return pyjwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
 def decode_token(token: str) -> dict | None:
+    """Decode et valide un jeton JWT. Renvoie le payload ou None si invalide/expiré."""
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        payload = pyjwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return {"username": payload.get("sub"), "role": payload.get("role")}
-    except JWTError:
+    except pyjwt.PyJWTError:
         return None
 
 
@@ -123,9 +124,18 @@ _hits: dict[str, deque[float]] = defaultdict(deque)
 
 def check_quota(request: Request) -> None:
     """Fenetre glissante par IP : compte les requetes des 60 dernieres secondes.
-    Au-dela du quota -> erreur 429 (Too Many Requests). Quota plus large si connecte."""
+    Au-dela du quota -> erreur 429 (Too Many Requests). Quota plus large si token valide."""
     ip = request.client.host if request.client else "unknown"
-    authed = bool(request.headers.get("authorization"))
+
+    # Valider réellement le token Bearer avant d'accorder le quota élargi.
+    # Un header Authorization présent mais avec un token invalide reste dans le tier anonyme.
+    authed = False
+    auth_header = request.headers.get("authorization", "")
+    if auth_header.lower().startswith("bearer "):
+        bearer_token = auth_header[7:].strip()
+        if bearer_token and decode_token(bearer_token) is not None:
+            authed = True
+
     limit = QUOTA_AUTH if authed else QUOTA_ANON
 
     now = time.monotonic()

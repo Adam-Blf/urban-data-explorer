@@ -1,20 +1,33 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
-import mapboxgl from 'mapbox-gl';
+import type * as MapboxGlType from 'mapbox-gl';
 import { AlertTriangle, Settings } from 'lucide-react';
 import { api } from '../services/api';
+import { District } from '../types';
 
 type Theme = 'light' | 'dark';
 
-/* ── Palette data-viz par thème (valeurs littérales pour Mapbox GL) ───── */
+/* ── Coordonnées des arrondissements — module scope (stable reference) ── */
+
+const DISTRICT_COORDS: Record<string, [number, number]> = {
+  '75001': [2.3364, 48.8626], '75002': [2.3426, 48.8682], '75003': [2.3601, 48.8629],
+  '75004': [2.3553, 48.8543], '75005': [2.3486, 48.8453], '75006': [2.3323, 48.8491],
+  '75007': [2.3126, 48.8562], '75008': [2.3075, 48.8725], '75009': [2.3374, 48.8771],
+  '75010': [2.3605, 48.8761], '75011': [2.3800, 48.8594], '75012': [2.4060, 48.8352],
+  '75013': [2.3557, 48.8283], '75014': [2.3255, 48.8292], '75015': [2.2925, 48.8402],
+  '75016': [2.2618, 48.8604], '75017': [2.3082, 48.8873], '75018': [2.3475, 48.8925],
+  '75019': [2.3802, 48.8870], '75020': [2.4014, 48.8631],
+};
+
+/* ── Palette data-viz par thème ─────────────────────────────────────── */
 
 interface ThemeColors {
-  seq: (number | string)[];      // paliers interpolate séquentiels bleu France
+  seq: (number | string)[];
   fallback: string;
-  sel: string;                   // arrondissement sélectionné (bleu France)
-  comp: string;                  // arrondissement comparé (rouge Marianne)
-  line: string;                  // contour par défaut
-  buildings: string;            // extrusion 3D
+  sel: string;
+  comp: string;
+  line: string;
+  buildings: string;
 }
 
 const THEME_COLORS: Record<Theme, ThemeColors> = {
@@ -36,7 +49,7 @@ const THEME_COLORS: Record<Theme, ThemeColors> = {
   },
 };
 
-/* ── Style structurel par granularité (épaisseurs / opacités / libellé) ── */
+/* ── Style structurel par granularité ───────────────────────────────── */
 
 const LEVEL_STYLES: Record<number, { lineWidth: number; fillOpacity: number; label: string }> = {
   0: { lineWidth: 2.5, fillOpacity: 0.1, label: 'Ville' },
@@ -46,7 +59,7 @@ const LEVEL_STYLES: Record<number, { lineWidth: number; fillOpacity: number; lab
   4: { lineWidth: 0.5, fillOpacity: 0.2, label: 'Bâtiment' },
 };
 
-/* ── Extraction du code selon le niveau (handler de clic) ──────────────── */
+/* ── Extraction du code selon le niveau ──────────────────────────────── */
 
 function extractCode(level: number, properties: Record<string, unknown> | null | undefined): string | null {
   if (!properties) return null;
@@ -76,7 +89,7 @@ function extractCode(level: number, properties: Record<string, unknown> | null |
   }
 }
 
-/* ── Expression de coloration choroplèthe ─────────────────────────────── */
+/* ── Expression de coloration choroplèthe ────────────────────────────── */
 
 const propertyForFamily = (activeFamily: string): string => {
   if (activeFamily === 'immobilier') return 'immobilier_idx';
@@ -87,7 +100,7 @@ const propertyForFamily = (activeFamily: string): string => {
   return 'score';
 };
 
-const getChoroplethColorExpression = (activeFamily: string, theme: Theme): any => {
+const getChoroplethColorExpression = (activeFamily: string, theme: Theme): unknown => {
   const c = THEME_COLORS[theme];
   return [
     'coalesce',
@@ -96,7 +109,7 @@ const getChoroplethColorExpression = (activeFamily: string, theme: Theme): any =
   ];
 };
 
-/* ── Détails de légende ─────────────────────────────────────────────── */
+/* ── Légende ─────────────────────────────────────────────────────────── */
 
 const getLegendDetails = (activeFamily: string) => {
   switch (activeFamily) {
@@ -115,7 +128,43 @@ const getLegendDetails = (activeFamily: string) => {
   }
 };
 
-/* ── Composant ─────────────────────────────────────────────────────────── */
+/* ── Popup HTML builder ──────────────────────────────────────────────── */
+
+const buildPopupHtml = (code: string | null, activeFamily: string, districts: District[]): string => {
+  const district = code ? districts.find((d) => d.code === code) : null;
+  const name = district
+    ? `${district.label} arrondissement`
+    : code ? code : 'Secteur';
+
+  let indicator = '';
+  if (district) {
+    if (activeFamily === 'immobilier')
+      indicator = `Prix&nbsp;: <strong>${Math.round(district.prix_m2).toLocaleString('fr-FR')}&nbsp;€/m²</strong>`;
+    else if (activeFamily === 'logement_social')
+      indicator = `Log.&nbsp;social&nbsp;: <strong>${district.logement_social_pct.toFixed(1)}&nbsp;%</strong>`;
+    else if (activeFamily === 'revenus')
+      indicator = `Revenu&nbsp;méd.&nbsp;: <strong>${Math.round(district.revenu_median / 1000)}k&nbsp;€/an</strong>`;
+    else if (activeFamily === 'cadre_vie')
+      indicator = `Cadre de vie&nbsp;: <strong>idx&nbsp;${district.cadre_vie_idx}</strong>`;
+    else if (activeFamily === 'environnement')
+      indicator = `Environnement&nbsp;: <strong>idx&nbsp;${district.environnement_idx}</strong>`;
+    else
+      indicator = `Score global&nbsp;: <strong>${district.score}</strong>`;
+  }
+
+  return `
+    <div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-mention);margin-bottom:3px">Arrondissement</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-title);margin-bottom:5px">${name}</div>
+      ${district ? `
+        <div style="font-size:11px;color:var(--text-default)">${indicator}</div>
+        ${activeFamily !== 'all' ? `<div style="font-size:11px;color:var(--text-mention);margin-top:2px">Score global&nbsp;: ${district.score}</div>` : ''}
+      ` : ''}
+    </div>
+  `;
+};
+
+/* ── Composant ──────────────────────────────────────────────────────── */
 
 interface MapViewportProps {
   mapMode: '2d' | '3d';
@@ -129,6 +178,7 @@ interface MapViewportProps {
   granularity: number;
   setGranularity: (level: number) => void;
   activeFamily: string;
+  districts: District[];
 }
 
 export const MapViewport: React.FC<MapViewportProps> = ({
@@ -143,25 +193,20 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   granularity,
   setGranularity,
   activeFamily,
+  districts,
 }) => {
   const mapContainer2D = useRef<HTMLDivElement>(null);
   const mapContainer3D = useRef<HTMLDivElement>(null);
   const map2DRef = useRef<maplibregl.Map | null>(null);
-  const map3DRef = useRef<mapboxgl.Map | null>(null);
+  const map3DRef = useRef<MapboxGlType.Map | null>(null);
   const granularityRef = useRef(granularity);
+  const activeFamilyRef = useRef(activeFamily);
+  const districtsRef = useRef(districts);
   const loadingRef = useRef(false);
 
-  const coords: Record<string, [number, number]> = {
-    '75001': [2.3364, 48.8626], '75002': [2.3426, 48.8682], '75003': [2.3601, 48.8629],
-    '75004': [2.3553, 48.8543], '75005': [2.3486, 48.8453], '75006': [2.3323, 48.8491],
-    '75007': [2.3126, 48.8562], '75008': [2.3075, 48.8725], '75009': [2.3374, 48.8771],
-    '75010': [2.3605, 48.8761], '75011': [2.3800, 48.8594], '75012': [2.4060, 48.8352],
-    '75013': [2.3557, 48.8283], '75014': [2.3255, 48.8292], '75015': [2.2925, 48.8402],
-    '75016': [2.2618, 48.8604], '75017': [2.3082, 48.8873], '75018': [2.3475, 48.8925],
-    '75019': [2.3802, 48.8870], '75020': [2.4014, 48.8631],
-  };
-
   useEffect(() => { granularityRef.current = granularity; }, [granularity]);
+  useEffect(() => { activeFamilyRef.current = activeFamily; }, [activeFamily]);
+  useEffect(() => { districtsRef.current = districts; }, [districts]);
 
   const updateGranularityByZoom = useCallback((zoom: number) => {
     let level = 0;
@@ -170,7 +215,6 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     else if (zoom >= 12) level = 2;
     else if (zoom >= 10) level = 1;
     else level = 0;
-
     if (level !== granularityRef.current) {
       granularityRef.current = level;
       setGranularity(level);
@@ -191,7 +235,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     });
   }, [setSelectedDistrict, setComparedDistrict]);
 
-  /* ── Application des styles (2D) ──────────────────────────────────── */
+  /* ── Application des styles 2D ────────────────────────────────────── */
 
   const applyStyles2D = useCallback((map: maplibregl.Map, level: number, active: string, sel: string | null, comp: string | null, th: Theme) => {
     const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
@@ -231,7 +275,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     } catch (e) { console.warn('Style update failed', e); }
   }, []);
 
-  const applyStyles3D = useCallback((map: mapboxgl.Map, level: number, active: string, sel: string | null, comp: string | null, th: Theme) => {
+  const applyStyles3D = useCallback((map: MapboxGlType.Map, level: number, active: string, sel: string | null, comp: string | null, th: Theme) => {
     const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
     const c = THEME_COLORS[th];
     const choro = getChoroplethColorExpression(active, th);
@@ -269,7 +313,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     } catch (e) { console.warn('Style update failed', e); }
   }, []);
 
-  /* ── Carte 2D (MapLibre + fond IGN clair / Carto sombre) ──────────── */
+  /* ── Carte 2D (MapLibre) ─────────────────────────────────────────── */
 
   useEffect(() => {
     if (mapMode !== '2d' || !mapContainer2D.current) return;
@@ -283,7 +327,11 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     };
     const cartoDark: maplibregl.RasterSourceSpecification = {
       type: 'raster',
-      tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],
+      tiles: [
+        'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+        'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+        'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      ],
       tileSize: 256,
       attribution: '© OpenStreetMap, © CARTO',
     };
@@ -303,6 +351,16 @@ export const MapViewport: React.FC<MapViewportProps> = ({
     map2DRef.current = map;
     map.on('zoomend', () => updateGranularityByZoom(map.getZoom()));
 
+    /* Hover popup */
+    const popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'ude-popup',
+      maxWidth: '260px',
+      offset: 10,
+    });
+    let lastHoveredCode: string | null = null;
+
     map.on('load', async () => {
       try {
         const level = granularityRef.current;
@@ -313,7 +371,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
         map.addSource('paris-base', { type: 'geojson', data: baseGeojson });
         map.addLayer({
           id: 'paris-base-fill', type: 'fill', source: 'paris-base',
-          paint: { 'fill-color': getChoroplethColorExpression(activeFamily, theme), 'fill-opacity': 0.6 },
+          paint: { 'fill-color': getChoroplethColorExpression(activeFamily, theme) as any, 'fill-opacity': 0.6 },
         });
 
         const geojson = await api.fetchGeoJsonByGranularity(level);
@@ -330,18 +388,49 @@ export const MapViewport: React.FC<MapViewportProps> = ({
 
         applyStyles2D(map, level, activeFamily, selectedDistrict, comparedDistrict, theme);
 
+        /* Click handler */
         map.on('click', 'paris-districts-fill', (e) => {
           if (e.features && e.features[0]) handleMapClick(e.features[0].properties);
         });
+        map.on('click', 'paris-base-fill', (e) => {
+          if (e.features && e.features[0]) handleMapClick(e.features[0].properties);
+        });
+
+        /* Hover popup on base fill (arrondissement level, always available) */
+        map.on('mousemove', 'paris-base-fill', (e) => {
+          if (!e.features || !e.features[0]) return;
+          const props = e.features[0].properties as Record<string, unknown>;
+          const code = extractCode(1, props);
+
+          popup.setLngLat(e.lngLat);
+
+          if (code !== lastHoveredCode) {
+            lastHoveredCode = code;
+            popup.setHTML(buildPopupHtml(code, activeFamilyRef.current, districtsRef.current));
+          }
+
+          if (!popup.isOpen()) popup.addTo(map);
+          map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'paris-base-fill', () => {
+          popup.remove();
+          lastHoveredCode = null;
+          map.getCanvas().style.cursor = '';
+        });
+
         map.on('mouseenter', 'paris-districts-fill', () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', 'paris-districts-fill', () => { map.getCanvas().style.cursor = ''; });
       } catch (err) { console.error('GeoJSON load failed', err); }
     });
 
-    return () => { if (map2DRef.current) { map2DRef.current.remove(); map2DRef.current = null; } };
-  }, [mapMode, theme, handleMapClick]);
+    return () => {
+      popup.remove();
+      if (map2DRef.current) { map2DRef.current.remove(); map2DRef.current = null; }
+    };
+  }, [mapMode, theme, handleMapClick]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* ── Mises à jour 2D (granularité / thématique / sélection) ───────── */
+  /* ── 2D GeoJSON refetch — only when granularity changes ──────────── */
 
   useEffect(() => {
     const map = map2DRef.current;
@@ -352,104 +441,132 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       .then((data) => {
         const source = map.getSource('paris-bounds') as maplibregl.GeoJSONSource | undefined;
         source?.setData(data);
-        applyStyles2D(map, granularity, activeFamily, selectedDistrict, comparedDistrict, theme);
       })
       .catch((err) => console.error('GeoJSON update failed', err))
       .finally(() => { loadingRef.current = false; });
+  }, [granularity]);
+
+  /* ── 2D Style update — no network call ───────────────────────────── */
+
+  useEffect(() => {
+    const map = map2DRef.current;
+    if (!map || !map.getSource('paris-bounds')) return;
+    applyStyles2D(map, granularity, activeFamily, selectedDistrict, comparedDistrict, theme);
   }, [granularity, activeFamily, selectedDistrict, comparedDistrict, theme, applyStyles2D]);
 
-  /* ── Carte 3D (Mapbox) ────────────────────────────────────────────── */
+  /* ── Carte 3D (Mapbox) — lazy-loaded ────────────────────────────── */
 
   useEffect(() => {
     if (mapMode !== '3d' || !mapContainer3D.current || !mapboxToken) return;
-    if (map3DRef.current) map3DRef.current.remove();
+    if (map3DRef.current) { map3DRef.current.remove(); map3DRef.current = null; }
 
-    mapboxgl.accessToken = mapboxToken;
+    let cancelled = false;
 
-    const map = new mapboxgl.Map({
-      container: mapContainer3D.current,
-      style: theme === 'dark' ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/light-v11',
-      center: [2.349014, 48.853316],
-      zoom: 12,
-      pitch: 60,
-      bearing: -20,
-    });
+    (async () => {
+      /* Lazy-load mapbox-gl CSS + JS only when 3D mode is actually used */
+      await import('mapbox-gl/dist/mapbox-gl.css');
+      const { default: mapboxgl } = await import('mapbox-gl');
 
-    map3DRef.current = map;
-    map.on('zoomend', () => updateGranularityByZoom(map.getZoom()));
+      if (cancelled || !mapContainer3D.current) return;
 
-    map.on('load', async () => {
-      const c = THEME_COLORS[theme];
-      const layers = map.getStyle().layers;
-      const labelLayerId = layers?.find((layer: any) => layer.type === 'symbol' && layer.layout?.['text-field'])?.id;
+      mapboxgl.accessToken = mapboxToken;
 
-      map.addLayer({
-        id: '3d-buildings', source: 'composite', 'source-layer': 'building',
-        filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
-        paint: {
-          'fill-extrusion-color': c.buildings,
-          'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
-          'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
-          'fill-extrusion-opacity': 0.6,
-        },
-      }, labelLayerId);
+      const map = new mapboxgl.Map({
+        container: mapContainer3D.current,
+        style: theme === 'dark' ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/light-v11',
+        center: [2.349014, 48.853316],
+        zoom: 12,
+        pitch: 60,
+        bearing: -20,
+      });
 
-      try {
-        const level = granularityRef.current;
-        const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
+      map3DRef.current = map as unknown as MapboxGlType.Map;
+      map.on('zoomend', () => updateGranularityByZoom(map.getZoom()));
 
-        const baseGeojson = await api.fetchGeoJsonByGranularity(1);
-        map.addSource('paris-base-3d', { type: 'geojson', data: baseGeojson });
+      map.on('load', async () => {
+        if (cancelled) return;
+        const c = THEME_COLORS[theme];
+        const layers = map.getStyle().layers;
+        const labelLayerId = layers?.find((layer: any) => layer.type === 'symbol' && layer.layout?.['text-field'])?.id;
+
         map.addLayer({
-          id: 'paris-base-fill-3d', type: 'fill', source: 'paris-base-3d',
-          paint: { 'fill-color': getChoroplethColorExpression(activeFamily, theme) as any, 'fill-opacity': 0.6 },
-        });
+          id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+          filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
+          paint: {
+            'fill-extrusion-color': c.buildings,
+            'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
+            'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
+            'fill-extrusion-opacity': 0.6,
+          },
+        }, labelLayerId);
 
-        const geojson = await api.fetchGeoJsonByGranularity(level);
-        if (!geojson.features || geojson.features.length === 0) return;
-        map.addSource('paris-bounds-3d', { type: 'geojson', data: geojson });
-        map.addLayer({
-          id: 'paris-districts-fill-3d', type: 'fill', source: 'paris-bounds-3d',
-          paint: { 'fill-color': c.line, 'fill-opacity': style.fillOpacity },
-        });
-        map.addLayer({
-          id: 'paris-districts-line-3d', type: 'line', source: 'paris-bounds-3d',
-          paint: { 'line-color': c.line, 'line-width': style.lineWidth },
-        });
+        try {
+          const level = granularityRef.current;
+          const style = LEVEL_STYLES[level] || LEVEL_STYLES[1];
 
-        applyStyles3D(map, level, activeFamily, selectedDistrict, comparedDistrict, theme);
+          const baseGeojson = await api.fetchGeoJsonByGranularity(1);
+          map.addSource('paris-base-3d', { type: 'geojson', data: baseGeojson });
+          map.addLayer({
+            id: 'paris-base-fill-3d', type: 'fill', source: 'paris-base-3d',
+            paint: { 'fill-color': getChoroplethColorExpression(activeFamily, theme) as any, 'fill-opacity': 0.6 },
+          });
 
-        map.on('click', 'paris-districts-fill-3d', (e) => {
-          if (e.features && e.features[0]) handleMapClick(e.features[0].properties);
-        });
-      } catch (err) { console.error('GeoJSON load failed', err); }
-    });
+          const geojson = await api.fetchGeoJsonByGranularity(level);
+          if (!geojson.features || geojson.features.length === 0) return;
+          map.addSource('paris-bounds-3d', { type: 'geojson', data: geojson });
+          map.addLayer({
+            id: 'paris-districts-fill-3d', type: 'fill', source: 'paris-bounds-3d',
+            paint: { 'fill-color': c.line, 'fill-opacity': style.fillOpacity },
+          });
+          map.addLayer({
+            id: 'paris-districts-line-3d', type: 'line', source: 'paris-bounds-3d',
+            paint: { 'line-color': c.line, 'line-width': style.lineWidth },
+          });
 
-    return () => { if (map3DRef.current) { map3DRef.current.remove(); map3DRef.current = null; } };
-  }, [mapMode, mapboxToken, theme, handleMapClick]);
+          applyStyles3D(map3DRef.current!, level, activeFamily, selectedDistrict, comparedDistrict, theme);
 
-  /* ── Mises à jour 3D ──────────────────────────────────────────────── */
+          map.on('click', 'paris-districts-fill-3d', (e: any) => {
+            if (e.features && e.features[0]) handleMapClick(e.features[0].properties);
+          });
+        } catch (err) { console.error('GeoJSON load failed', err); }
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      if (map3DRef.current) { map3DRef.current.remove(); map3DRef.current = null; }
+    };
+  }, [mapMode, mapboxToken, theme, handleMapClick]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── 3D GeoJSON refetch ───────────────────────────────────────────── */
 
   useEffect(() => {
     const map = map3DRef.current;
-    if (!map || !map.getSource('paris-bounds-3d')) return;
+    if (!map || !(map as any).getSource('paris-bounds-3d')) return;
 
     api.fetchGeoJsonByGranularity(granularity).then((data) => {
-      const source = map.getSource('paris-bounds-3d') as mapboxgl.GeoJSONSource | undefined;
+      const source = (map as any).getSource('paris-bounds-3d');
       source?.setData(data);
-      applyStyles3D(map, granularity, activeFamily, selectedDistrict, comparedDistrict, theme);
     });
-  }, [granularity, activeFamily, selectedDistrict, comparedDistrict, theme, applyStyles3D]);
+  }, [granularity]);
 
-  /* ── Vol vers le secteur sélectionné ──────────────────────────────── */
+  /* ── 3D Style update ─────────────────────────────────────────────── */
 
   useEffect(() => {
-    if (selectedDistrict && coords[selectedDistrict]) {
-      const center = coords[selectedDistrict];
+    const map = map3DRef.current;
+    if (!map) return;
+    applyStyles3D(map, granularity, activeFamily, selectedDistrict, comparedDistrict, theme);
+  }, [granularity, activeFamily, selectedDistrict, comparedDistrict, theme, applyStyles3D]);
+
+  /* ── Vol vers le secteur sélectionné ─────────────────────────────── */
+
+  useEffect(() => {
+    if (selectedDistrict && DISTRICT_COORDS[selectedDistrict]) {
+      const center = DISTRICT_COORDS[selectedDistrict];
       if (mapMode === '2d' && map2DRef.current) {
         map2DRef.current.flyTo({ center, zoom: 13, duration: 1500 });
       } else if (mapMode === '3d' && map3DRef.current) {
-        map3DRef.current.flyTo({ center, zoom: 13.5, pitch: 50, duration: 1800 });
+        (map3DRef.current as any).flyTo({ center, zoom: 13.5, pitch: 50, duration: 1800 });
       }
     }
   }, [selectedDistrict, mapMode]);
@@ -463,19 +580,34 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   return (
     <>
       {mapMode === '2d' ? (
-        <div ref={mapContainer2D} className="map-viewport" />
+        <div
+          ref={mapContainer2D}
+          className="map-viewport"
+          role="application"
+          aria-label="Carte interactive de Paris"
+        />
       ) : mapboxToken ? (
-        <div ref={mapContainer3D} className="map-viewport" />
+        <div
+          ref={mapContainer3D}
+          className="map-viewport"
+          role="application"
+          aria-label="Carte interactive de Paris en vue 3D"
+        />
       ) : (
-        <div className="map-viewport" style={{ background: 'var(--bg-alt)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 1, padding: '24px' }}>
-          <AlertTriangle size={40} style={{ color: 'var(--warning)' }} />
+        <div
+          className="map-viewport"
+          style={{ background: 'var(--bg-alt)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 1, padding: '24px' }}
+          role="region"
+          aria-label="Vue 3D non disponible"
+        >
+          <AlertTriangle size={40} style={{ color: 'var(--warning)' }} aria-hidden="true" />
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-title)' }}>Jeton Mapbox requis pour la vue 3D</h2>
           <p style={{ color: 'var(--text-default)', maxWidth: '420px', textAlign: 'center', fontSize: '14px', lineHeight: 1.5 }}>
-            Pour explorer Paris en 3D (hauteurs de bâtiments, relief), renseignez votre jeton d’accès Mapbox.
-            La vue 2D s’appuie sur le fond de plan IGN et ne nécessite aucun jeton.
+            Pour explorer Paris en 3D (hauteurs de bâtiments, relief), renseignez votre jeton d'accès Mapbox.
+            La vue 2D s'appuie sur le fond de plan IGN et ne nécessite aucun jeton.
           </p>
           <button onClick={() => setShowSettings(true)} className="dsfr-btn dsfr-btn--primary" style={{ marginTop: '4px' }}>
-            <Settings size={18} /> Configurer le jeton
+            <Settings size={18} aria-hidden="true" /> Configurer le jeton
           </button>
         </div>
       )}
@@ -485,9 +617,10 @@ export const MapViewport: React.FC<MapViewportProps> = ({
         <div
           className="dsfr-surface"
           style={{ position: 'absolute', bottom: '16px', left: '16px', zIndex: 12, padding: '12px 16px', width: '272px', display: 'flex', flexDirection: 'column', gap: '8px' }}
+          aria-label={`Légende : ${legendInfo.title}`}
         >
           <span className="dsfr-eyebrow" style={{ color: 'var(--text-title)' }}>{legendInfo.title}</span>
-          <div style={{ height: '10px', background: seqGradient, width: '100%' }} />
+          <div style={{ height: '10px', background: seqGradient, width: '100%' }} aria-hidden="true" />
           <div className="tabular" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-mention)' }}>
             <span>{legendInfo.minLabel}</span>
             <span>{legendInfo.midLabel}</span>
@@ -500,8 +633,9 @@ export const MapViewport: React.FC<MapViewportProps> = ({
       <div
         className="dsfr-surface"
         style={{ position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)', zIndex: 12, display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 16px' }}
+        aria-label={`Niveau de granularité : ${currentStyle.label}`}
       >
-        <span className="dsfr-status-dot" style={{ background: 'var(--blue-france)' }} />
+        <span className="dsfr-status-dot" style={{ background: 'var(--blue-france)' }} aria-hidden="true" />
         <span className="tabular" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-title)', letterSpacing: '0.02em' }}>
           Niveau {granularity} · {currentStyle.label}
         </span>

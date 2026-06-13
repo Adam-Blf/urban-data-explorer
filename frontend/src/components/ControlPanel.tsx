@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Layers, Filter, Info, X } from 'lucide-react';
 
 interface ControlPanelProps {
@@ -6,7 +7,7 @@ interface ControlPanelProps {
   setGranularity: (val: number) => void;
   activeFamily: string;
   setActiveFamily: (val: string) => void;
-  style?: React.CSSProperties;
+  isVisible: boolean;
   onClose?: () => void;
 }
 
@@ -26,20 +27,35 @@ const FAMILIES = [
   { id: 'environnement', name: 'Environnement', fullWidth: true },
 ];
 
-export const ControlPanel: React.FC<ControlPanelProps> = ({
+export const ControlPanel = React.memo<ControlPanelProps>(function ControlPanel({
   granularity,
   setGranularity,
   activeFamily,
   setActiveFamily,
-  style,
+  isVisible,
   onClose,
-}) => {
+}) {
+  const panelRef = useRef<HTMLElement>(null);
+
+  /* inert via DOM — keeps off-screen content fully inoperable */
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    if (!isVisible) el.setAttribute('inert', '');
+    else el.removeAttribute('inert');
+  }, [isVisible]);
+
   return (
-    <aside
+    <motion.aside
+      ref={panelRef}
       className="dsfr-surface"
+      initial={false}
+      animate={{ x: isVisible ? 0 : -432 }}
+      transition={{ type: 'tween', ease: [0.4, 0, 0.2, 1], duration: 0.3 }}
       style={{
         position: 'absolute',
         top: '88px',
+        left: '16px',
         bottom: '16px',
         width: '380px',
         zIndex: 15,
@@ -48,7 +64,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         flexDirection: 'column',
         gap: '24px',
         overflowY: 'auto',
-        ...style,
       }}
     >
       {/* En-tête */}
@@ -76,6 +91,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <button
               key={g.level}
               onClick={() => setGranularity(g.level)}
+              aria-pressed={granularity === g.level}
               className={`dsfr-segment ${granularity === g.level ? 'is-active' : ''}`}
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1px' }}
             >
@@ -94,6 +110,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <button
             onClick={() => setActiveFamily('all')}
+            aria-pressed={activeFamily === 'all'}
             className={`dsfr-segment ${activeFamily === 'all' ? 'is-active' : ''}`}
             style={{ textAlign: 'center', fontWeight: 600 }}
           >
@@ -104,6 +121,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               <button
                 key={f.id}
                 onClick={() => setActiveFamily(f.id)}
+                aria-pressed={activeFamily === f.id}
                 className={`dsfr-segment ${activeFamily === f.id ? 'is-active' : ''}`}
                 style={{
                   textAlign: 'center',
@@ -130,6 +148,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           Sélectionnez une thématique pour appliquer une coloration choroplèthe dédiée.
         </p>
       </div>
-    </aside>
+    </motion.aside>
   );
-};
+});

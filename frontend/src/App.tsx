@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { api } from './services/api';
 import { District, Overview, TimelinePoint, EventLog } from './types';
 import { Header } from './components/Header';
@@ -43,7 +43,7 @@ export default function App() {
   const [events, setEvents] = useState<EventLog[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const connected = await api.checkHealth();
       setIsConnected(connected);
@@ -141,21 +141,24 @@ export default function App() {
         environnement_idx: 70 + Math.cos(i * 0.4) * 3
       })));
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(() => {
+      /* Skip polling when tab is hidden — avoids redundant requests */
+      if (document.visibilityState !== 'hidden') fetchData();
+    }, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchData]);
 
+  /* State-driven token update — no page reload needed.
+     The MapViewport 3D useEffect depends on mapboxToken and will re-init automatically. */
   const saveToken = (token: string) => {
     setMapboxToken(token);
     localStorage.setItem('ude_mapbox_token', token);
-    window.location.reload();
+    // window.location.reload() removed — state change propagates to MapViewport
   };
-
-  const maxActivity = timeline.length ? Math.max(...timeline.map(t => t.activity)) : 100;
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: 'var(--bg)' }}>
@@ -171,6 +174,7 @@ export default function App() {
         granularity={granularity}
         setGranularity={setGranularity}
         activeFamily={activeFamily}
+        districts={districts}
       />
 
       <Header
@@ -199,11 +203,7 @@ export default function App() {
         setGranularity={setGranularity}
         activeFamily={activeFamily}
         setActiveFamily={setActiveFamily}
-        style={{
-          left: showControlPanel ? '16px' : '-420px',
-          right: 'auto',
-          transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-        }}
+        isVisible={showControlPanel}
         onClose={() => setShowControlPanel(false)}
       />
 
@@ -217,11 +217,7 @@ export default function App() {
         timeline={timeline}
         events={events}
         activeFamily={activeFamily}
-        maxActivity={maxActivity}
-        style={{
-          right: showDataPanel ? '16px' : '-480px',
-          transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-        }}
+        isVisible={showDataPanel}
         onClose={() => setShowDataPanel(false)}
       />
     </div>

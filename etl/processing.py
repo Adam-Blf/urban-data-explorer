@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -83,17 +84,12 @@ def _normalize_code(raw: Any) -> str | None:
         if 1 <= num <= 20:
             return f"750{num:02d}"
 
-    # Format "75001"-"75020" direct
+    # Format "75001"-"75020" direct (inclut les codes postaux parisiens)
     match = re.match(r"^750(\d{2})$", text)
     if match:
         num = int(match.group(1))
         if 1 <= num <= 20:
             return text
-
-    # Format code postal "75001"-"75020"
-    match = re.match(r"^750(\d{2})$", text)
-    if match:
-        return text
 
     # Format numérique simple "1"-"20"
     match = re.match(r"^(\d{1,2})(?:e|er|ème)?$", text, re.IGNORECASE)
@@ -160,7 +156,11 @@ def _load_iris() -> list[dict]:
 
 
 def _point_in_polygon(lon: float, lat: float, polygon: list[list[float]]) -> bool:
-    """Ray-casting pour tester si un point est dans un polygone."""
+    """Ray-casting pour tester si un point est dans un polygone.
+
+    Fix : quand p1y == p2y (bord horizontal), xints n'est pas calculé et la
+    branche de toggle est ignorée → plus de référence à une variable non définie.
+    """
     inside = False
     n = len(polygon)
     if n < 3:
@@ -171,10 +171,10 @@ def _point_in_polygon(lon: float, lat: float, polygon: list[list[float]]) -> boo
         if lat > min(p1y, p2y):
             if lat <= max(p1y, p2y):
                 if lon <= max(p1x, p2x):
-                    if p1y != p2y:
+                    if p1y != p2y:  # segment non horizontal : calculer l'intersection
                         xints = (lat - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
-                    if p1x == p2x or lon <= xints:
-                        inside = not inside
+                        if p1x == p2x or lon <= xints:
+                            inside = not inside
         p1x, p1y = p2x, p2y
     return inside
 
@@ -219,8 +219,9 @@ def resolve_iris(lat: float, lon: float) -> dict[str, str | None]:
     return {"code_iris": None, "nom_iris": None, "insee_com": None}
 
 
-def reverse_geocode_api(lat: float, lon: float) -> dict[str, str | None]:
-    """Fallback : appel à l'API adresse.data.gouv.fr/reverse."""
+@lru_cache(maxsize=1024)
+def _reverse_geocode_cached(lat: float, lon: float) -> dict[str, str | None]:
+    """Version interne mise en cache – prend des coordonnées pré-arrondies."""
     try:
         resp = requests.get(
             "https://api-adresse.data.gouv.fr/reverse/",
@@ -241,6 +242,15 @@ def reverse_geocode_api(lat: float, lon: float) -> dict[str, str | None]:
     except Exception:
         pass
     return {"arrondissement_code": None, "street": None, "city": None}
+
+
+def reverse_geocode_api(lat: float, lon: float) -> dict[str, str | None]:
+    """Fallback : appel à l'API adresse.data.gouv.fr/reverse (résultat mis en cache).
+
+    Les coordonnées sont arrondies à ~5 décimales (~1 m de précision) pour
+    maximiser les hits de cache lors d'appels successifs sur le même point.
+    """
+    return _reverse_geocode_cached(round(lat, 5), round(lon, 5))
 
 
 # ── Construction Silver ──────────────────────────────────────────────────

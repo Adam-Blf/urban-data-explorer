@@ -9,14 +9,13 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-import re
 from collections import Counter
 from datetime import UTC, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
 
 from etl.catalog import ALL_SOURCES, FAMILIES
-from etl.processing import resolve_iris
+from etl.processing import _normalize_code, resolve_iris
 
 @lru_cache(maxsize=10000)
 def cached_resolve_iris(lat: float, lon: float) -> str | None:
@@ -93,47 +92,6 @@ def _digest(seed: str) -> float:
     return hashlib.sha1(seed.encode()).digest()[0] / 255.0
 
 
-def _normalize_code(raw: any) -> str | None:
-    """Normalise un code arrondissement vers le format 75001-75020."""
-    if raw is None:
-        return None
-    text = str(raw).strip()
-    if not text:
-        return None
-
-    # Format "75101" -> "75001"
-    match = re.match(r"^751(\d{2})$", text)
-    if match:
-        num = int(match.group(1))
-        if 1 <= num <= 20:
-            return f"750{num:02d}"
-
-    # Format "75001"-"75020" direct
-    match = re.match(r"^750(\d{2})$", text)
-    if match:
-        num = int(match.group(1))
-        if 1 <= num <= 20:
-            return text
-
-    # Format code postal "75001"-"75020"
-    match = re.match(r"^750(\d{2})$", text)
-    if match:
-        return text
-
-    # Format numérique simple "1"-"20"
-    match = re.match(r"^(\d{1,2})(?:e|er|ème)?$", text, re.IGNORECASE)
-    if match:
-        num = int(match.group(1))
-        if 1 <= num <= 20:
-            return f"750{num:02d}"
-
-    # Code INSEE commune "75056" -> non résolu ici (ville entière)
-    if text == "75056":
-        return None
-
-    return None
-
-
 @lru_cache(maxsize=1)
 def source_catalog():
     return [
@@ -156,6 +114,12 @@ def source_family_counts():
 
 
 def _enrich_district_row(code: str, raw_row: dict) -> dict:
+    """Enrichit un arrondissement avec les indices calculés.
+
+    Utilise les valeurs réelles issues du parquet Gold ou de la DB (prix_m2,
+    revenu_median, data_source…) si elles sont présentes dans raw_row et
+    positives ; retombe sur les constantes de référence uniquement si absent/nul.
+    """
     gs = int(raw_row.get("green_space_count", 0))
     mob = int(raw_row.get("mobility_count", 0))
     ps = int(raw_row.get("public_service_count", 0))
@@ -164,28 +128,40 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     hea = int(raw_row.get("health_count", 0))
     hou = int(raw_row.get("housing_count", 0))
     pre = int(raw_row.get("pressure_count", 0))
-    
+
     acc = raw_row.get("accessibility_index", 50)
     press = raw_row.get("pressure_index", 50)
     attr = raw_row.get("attractiveness_index", 50)
-    
-    # New indicators
-    prix_m2 = PRIX_M2_BASES.get(code, 10000.0)
-    sales_volume = SALES_VOLUME_BASES.get(code, 300)
-    revenu_median = REVENU_MEDIAN_BASES.get(code, 30000.0)
-    logements_sociaux_count = LOGEMENT_SOCIAL_COUNT_BASES.get(code, 5000)
-    logement_social_pct = LOGEMENT_SOCIAL_PCT_BASES.get(code, 15.0)
-    
-    # Calculate indexes
+
+    # Utilise les valeurs réelles si présentes et positives, sinon constantes de référence
+    def _pos(key: str, default: float) -> float:
+        try:
+            v = float(raw_row.get(key) or 0)
+            return v if v > 0 else default
+        except (TypeError, ValueError):
+            return default
+
+    prix_m2 = _pos("prix_m2", PRIX_M2_BASES.get(code, 10000.0))
+    sales_volume = int(_pos("sales_volume", SALES_VOLUME_BASES.get(code, 300)))
+    revenu_median = _pos("revenu_median", REVENU_MEDIAN_BASES.get(code, 30000.0))
+    logements_sociaux_count = int(_pos("logements_sociaux_count", LOGEMENT_SOCIAL_COUNT_BASES.get(code, 5000)))
+    logement_social_pct = _pos("logement_social_pct", LOGEMENT_SOCIAL_PCT_BASES.get(code, 15.0))
+    data_source = raw_row.get("data_source") or "reference"
+
+    # Calcul des indices
     immobilier_idx = round(clamp((prix_m2 - 8000) / (16000 - 8000) * 100, 10, 95))
     logement_social_idx = round(clamp(logement_social_pct * 2.5, 5, 95))
     revenu_idx = round(clamp((revenu_median - 20000) / (48000 - 20000) * 100, 10, 95))
     cadre_vie_idx = round(clamp(acc, 0, 100))
     environnement_idx = round(clamp(gs * 7.5, 20, 95))
-    
-    # Overall score is the mean of the 5 indices
+
+    # Accessibilité au logement : m² achetables avec un an de revenu médian
+    m2_abordables = round(revenu_median / prix_m2, 2) if prix_m2 else 0.0
+    accessibilite_idx = round(clamp(m2_abordables / 4.0 * 100, 0, 100))
+
+    # Score global = moyenne des 5 indices
     score = round((immobilier_idx + logement_social_idx + revenu_idx + cadre_vie_idx + environnement_idx) / 5)
-    
+
     return {
         "code": code,
         "name": raw_row["name"],
@@ -216,6 +192,9 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
         "logement_social_pct": logement_social_pct,
         "revenu_median": revenu_median,
         "sales_volume": sales_volume,
+        "m2_abordables": m2_abordables,
+        "accessibilite_idx": accessibilite_idx,
+        "data_source": data_source,
     }
 
 
@@ -225,7 +204,7 @@ def district_rows():
     try:
         from .db import pg_fetch_all
         sql = """
-            SELECT 
+            SELECT
                 arrondissement_code,
                 green_space_count,
                 mobility_count,
@@ -237,7 +216,13 @@ def district_rows():
                 pressure_count,
                 accessibility_index,
                 pressure_index,
-                attractiveness_index
+                attractiveness_index,
+                prix_m2,
+                revenu_median,
+                sales_volume,
+                logements_sociaux_count,
+                logement_social_pct,
+                COALESCE(data_source, 'reference') AS data_source
             FROM fact_arrondissement_dashboard
         """
         db_rows = pg_fetch_all(sql)
@@ -273,9 +258,16 @@ def district_rows():
                     "accessibility_index": row["accessibility_index"],
                     "pressure_index": row["pressure_index"],
                     "attractiveness_index": row["attractiveness_index"],
+                    # Valeurs réelles DVF/INSEE si disponibles dans la DB
+                    "prix_m2": row.get("prix_m2"),
+                    "revenu_median": row.get("revenu_median"),
+                    "sales_volume": row.get("sales_volume"),
+                    "logements_sociaux_count": row.get("logements_sociaux_count"),
+                    "logement_social_pct": row.get("logement_social_pct"),
+                    "data_source": row.get("data_source"),
                 }
                 rows.append(_enrich_district_row(code, raw_row))
-            
+
             if rows:
                 rows.sort(key=lambda r: r["code"])
                 return rows
@@ -294,15 +286,15 @@ def district_rows():
                 district = next((d for d in DISTRICTS if d["code"] == code), None)
                 if not district:
                     continue
-                
+
                 try:
                     i = [d["code"] for d in DISTRICTS].index(code)
                 except ValueError:
                     i = 0
-                
+
                 x = 300 + i * 25
                 y = 200 + int(math.sin(i) * 100)
-                
+
                 raw_row = {
                     "name": district["name"],
                     "label": district["label"],
@@ -319,6 +311,13 @@ def district_rows():
                     "accessibility_index": row["accessibility_index"],
                     "pressure_index": row["pressure_index"],
                     "attractiveness_index": row["attractiveness_index"],
+                    # Valeurs réelles DVF/INSEE si présentes dans le parquet Gold
+                    "prix_m2": row.get("prix_m2"),
+                    "revenu_median": row.get("revenu_median"),
+                    "sales_volume": row.get("sales_volume"),
+                    "logements_sociaux_count": row.get("logements_sociaux_count"),
+                    "logement_social_pct": row.get("logement_social_pct"),
+                    "data_source": row.get("data_source"),
                 }
                 rows.append(_enrich_district_row(code, raw_row))
             
