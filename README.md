@@ -12,8 +12,7 @@
 <div align="center">
 
 [![RNCP40875 - Bloc 1](https://img.shields.io/badge/RNCP40875-Bloc_1-brightgreen?style=for-the-badge)](https://www.francecompetences.fr/recherche/rncp/40875/)
-[![Version](https://img.shields.io/badge/version-1.1.0-000091?style=for-the-badge)](#)
-[![Evaluation Grid](https://img.shields.io/badge/Bloc_1_RNCP-Conforme_20%2F20-success?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-1.2.0-000091?style=for-the-badge)](#)
 
 </div>
 
@@ -106,7 +105,7 @@ Le projet dispose d'une infrastructure complète conteneurisée :
    ```bash
    docker-compose up -d postgres cassandra
    ```
-2. *(Optionnel)* Démarrez la stack streaming et big data (Kafka, Zookeeper, Spark, Hadoop/HDFS, Hive) :
+2. *(Optionnel)* Démarrez la stack streaming et big data (Kafka, Zookeeper, Hadoop/HDFS, Hive) :
    ```bash
    docker-compose --profile streaming --profile lake up -d
    ```
@@ -184,8 +183,8 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 
 | Compétence | Description de la compétence évaluée | Preuve de mise en œuvre dans le projet | Statut |
 | :--- | :--- | :--- | :---: |
-| **C1.1** | Concevoir et structurer une base de données relationnelle | Modèle relationnel en étoile mis en place dans [postgres/init.sql](file:///c:/Users/adamb/Documents/urban-data-explorer/postgres/init.sql). Script de test de charge : [scripts/test_load_postgres.py](file:///c:/Users/adamb/Documents/urban-data-explorer/scripts/test_load_postgres.py). | **Conforme** |
-| **C1.2** | Concevoir et structurer une base de données non-relationnelle (NoSQL) | Modélisation orientée requêtes dans Cassandra pour stocker les snapshots d'événements de streaming ([cassandra/schema.cql](file:///c:/Users/adamb/Documents/urban-data-explorer/cassandra/schema.cql)). | **Conforme** |
+| **C1.1** | Concevoir et structurer une base de données relationnelle | Modèle relationnel en étoile mis en place dans [postgres/init.sql](postgres/init.sql). Script de test de charge : [scripts/test_load_postgres.py](scripts/test_load_postgres.py). | **Conforme** |
+| **C1.2** | Concevoir et structurer une base de données non-relationnelle (NoSQL) | Modélisation orientée requêtes dans Cassandra pour stocker les snapshots d'événements de streaming ([cassandra/schema.cql](cassandra/schema.cql)). | **Conforme** |
 | **C1.3** | Configurer et requêter un cluster de stockage (Data Lake) | Architecture de stockage Bronze → Silver → Gold organisée par répertoires et fichiers Parquet optimisés. | **Conforme** |
 | **C1.4** | Architecturer des infrastructures scalables et résilientes | Docker Compose : `restart: unless-stopped`, **healthchecks** (postgres, cassandra, api), démarrage ordonné (`depends_on: service_healthy`), **volumes persistants**, profils `streaming`/`lake`. Mode local-first hors ligne. [ADR](docs/ADR/0001-architecture-data.md). | **Conforme** |
 | **C2.1** | Développer une API Rest pour exposer les données | API FastAPI (`api/main.py`) documentée via Swagger (`/docs`). **Authentification JWT** (OAuth2, rôles viewer/admin) et **quotas par IP** (anonyme 120 / authentifié 600 req·min) dans [`api/security.py`](api/security.py). | **Conforme** |
