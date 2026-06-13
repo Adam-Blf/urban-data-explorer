@@ -127,7 +127,7 @@ def seed_postgres() -> bool:
     doesn't exist yet (e.g. running without Docker).
     """
     try:
-        from .db import pg_execute, pg_fetch_all  # type: ignore
+        from .db import pg_execute  # type: ignore
         for code, vec in _DISTRICT_VECTORS.items():
             desc = DISTRICT_DESCRIPTIONS[code]
             literal = _pg_vector_literal(vec)
