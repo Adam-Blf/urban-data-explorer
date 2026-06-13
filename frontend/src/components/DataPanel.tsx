@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Activity, X, Play, Pause } from 'lucide-react';
-import { District, Overview, TimelinePoint, EventLog } from '../types';
+import { TrendingUp, Activity, X, Play, Pause, ShieldCheck } from 'lucide-react';
+import { District, Overview, TimelinePoint, EventLog, QualityEntry } from '../types';
+import { api } from '../services/api';
 
 interface DataPanelProps {
   selectedDistrict: string | null;
@@ -78,6 +79,12 @@ export const DataPanel = React.memo<DataPanelProps>(function DataPanel({
   const [isPlaying, setIsPlaying] = useState(false);
   const [playIndex, setPlayIndex] = useState<number | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  /* Data quality state */
+  const [quality, setQuality] = useState<QualityEntry[]>([]);
+  useEffect(() => {
+    api.fetchQuality().then(setQuality).catch(() => setQuality([]));
+  }, []);
   const prefersReducedMotion = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
@@ -444,6 +451,48 @@ export const DataPanel = React.memo<DataPanelProps>(function DataPanel({
           <span>{timeline[timeline.length - 1]?.label || 'Fin'}</span>
         </div>
       </div>
+
+      {/* Qualité des données Gold */}
+      {quality.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ShieldCheck size={14} style={{ color: 'var(--blue-france)' }} />
+            Qualité · couche Gold
+          </h3>
+          <div className="dsfr-card--alt" style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {quality.map((q) => (
+              <div key={q.dataset} style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px' }}>
+                  <span style={{ color: 'var(--text-title)', fontWeight: 600 }}>{q.dataset.replace('.parquet', '')}</span>
+                  {q.freshness_days != null && (
+                    <span style={{ color: 'var(--text-mention)' }}>{q.freshness_days}j</span>
+                  )}
+                </div>
+                {q.completeness_pct != null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ flex: 1, height: '4px', background: 'var(--bg-contrast)', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${q.completeness_pct}%`,
+                        background: q.completeness_pct >= 95 ? 'var(--success)' : q.completeness_pct >= 80 ? 'var(--warning)' : 'var(--error)',
+                        transition: 'width 0.4s ease',
+                      }} />
+                    </div>
+                    <span className="tabular" style={{ fontSize: '10px', color: 'var(--text-mention)', minWidth: '34px', textAlign: 'right' }}>
+                      {q.completeness_pct}%
+                    </span>
+                  </div>
+                )}
+                {q.out_of_range_count != null && q.out_of_range_count > 0 && (
+                  <span style={{ fontSize: '10px', color: 'var(--warning)' }}>
+                    {q.out_of_range_count} valeur{q.out_of_range_count > 1 ? 's' : ''} hors plage
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Flux d'événements */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
