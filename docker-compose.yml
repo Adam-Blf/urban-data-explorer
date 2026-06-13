@@ -1,7 +1,7 @@
 services:
   # ── Core ────────────────────────────────────────────────────────────────
   postgres:
-    image: postgres:16
+    image: pgvector/pgvector:pg16       # postgres:16 + pgvector extension
     restart: unless-stopped
     environment:
       - POSTGRES_DB=ude

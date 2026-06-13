@@ -37,6 +37,14 @@ def pg_fetch_all(sql: str, params: tuple[object, ...] | None = None):
             return [dict(row) for row in cursor.fetchall()]
 
 
+def pg_execute(sql: str, params: tuple[object, ...] | None = None) -> None:
+    """Execute a write query (INSERT / UPDATE / DDL) and commit."""
+    with pg_conn() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, params)
+        conn.commit()
+
+
 def cassandra_session():
     """Open a Cassandra session configured from the environment."""
     from cassandra.cluster import Cluster
