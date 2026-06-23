@@ -42,6 +42,15 @@ class SourceSpec:
     arrondissement_candidates: tuple[str, ...] = ()
     address_candidates: tuple[str, ...] = ()
 
+    @property
+    def is_overpass(self) -> bool:
+        return self.download_url.startswith("OVERPASS:")
+
+    @property
+    def polars_encoding(self) -> str:
+        # Polars uses "utf8" not "utf-8-sig"; both handle BOM transparently
+        return "utf8"
+
 
 # ---------------------------------------------------------------------------
 # Catalogue complet — 44 sources réparties en 4 familles thématiques
