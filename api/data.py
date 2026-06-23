@@ -124,7 +124,6 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     mob = int(raw_row.get("mobilite_count", 0))
     vq = int(raw_row.get("vie_quotidienne_count", 0))
     lu = int(raw_row.get("logement_urbanisme_count", 0))
-    gs = env  # used for environnement_idx formula
 
     acc = raw_row.get("accessibility_index", 50)
     press = raw_row.get("pressure_index", 50)
@@ -150,7 +149,7 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     logement_social_idx = round(clamp(logement_social_pct * 2.5, 5, 95))
     revenu_idx = round(clamp((revenu_median - 20000) / (48000 - 20000) * 100, 10, 95))
     cadre_vie_idx = round(clamp(acc, 0, 100))
-    environnement_idx = round(clamp(gs * 7.5, 20, 95))
+    environnement_idx = round(clamp(env * 7.5, 20, 95))
 
     # Accessibilité au logement : m² achetables avec un an de revenu médian
     m2_abordables = round(revenu_median / prix_m2, 2) if prix_m2 else 0.0
@@ -199,14 +198,10 @@ def district_rows():
         sql = """
             SELECT
                 arrondissement_code,
-                green_space_count,
-                mobility_count,
-                public_service_count,
-                education_count,
-                culture_count,
-                health_count,
-                housing_count,
-                pressure_count,
+                environnement_count,
+                mobilite_count,
+                vie_quotidienne_count,
+                logement_urbanisme_count,
                 accessibility_index,
                 pressure_index,
                 attractiveness_index,
@@ -226,32 +221,24 @@ def district_rows():
                 district = next((d for d in DISTRICTS if d["code"] == code), None)
                 if not district:
                     continue
-                
+
                 try:
                     i = [d["code"] for d in DISTRICTS].index(code)
                 except ValueError:
                     i = 0
-                
-                x = 300 + i * 25
-                y = 200 + int(math.sin(i) * 100)
-                
+
                 raw_row = {
                     "name": district["name"],
                     "label": district["label"],
-                    "x": x,
-                    "y": y,
-                    "green_space_count": row["green_space_count"],
-                    "mobility_count": row["mobility_count"],
-                    "public_service_count": row["public_service_count"],
-                    "education_count": row["education_count"],
-                    "culture_count": row["culture_count"],
-                    "health_count": row["health_count"],
-                    "housing_count": row["housing_count"],
-                    "pressure_count": row["pressure_count"],
+                    "x": 300 + i * 25,
+                    "y": 200 + int(math.sin(i) * 100),
+                    "environnement_count": row["environnement_count"],
+                    "mobilite_count": row["mobilite_count"],
+                    "vie_quotidienne_count": row["vie_quotidienne_count"],
+                    "logement_urbanisme_count": row["logement_urbanisme_count"],
                     "accessibility_index": row["accessibility_index"],
                     "pressure_index": row["pressure_index"],
                     "attractiveness_index": row["attractiveness_index"],
-                    # Valeurs réelles DVF/INSEE si disponibles dans la DB
                     "prix_m2": row.get("prix_m2"),
                     "revenu_median": row.get("revenu_median"),
                     "sales_volume": row.get("sales_volume"),
@@ -291,20 +278,15 @@ def district_rows():
                 raw_row = {
                     "name": district["name"],
                     "label": district["label"],
-                    "x": x,
-                    "y": y,
-                    "green_space_count": row["green_space_count"],
-                    "mobility_count": row["mobility_count"],
-                    "public_service_count": row["public_service_count"],
-                    "education_count": row["education_count"],
-                    "culture_count": row["culture_count"],
-                    "health_count": row["health_count"],
-                    "housing_count": row["housing_count"],
-                    "pressure_count": row["pressure_count"],
+                    "x": 300 + i * 25,
+                    "y": 200 + int(math.sin(i) * 100),
+                    "environnement_count": row.get("environnement_count", 0),
+                    "mobilite_count": row.get("mobilite_count", 0),
+                    "vie_quotidienne_count": row.get("vie_quotidienne_count", 0),
+                    "logement_urbanisme_count": row.get("logement_urbanisme_count", 0),
                     "accessibility_index": row["accessibility_index"],
                     "pressure_index": row["pressure_index"],
                     "attractiveness_index": row["attractiveness_index"],
-                    # Valeurs réelles DVF/INSEE si présentes dans le parquet Gold
                     "prix_m2": row.get("prix_m2"),
                     "revenu_median": row.get("revenu_median"),
                     "sales_volume": row.get("sales_volume"),
@@ -333,46 +315,32 @@ def district_rows():
             fb = _digest(f"{district['code']}:{family}")
             density = fam_counts.get(family, 0)
             base = 2 + round(fb * 4) + density // 3
-            if family == "green_space":
+            if family == "environnement":
                 base = 2 + round((1 - c) * 5) + round(fb * 2) + density // 4
-            elif family == "mobility":
+            elif family == "mobilite":
                 base = 3 + round((0.6 + bias) * 4) + density // 3
-            elif family == "education":
+            elif family == "vie_quotidienne":
                 base = 2 + round((0.35 + c) * 5) + density // 4
             counts[family] = max(0, base)
 
-        accessibility = clamp(
-            34 + counts["green_space"] * 2.5 + counts["mobility"] * 4
-            + counts["public_service"] * 5.5 + counts["education"] * 2
-            + counts["culture"] * 1.5 + counts["health"] * 1.5
-            - counts["pressure"] * 2.6,
-            12, 96,
-        )
-        pressure = clamp(
-            10 + counts["pressure"] * 5.8 + counts["mobility"] * 0.6
-            - counts["green_space"] * 0.9 + c * 4,
-            4, 98,
-        )
-        attractiveness = clamp(
-            accessibility * 0.55 + counts["green_space"] * 1.4
-            + counts["culture"] * 1.0 + counts["housing"] * 0.6
-            - pressure * 0.28,
-            8, 98,
-        )
-        
+        env = counts["environnement"]
+        mob = counts["mobilite"]
+        vq = counts["vie_quotidienne"]
+        lu = counts["logement_urbanisme"]
+
+        accessibility = clamp(34 + env * 2.5 + mob * 0.8 + vq * 1.5 - lu * 0.3, 12, 96)
+        pressure = clamp(10 + lu * 1.5 + mob * 0.1 - env * 0.9, 4, 98)
+        attractiveness = clamp(accessibility * 0.55 + env * 1.4 + vq * 1.0 + lu * 0.6 - pressure * 0.28, 8, 98)
+
         raw_row = {
             "name": district["name"],
             "label": district["label"],
             "x": 300 + i * 25,
             "y": 200 + int(math.sin(i) * 100),
-            "green_space_count": counts["green_space"],
-            "mobility_count": counts["mobility"],
-            "public_service_count": counts["public_service"],
-            "education_count": counts["education"],
-            "culture_count": counts["culture"],
-            "health_count": counts["health"],
-            "housing_count": counts["housing"],
-            "pressure_count": counts["pressure"],
+            "environnement_count": env,
+            "mobilite_count": mob,
+            "vie_quotidienne_count": vq,
+            "logement_urbanisme_count": lu,
             "accessibility_index": accessibility,
             "pressure_index": pressure,
             "attractiveness_index": attractiveness,

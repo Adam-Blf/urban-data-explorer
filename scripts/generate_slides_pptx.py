@@ -175,8 +175,8 @@ def build():
     content_header(s, "Plan", "Sommaire de la soutenance")
     left = [
         ("1. ", "Contexte & besoin de gouvernance"),
-        ("2. ", "Architecture d'ensemble (médaillon)"),
-        ("3. ", "Sources Open Data & géocodage"),
+        ("2. ", "Architecture médaillon (Bronze/Silver/Gold)"),
+        ("3. ", "83 sources · 4 familles · OSM Overpass"),
         ("4. ", "C1.1 · Base relationnelle & tests de charge"),
         ("5. ", "C1.2 · Base NoSQL Cassandra"),
         ("6. ", "C1.3 / C1.4 · Data Lake, scalabilité, résilience"),
@@ -187,7 +187,7 @@ def build():
         ("9. ", "C2.3 / C2.4 · Transformation & optimisation"),
         ("10. ", "Indicateurs Gold & score de synthèse"),
         ("11. ", "Interface DSFR & accessibilité"),
-        ("12. ", "Conformité grille & conclusion"),
+        ("12. ", "Conformité grille RNCP & conclusion"),
     ]
     bullets(s, Inches(0.85), Inches(1.7), Inches(5.8), Inches(5), left, size=16, gap=14)
     bullets(s, Inches(6.9), Inches(1.7), Inches(5.8), Inches(5), right, size=16, gap=14)
@@ -207,10 +207,10 @@ def build():
     rect(s, Inches(8.4), Inches(1.7), Inches(0.1), Inches(4.6), BLUE)
     textbox(s, Inches(8.75), Inches(2.0), Inches(3.5), Inches(4), [
         [("CHIFFRES CLÉS", 12, True, MENTION)],
-        [("24", 34, True, BLUE)], [("sources de données intégrées", 12, False, GREY)],
-        [("8", 34, True, BLUE)], [("familles thématiques", 12, False, GREY)],
+        [("83", 34, True, BLUE)], [("sources de données intégrées", 12, False, GREY)],
+        [("4", 34, True, BLUE)], [("familles thématiques", 12, False, GREY)],
         [("20", 34, True, BLUE)], [("arrondissements analysés", 12, False, GREY)],
-        [("5", 34, True, BLUE)], [("niveaux de granularité", 12, False, GREY)],
+        [("118", 34, True, BLUE)], [("tests pytest verts", 12, False, GREY)],
     ], space_after=2)
     footer(s, 3)
 
@@ -245,7 +245,7 @@ def build():
     s = new_slide(prs)
     content_header(s, "Données", "Sources Open Data & géocodage")
     bullets(s, Inches(0.85), Inches(1.7), Inches(7.0), Inches(5), [
-        ("24 sources, 8 familles : ", "mobilité, éducation, logement, culture, santé, espaces verts, services publics, pression urbaine."),
+        ("83 sources, 4 familles : ", "mobilité (17), vie quotidienne (42), environnement (12), logement & urbanisme (12). 30 sources OSM Overpass."),
         ("Sources réelles : ", "DVF 2023 (prix immobilier) et INSEE Filosofi 2020 (revenus) alimentent le cœur logement."),
         ("Géocodage offline : ", "point-in-polygon (ray-casting) sur les contours IRIS, sans appel réseau ; fallback API adresse.data.gouv.fr."),
         ("Qualité tracée : ", "drapeaux quality_flag (rattachement) et data_source (réel / référence)."),
@@ -254,14 +254,11 @@ def build():
     rect(s, Inches(8.4), Inches(1.7), Inches(0.1), Inches(4.6), RED)
     textbox(s, Inches(8.75), Inches(2.0), Inches(3.5), Inches(4.1), [
         [("RÉPARTITION PAR FAMILLE", 11, True, MENTION)],
-        [("Mobilité", 13, True, INK), ("   7", 13, False, GREY)],
-        [("Logement", 13, True, INK), ("   3", 13, False, GREY)],
-        [("Éducation", 13, True, INK), ("   3", 13, False, GREY)],
-        [("Espaces verts", 13, True, INK), ("   3", 13, False, GREY)],
-        [("Services publics", 13, True, INK), ("   3", 13, False, GREY)],
-        [("Culture", 13, True, INK), ("   2", 13, False, GREY)],
-        [("Santé", 13, True, INK), ("   2", 13, False, GREY)],
-        [("Pression urbaine", 13, True, INK), ("   1", 13, False, GREY)],
+        [("Mobilité", 13, True, INK), ("   17", 13, False, GREY)],
+        [("Vie quotidienne", 13, True, INK), ("   42", 13, False, GREY)],
+        [("Environnement", 13, True, INK), ("   12", 13, False, GREY)],
+        [("Logement & urbanisme", 13, True, INK), ("   12", 13, False, GREY)],
+        [("dont OSM Overpass", 13, False, MENTION), ("   30", 13, False, MENTION)],
     ], space_after=6)
     footer(s, 5)
 
