@@ -120,14 +120,11 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     revenu_median, data_source…) si elles sont présentes dans raw_row et
     positives ; retombe sur les constantes de référence uniquement si absent/nul.
     """
-    gs = int(raw_row.get("green_space_count", 0))
-    mob = int(raw_row.get("mobility_count", 0))
-    ps = int(raw_row.get("public_service_count", 0))
-    edu = int(raw_row.get("education_count", 0))
-    cul = int(raw_row.get("culture_count", 0))
-    hea = int(raw_row.get("health_count", 0))
-    hou = int(raw_row.get("housing_count", 0))
-    pre = int(raw_row.get("pressure_count", 0))
+    env = int(raw_row.get("environnement_count", 0))
+    mob = int(raw_row.get("mobilite_count", 0))
+    vq = int(raw_row.get("vie_quotidienne_count", 0))
+    lu = int(raw_row.get("logement_urbanisme_count", 0))
+    gs = env  # used for environnement_idx formula
 
     acc = raw_row.get("accessibility_index", 50)
     press = raw_row.get("pressure_index", 50)
@@ -169,14 +166,10 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
         "x": raw_row.get("x", 0),
         "y": raw_row.get("y", 0),
         "family_counts": {
-            "green_space": gs,
-            "mobility": mob,
-            "public_service": ps,
-            "education": edu,
-            "culture": cul,
-            "health": hea,
-            "housing": hou,
-            "pressure": pre,
+            "environnement": env,
+            "mobilite": mob,
+            "vie_quotidienne": vq,
+            "logement_urbanisme": lu,
         },
         "accessibility_index": round(acc),
         "pressure_index": round(press),

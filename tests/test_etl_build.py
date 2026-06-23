@@ -15,7 +15,7 @@ from etl.catalog import SOURCE_MAP
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
-def _silver_frame(n_per_arr: int = 3, family: str = "green_space") -> pl.DataFrame:
+def _silver_frame(n_per_arr: int = 3, family: str = "environnement") -> pl.DataFrame:
     """Crée un Silver DataFrame synthétique (sans accès réseau ni FS)."""
     rows = []
     for i in range(1, 21):
@@ -42,7 +42,7 @@ def test_family_counts_basic():
     counts = _family_counts(df)
     assert len(counts) == 20
     for code, fams in counts.items():
-        assert fams["green_space"] == 3
+        assert fams["environnement"] == 3
 
 
 def test_family_counts_empty_frame():
@@ -56,7 +56,7 @@ def test_family_counts_empty_frame():
 def test_family_counts_null_codes_excluded():
     df = pl.DataFrame({
         "source_id": ["s1", "s2"],
-        "family": ["green_space", "mobility"],
+        "family": ["environnement", "mobilite"],
         "arrondissement_code": [None, "75011"],
         "latitude": [48.85, 48.86],
         "longitude": [2.35, 2.36],
@@ -160,7 +160,7 @@ def test_silver_record_with_code():
     row = {"adresse_codepostal": "75011"}
     rec = build_silver_record(row, spec)
     assert rec["source_id"] == "espaces_verts"
-    assert rec["family"] == "green_space"
+    assert rec["family"] == "environnement"
     assert rec["arrondissement_code"] == "75011"
 
 
