@@ -32,7 +32,7 @@ interface ThemeColors {
 
 const THEME_COLORS: Record<Theme, ThemeColors> = {
   light: {
-    seq: [0, '#DBEAFE', 35, '#7EC8E3', 70, '#0C78B4', 100, '#163767'],
+    seq: [0, '#163767', 33, '#0C78B4', 66, '#8B35B5', 100, '#FF43B8'],
     fallback: 'rgba(22, 55, 103, 0.08)',
     sel: '#163767',
     comp: '#FF43B8',
@@ -40,9 +40,9 @@ const THEME_COLORS: Record<Theme, ThemeColors> = {
     buildings: '#0C78B4',
   },
   dark: {
-    seq: [0, '#102347', 35, '#1a4d8a', 70, '#0C78B4', 100, '#5DADE2'],
+    seq: [0, '#051832', 33, '#163767', 66, '#7B2FA0', 100, '#FF43B8'],
     fallback: 'rgba(12, 120, 180, 0.10)',
-    sel: '#5DADE2',
+    sel: '#FF43B8',
     comp: '#FF43B8',
     line: '#0C78B4',
     buildings: '#1a4d8a',
@@ -574,8 +574,8 @@ export const MapViewport: React.FC<MapViewportProps> = ({
   const currentStyle = LEVEL_STYLES[granularity] || LEVEL_STYLES[1];
   const legendInfo = getLegendDetails(activeFamily);
   const seqGradient = theme === 'dark'
-    ? 'linear-gradient(to right, #102347, #1a4d8a, #0C78B4, #5DADE2)'
-    : 'linear-gradient(to right, #DBEAFE, #7EC8E3, #0C78B4, #163767)';
+    ? 'linear-gradient(to right, #051832, #163767, #7B2FA0, #FF43B8)'
+    : 'linear-gradient(to right, #163767, #0C78B4, #8B35B5, #FF43B8)';
 
   return (
     <>
