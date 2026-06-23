@@ -12,7 +12,9 @@
 <div align="center">
 
 [![RNCP40875 - Bloc 1](https://img.shields.io/badge/RNCP40875-Bloc_1-brightgreen?style=for-the-badge)](https://www.francecompetences.fr/recherche/rncp/40875/)
-[![Version](https://img.shields.io/badge/version-1.2.0-000091?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-1.3.0-000091?style=for-the-badge)](#)
+[![Tests](https://img.shields.io/badge/tests-118%20passed-10B981?style=for-the-badge)](#)
+[![Sources](https://img.shields.io/badge/sources-83-000091?style=for-the-badge)](#)
 
 </div>
 
@@ -51,7 +53,7 @@ Stack médaillon locale-first ou distribuée, du CSV Open Data à la cartographi
 
 ```mermaid
 flowchart TD
-    OD["Open Data Paris · 24 sources<br/>CSV + GeoJSON · DVF + INSEE"]
+    OD["Open Data Paris + OSM · 83 sources<br/>CSV/TSV/GZ · DVF + INSEE + Overpass"]
     OD -->|"ETL batch · Polars"| BRONZE["Bronze<br/>Parquet brut"]
     BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
     SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
@@ -84,16 +86,20 @@ flowchart TD
 
 ---
 
-## 📦 Lancement Rapide (Sans Docker)
+## Lancement rapide (sans Docker)
 
-Pour exécuter le projet localement et hors-ligne instantanément :
+```bash
+# Backend
+pip install -r requirements.txt
+uvicorn api.main:app --reload --port 8000
 
-1. Ouvrez une console PowerShell à la racine du projet et lancez le script d'automatisation :
-   ```powershell
-   ./scripts/start_app.ps1
-   ```
-2. Le script installe les dépendances Python (`fastapi`, `uvicorn`, `polars`, etc.), installe les dépendances frontend, lance le backend sur le port `8000` et le frontend Vite sur le port `5173`.
-3. Votre navigateur s'ouvre automatiquement sur `http://localhost:5173`.
+# Frontend (autre terminal)
+cd frontend && npm install && npm run dev
+```
+
+Ouvrir `http://localhost:5173`. L'API est disponible sur `http://localhost:8000/docs`.
+
+> **Note:** les scripts `.ps1` et `.bat` ne sont pas utilisés (bloques par EDR en environnement hospitalier). Utiliser `python` directement.
 
 ---
 
@@ -116,9 +122,16 @@ Le projet dispose d'une infrastructure complète conteneurisée :
 
 ---
 
-## 🗂️ Sources de données (24 sources, 8 familles)
+## Sources de données (83 sources, 4 familles)
 
-Le catalogue ([`etl/catalog.py`](etl/catalog.py)) référence **24 sources**, réparties pour équilibrer les familles : mobilité (7), logement (3), éducation (3), espaces verts (3), services publics (3), culture (2), santé (2), pression urbaine (1).
+Le catalogue ([`etl/catalog.py`](etl/catalog.py)) référence **83 sources** dont **30 via OpenStreetMap Overpass**, réparties en 4 familles thématiques :
+
+| Famille | Sources | Exemples |
+|---|---|---|
+| Mobilite & Accessibilite | 17 | Velib, IDFM, cyclable, IRVE, bus/metro OSM |
+| Vie quotidienne | 42 | Education, sante, commerce, culture, lieux OSM |
+| Environnement & Cadre de vie | 12 | Espaces verts, arbres, ilots chaleur, bruit |
+| Logement & Urbanisme | 12 | DVF, DPE, logements sociaux, MH, Filosofi |
 
 **Sources externes réelles** (chargées par [`etl/external.py`](etl/external.py), remplaçant les valeurs de référence) :
 - **DVF · Demandes de Valeurs Foncières** (DGFiP / data.gouv.fr) : transactions immobilières 2023, département 75 → **prix au m² médian réel** et **volume de ventes** par arrondissement.

@@ -397,18 +397,14 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
     rows = []
 
     for code, fam_counts in counts.items():
-        gs = fam_counts.get("green_space", 0)
-        mob = fam_counts.get("mobility", 0)
-        ps = fam_counts.get("public_service", 0)
-        edu = fam_counts.get("education", 0)
-        cul = fam_counts.get("culture", 0)
-        hea = fam_counts.get("health", 0)
-        hou = fam_counts.get("housing", 0)
-        pre = fam_counts.get("pressure", 0)
+        env = fam_counts.get("environnement", 0)
+        mob = fam_counts.get("mobilite", 0)
+        vq = fam_counts.get("vie_quotidienne", 0)
+        lu = fam_counts.get("logement_urbanisme", 0)
 
-        accessibility = min(96, max(12, 34 + gs * 2.5 + mob * 0.8 + ps * 5.5 + edu * 2 + cul * 1.5 + hea * 1.5 - pre * 2.6))
-        pressure = min(98, max(4, 10 + pre * 5.8 + mob * 0.1 - gs * 0.9))
-        attractiveness = min(98, max(8, accessibility * 0.55 + gs * 1.4 + cul * 1.0 + hou * 0.6 - pressure * 0.28))
+        accessibility = min(96, max(12, 34 + env * 2.5 + mob * 0.8 + vq * 1.5 - lu * 0.3))
+        pressure = min(98, max(4, 10 + lu * 1.5 + mob * 0.1 - env * 0.9))
+        attractiveness = min(98, max(8, accessibility * 0.55 + env * 1.4 + vq * 1.0 + lu * 0.6 - pressure * 0.28))
 
         # New indicators · prix & revenus réels (DVF / Filosofi) si dispo, sinon référence
         dvf_row = dvf.get(code)
@@ -424,7 +420,7 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         logement_social_idx = round(min(95, max(5, logement_social_pct * 2.5)))
         revenu_idx = round(min(95, max(10, (revenu_median - 20000) / (48000 - 20000) * 100)))
         cadre_vie_idx = round(min(100, max(0, accessibility)))
-        environnement_idx = round(min(95, max(20, gs * 7.5)))
+        environnement_idx = round(min(95, max(20, env * 7.5)))
 
         # Accessibilite au logement (KPI demande par l'enonce) : on relie le prix
         # au revenu. m2_abordables = revenu annuel median / prix au m2 = combien de
@@ -438,14 +434,10 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
 
         rows.append({
             "arrondissement_code": code,
-            "green_space_count": gs,
-            "mobility_count": mob,
-            "public_service_count": ps,
-            "education_count": edu,
-            "culture_count": cul,
-            "health_count": hea,
-            "housing_count": hou,
-            "pressure_count": pre,
+            "environnement_count": env,
+            "mobilite_count": mob,
+            "vie_quotidienne_count": vq,
+            "logement_urbanisme_count": lu,
             "accessibility_index": round(accessibility),
             "pressure_index": round(pressure),
             "attractiveness_index": round(attractiveness),
