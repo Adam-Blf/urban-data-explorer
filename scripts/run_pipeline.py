@@ -16,39 +16,13 @@ sys.path.insert(0, str(ROOT))
 import polars as pl
 
 from etl.catalog import ALL_SOURCES
-from etl.processing import build_gold_dashboard, build_gold_timeline, build_silver_record
+from etl.io import load_source_as_silver
+from etl.processing import build_gold_dashboard, build_gold_timeline
 
 DATA_DIR = ROOT / "data" / "raw" / "downloads"
 BRONZE_DIR = ROOT / "data" / "bronze"
 SILVER_DIR = ROOT / "data" / "silver"
 GOLD_DIR = ROOT / "data" / "gold"
-
-
-def process_source(spec) -> pl.DataFrame:
-    for ext in (".csv", ".tsv", ".csv.gz"):
-        path = DATA_DIR / f"{spec.source_id}{ext}"
-        if path.exists():
-            break
-    else:
-        return pl.DataFrame()
-
-    sep = "\t" if path.suffix == ".tsv" else spec.separator
-    try:
-        df = pl.read_csv(
-            path,
-            separator=sep,
-            encoding=spec.encoding if spec.encoding != "utf-8-sig" else "utf8",
-            infer_schema_length=500,
-            ignore_errors=True,
-            truncate_ragged_lines=True,
-        )
-    except Exception as exc:
-        print(f"  [ERR] {spec.source_id}: {exc}")
-        return pl.DataFrame()
-
-    records = [build_silver_record(row, spec) for row in df.iter_rows(named=True)]
-    print(f"  [OK] {spec.source_id}: {len(records)} lignes")
-    return pl.DataFrame(records) if records else pl.DataFrame()
 
 
 def main() -> None:
@@ -59,8 +33,9 @@ def main() -> None:
     t0 = time.perf_counter()
     all_silver: list[pl.DataFrame] = []
     for spec in ALL_SOURCES:
-        df = process_source(spec)
+        df = load_source_as_silver(spec, DATA_DIR)
         if not df.is_empty():
+            print(f"  [OK] {spec.source_id}: {len(df)} lignes")
             all_silver.append(df)
 
     if not all_silver:
