@@ -1,12 +1,12 @@
-"""Genere le rapport de soutenance (.pdf) · Urban Data Explorer.
+"""Genere le rapport de soutenance (.pdf) - Urban Data Explorer.
 
-RNCP40875 · Bloc 1 · Expert en Ingenierie des Donnees.
+RNCP40875 - Bloc 1 - Expert en Ingenierie des Donnees.
 Binome : Adam Beloucif & Emilien Morice.
 
 Ton : rapport de SOUTENANCE (narratif, accessible), pas une doc technique.
 Charte DSFR : bleu France #000091, rouge Marianne #E1000F, fond blanc.
 Police de rendu : Helvetica (substitution systeme officielle de Marianne).
-Regle de redaction : aucun tiret long ; on emploie '·', ':', ',' et '-'.
+Regle de redaction : aucun tiret long ; on emploie '-', ':', ',' et '-'.
 
 Dependance : fpdf2 (deja dans requirements.txt).
 """
@@ -47,9 +47,9 @@ class Report(FPDF):
         self.set_xy(15, 8)
         self.set_font("Helvetica", "B", 9)
         self.set_text_color(*MENTION)
-        self.cell(0, 5, "Urban Data Explorer  ·  Rapport de soutenance M1", align="L")
+        self.cell(0, 5, "Urban Data Explorer  -  Rapport de soutenance M1", align="L")
         self.set_font("Helvetica", "", 9)
-        self.cell(0, 5, "RNCP40875 · Bloc 1", align="R", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 5, "RNCP40875 - Bloc 1", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*BORDER)
         self.set_line_width(0.3)
         self.line(15, 16, 195, 16)
@@ -219,7 +219,7 @@ def main():
     pdf.cell(0, 6, "REPUBLIQUE FRANCAISE", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MENTION)
-    pdf.cell(0, 5, "Donnees ouvertes · Ville de Paris · OpenStreetMap · data.gouv.fr", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, "Donnees ouvertes - Ville de Paris - OpenStreetMap - data.gouv.fr", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_xy(15, 90)
     pdf.set_font("Helvetica", "B", 34)
@@ -239,14 +239,14 @@ def main():
     pdf.ln(3)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(*MENTION)
-    pdf.cell(0, 6, "RNCP40875 · Bloc 1 · Expert en Ingenierie des Donnees", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 6, "Certificateur : Efrei · Paris Pantheon-Assas Universite", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "RNCP40875 - Bloc 1 - Expert en Ingenierie des Donnees", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "Certificateur : Efrei - Paris Pantheon-Assas Universite", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, f"Binome : {AUTHORS}", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, "Annee 2025-2026", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 9)
     pdf.set_text_color(*MENTION)
-    pdf.cell(0, 5, "CONFIDENTIEL PEDA · ne pas diffuser hors jury", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, "CONFIDENTIEL PEDA - ne pas diffuser hors jury", new_x="LMARGIN", new_y="NEXT")
     pdf.set_fill_color(*BLUE)
     pdf.rect(0, 282, 150, 15, "F")
     pdf.set_fill_color(*EFREI_AZURE)
@@ -265,12 +265,12 @@ def main():
         ("6", "Couverture OpenStreetMap : Overpass API"),
         ("7", "Pipeline ETL : de la source brute au datamart"),
         ("8", "Auto-ingestion hebdomadaire (Task Scheduler)"),
-        ("9", "C1.1 · Base relationnelle PostgreSQL"),
-        ("10", "C1.2 · Base NoSQL Cassandra"),
-        ("11", "C1.3 / C1.4 · Data Lake Parquet et scalabilite"),
-        ("12", "C2.1 · API REST FastAPI"),
-        ("13", "C2.2 · Streaming Kafka temps reel"),
-        ("14", "C2.3 / C2.4 · Transformation et optimisation"),
+        ("9", "C1.1 - Base relationnelle PostgreSQL"),
+        ("10", "C1.2 - Base NoSQL Cassandra"),
+        ("11", "C1.3 / C1.4 - Data Lake Parquet et scalabilite"),
+        ("12", "C2.1 - API REST FastAPI"),
+        ("13", "C2.2 - Streaming Kafka temps reel"),
+        ("14", "C2.3 / C2.4 - Transformation et optimisation"),
         ("15", "Indicateurs Gold et score de synthese"),
         ("16", "Qualite et tracabilite"),
         ("17", "Interface DSFR et accessibilite"),
@@ -303,7 +303,7 @@ def main():
         "Il couvre l'ensemble des competences C1.1 a C2.4 du Bloc 1 RNCP40875."
     )
     pdf.body(
-        "Les donnees immobilieres (DVF 2023 · data.gouv.fr) et de revenus (INSEE Filosofi 2020) alimentent "
+        "Les donnees immobilieres (DVF 2023 - data.gouv.fr) et de revenus (INSEE Filosofi 2020) alimentent "
         "les indicateurs Gold avec des valeurs reelles. L'auto-ingestion hebdomadaire (Windows Task Scheduler, "
         "XML natif, sans .bat ni .ps1) garantit la fraicheur du catalogue chaque dimanche."
     )
@@ -368,13 +368,13 @@ def main():
         "organise les donnees en trois couches successives. Chaque couche correspond a un niveau de maturite "
         "de la donnee."
     )
-    pdf.h2("Bronze · la donnee brute")
+    pdf.h2("Bronze - la donnee brute")
     pdf.body(
         "Les fichiers sont telecharges tels quels depuis les sources officielles et stockes dans "
         "data/raw/downloads/. Un fichier Bronze est une photographie exacte de la source a un instant t. "
         "Il n'est jamais modifie apres ingestion. Format : CSV, TSV (Overpass), ou CSV.GZ (gros jeux data.gouv.fr)."
     )
-    pdf.h2("Silver · la donnee normalisee")
+    pdf.h2("Silver - la donnee normalisee")
     pdf.body(
         "Le pipeline ETL (Polars) transforme chaque fichier Bronze en un enregistrement normalise "
         "appelable un 'record Silver'. Chaque record contient : source_id, family, arrondissement_code "
@@ -382,7 +382,7 @@ def main():
         "Le geocodage est realise hors ligne par point-in-polygon sur les contours IRIS (GeoJSON officiel IGN), "
         "sans aucun appel reseau externe lors du traitement."
     )
-    pdf.h2("Gold · le datamart")
+    pdf.h2("Gold - le datamart")
     pdf.body(
         "A partir du Silver, on construit deux datamarts : le dashboard (une ligne par arrondissement, "
         "avec tous les indices calcules) et la timeline (20 arrondissements x 12 mois = 240 lignes). "
@@ -435,8 +435,8 @@ def main():
         "(colonnes latitude/longitude, geo_point, arrondissement, adresse)."
     )
     pdf.quote(
-        "83 sources · 4 familles · 3 fournisseurs principaux (opendata.paris.fr, data.gouv.fr, "
-        "OpenStreetMap Overpass) · 30 sources OSM (Overpass API)"
+        "83 sources - 4 familles - 3 fournisseurs principaux (opendata.paris.fr, data.gouv.fr, "
+        "OpenStreetMap Overpass) - 30 sources OSM (Overpass API)"
     )
 
     pdf.family_card("mobilite", "Mobilite & Accessibilite", 17, [
@@ -534,7 +534,7 @@ def main():
     # ── 7. Pipeline ETL ─────────────────────────────────────────────────────
     pdf.add_page()
     pdf.h1(7, "Pipeline ETL : de la source brute au datamart")
-    pdf.h2("Etape 1 · Ingestion Bronze")
+    pdf.h2("Etape 1 - Ingestion Bronze")
     pdf.body(
         "Le script auto_ingest.py parcourt le catalogue ALL_SOURCES et telecharge chaque source. "
         "Deux modes : HTTP GET (avec retry exponentiel, 3 tentatives) pour les API Opendatasoft et "
@@ -542,7 +542,7 @@ def main():
         "source evite de surcharger les API publiques. Chaque fichier est nomme {source_id}.csv "
         "ou {source_id}.tsv dans data/raw/downloads/."
     )
-    pdf.h2("Etape 2 · Transformation Silver")
+    pdf.h2("Etape 2 - Transformation Silver")
     pdf.body(
         "La fonction build_silver_record(row, spec) transforme chaque ligne CSV en un record Silver. "
         "Elle applique dans l'ordre : (1) extraction des coordonnees GPS (colonnes latitude/longitude "
@@ -553,7 +553,7 @@ def main():
     pdf.bullet("quality_flag = 'gps_iris' : ", "rattachement par point-in-polygon sur les contours IRIS.")
     pdf.bullet("quality_flag = 'code_only' : ", "code arrondissement fourni directement par la source, sans GPS.")
     pdf.bullet("quality_flag = 'unresolved' : ", "ni GPS ni code arrondissement exploitable.")
-    pdf.h2("Etape 3 · Agregation Gold")
+    pdf.h2("Etape 3 - Agregation Gold")
     pdf.body(
         "La fonction build_gold_dashboard(silver_df) agregee les records Silver par arrondissement et "
         "par famille. Elle calcule les 4 comptes de famille (environnement_count, mobilite_count, "
@@ -612,7 +612,7 @@ def main():
 
     # ── 9. C1.1 PostgreSQL ──────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(9, "C1.1 · Base relationnelle PostgreSQL")
+    pdf.h1(9, "C1.1 - Base relationnelle PostgreSQL")
     pdf.body(
         "PostgreSQL 15 est le moteur relationnel du projet. Il stocke les datamarts Gold sous la forme "
         "d'un schema en etoile concu pour l'analyse par arrondissement. Ce choix correspond a la "
@@ -649,7 +649,7 @@ def main():
 
     # ── 10. C1.2 Cassandra ──────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(10, "C1.2 · Base NoSQL Cassandra")
+    pdf.h1(10, "C1.2 - Base NoSQL Cassandra")
     pdf.body(
         "Apache Cassandra est utilise pour stocker les evenements du flux temps reel : "
         "disponibilite des stations Velib' et evenements de chantiers. Le choix de Cassandra "
@@ -662,7 +662,7 @@ def main():
         "etc.) et triee par event_time DESC dans le clustering. Cette conception garantit que la "
         "requete 'donner les N evenements recents d'un type donne' est O(N) sans scan complet."
     )
-    pdf.quote("PRIMARY KEY (event_type, event_time DESC, event_id) · TTL 604 800 s (7 jours) · RF=1 SimpleStrategy")
+    pdf.quote("PRIMARY KEY (event_type, event_time DESC, event_id) - TTL 604 800 s (7 jours) - RF=1 SimpleStrategy")
     pdf.h2("Complementarite SQL/NoSQL")
     pdf.body(
         "PostgreSQL et Cassandra coexistent et se complementent. PostgreSQL sert l'analytique structuree "
@@ -673,8 +673,8 @@ def main():
 
     # ── 11. C1.3 / C1.4 ────────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(11, "C1.3 / C1.4 · Data Lake Parquet et scalabilite")
-    pdf.h2("C1.3 · Data Lake")
+    pdf.h1(11, "C1.3 / C1.4 - Data Lake Parquet et scalabilite")
+    pdf.h2("C1.3 - Data Lake")
     pdf.body(
         "Les donnees sont stockees en Parquet, un format colonnaire compresse (codec Snappy) "
         "particulierement adapte aux requetes analytiques. Chaque couche (Bronze, Silver, Gold) "
@@ -687,7 +687,7 @@ def main():
         "est prise en charge par le catalogue via les attributs separator et encoding de SourceSpec. "
         "Polars adapte automatiquement la lecture au format declare."
     )
-    pdf.h2("C1.4 · Scalabilite et resilience")
+    pdf.h2("C1.4 - Scalabilite et resilience")
     pdf.bullet("Docker Compose : ", "11 services (api, postgres, cassandra, kafka, zookeeper, hadoop, hive, spark, frontend, nginx, prometheus), profils activables (streaming, lake).")
     pdf.bullet("Healthchecks : ", "sondes de sante sur postgres, cassandra et l'API ; l'api attend que les bases soient prets avant de demarrer.")
     pdf.bullet("Volumes persistants : ", "les donnees postgres et cassandra survivent aux redemarrages de conteneurs.")
@@ -696,7 +696,7 @@ def main():
 
     # ── 12. C2.1 API ────────────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(12, "C2.1 · API REST FastAPI")
+    pdf.h1(12, "C2.1 - API REST FastAPI")
     pdf.body(
         "L'API est implementee avec FastAPI (ASGI, Pydantic v2) et se documente automatiquement "
         "via Swagger a l'adresse /docs et ReDoc a /redoc. Elle est le point d'acces unique entre "
@@ -725,7 +725,7 @@ def main():
 
     # ── 13. C2.2 Streaming ──────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(13, "C2.2 · Streaming Kafka temps reel")
+    pdf.h1(13, "C2.2 - Streaming Kafka temps reel")
     pdf.body(
         "Apache Kafka est le bus de messages du projet. Il decouple les producteurs de donnees "
         "en temps reel (Velib disponibilite, chantiers perturbants) des consommateurs "
@@ -752,8 +752,8 @@ def main():
 
     # ── 14. C2.3 / C2.4 ────────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(14, "C2.3 / C2.4 · Transformation et optimisation")
-    pdf.h2("C2.3 · Integration et transformation")
+    pdf.h1(14, "C2.3 / C2.4 - Transformation et optimisation")
+    pdf.h2("C2.3 - Integration et transformation")
     pdf.body(
         "Polars est le moteur de transformation. Il lit les fichiers CSV/TSV en streaming "
         "(scan_csv/scan_ipc), applique les transformations paresseuses (lazy frame), et "
@@ -763,7 +763,7 @@ def main():
     pdf.bullet("Parsing geo_point : ", "chaine '48.85, 2.35' -> (lat=48.85, lon=2.35).")
     pdf.bullet("Geocodage IRIS : ", "algorithme ray-casting sur les polygones IRIS charges en memoire (GeoJSON IGN).")
     pdf.bullet("Fusion multi-sources : ", "sources DVF (CSV.GZ 250 Mo) + INSEE Filosofi (parquet) integrees dans build_gold_dashboard.")
-    pdf.h2("C2.4 · Optimisation")
+    pdf.h2("C2.4 - Optimisation")
     pdf.body(
         "Plusieurs strategies d'optimisation sont appliquees pour garantir des temps de reponse "
         "sub-millisecondes et une empreinte memoire raisonnable :"
@@ -917,13 +917,13 @@ def main():
     pdf.table(
         ["Arrondissement", "Prix m2", "Rev. median", "Score global"],
         [
-            ["75001 · Louvre", "13 200 EUR", "34 200 EUR", "62"],
-            ["75006 · Luxembourg", "15 800 EUR", "45 200 EUR", "71"],
-            ["75011 · Popincourt", "10 800 EUR", "31 800 EUR", "52"],
-            ["75013 · Gobelins", "9 200 EUR", "27 200 EUR", "48"],
-            ["75016 · Passy", "11 200 EUR", "44 500 EUR", "58"],
-            ["75019 · Buttes-Chaumont", "8 500 EUR", "21 500 EUR", "41"],
-            ["75020 · Menilmontant", "8 700 EUR", "22 800 EUR", "43"],
+            ["75001 - Louvre", "13 200 EUR", "34 200 EUR", "62"],
+            ["75006 - Luxembourg", "15 800 EUR", "45 200 EUR", "71"],
+            ["75011 - Popincourt", "10 800 EUR", "31 800 EUR", "52"],
+            ["75013 - Gobelins", "9 200 EUR", "27 200 EUR", "48"],
+            ["75016 - Passy", "11 200 EUR", "44 500 EUR", "58"],
+            ["75019 - Buttes-Chaumont", "8 500 EUR", "21 500 EUR", "41"],
+            ["75020 - Menilmontant", "8 700 EUR", "22 800 EUR", "43"],
         ],
         [58, 36, 42, 34],
     )
@@ -954,29 +954,29 @@ def main():
     pdf.table(
         ["Terme / Acronyme", "Definition"],
         [
-            ["ADEME", "Agence de l'Environnement et de la Maitrise de l'Energie · source DPE"],
-            ["ASGI", "Asynchronous Server Gateway Interface · protocole serveur Python async"],
+            ["ADEME", "Agence de l'Environnement et de la Maitrise de l'Energie - source DPE"],
+            ["ASGI", "Asynchronous Server Gateway Interface - protocole serveur Python async"],
             ["Bronze", "Couche 1 medaillon : donnee brute, inchangee apres ingestion"],
-            ["CORS", "Cross-Origin Resource Sharing · politique d'acces API par domaine"],
-            ["CSV", "Comma-Separated Values · format de fichier tabulaire"],
+            ["CORS", "Cross-Origin Resource Sharing - politique d'acces API par domaine"],
+            ["CSV", "Comma-Separated Values - format de fichier tabulaire"],
             ["DSFR", "Systeme de Design de l'Etat francais (design.numerique.gouv.fr)"],
             ["DPE", "Diagnostic de Performance Energetique"],
-            ["DVF", "Demandes de Valeurs Foncieres · transactions immobilieres DGFiP"],
-            ["ETL", "Extract, Transform, Load · processus d'ingestion des donnees"],
+            ["DVF", "Demandes de Valeurs Foncieres - transactions immobilieres DGFiP"],
+            ["ETL", "Extract, Transform, Load - processus d'ingestion des donnees"],
             ["GeoJSON", "Format JSON pour les donnees geographiques (OGC)"],
             ["Gold", "Couche 3 medaillon : datamarts calcules, prets pour l'analyse"],
             ["HDFS", "Hadoop Distributed File System"],
             ["IRIS", "Ilots Regroupes pour l'Information Statistique (INSEE)"],
-            ["JWT", "JSON Web Token · format de jeton d'authentification"],
-            ["KPI", "Key Performance Indicator · indicateur cle de performance"],
-            ["OSM", "OpenStreetMap · base cartographique collaborative mondiale"],
+            ["JWT", "JSON Web Token - format de jeton d'authentification"],
+            ["KPI", "Key Performance Indicator - indicateur cle de performance"],
+            ["OSM", "OpenStreetMap - base cartographique collaborative mondiale"],
             ["Parquet", "Format colonnaire compresse (Apache Foundation)"],
             ["Polars", "Librairie DataFrame Python, moteur Rust, tres performante"],
             ["RNCP", "Repertoire National des Certifications Professionnelles"],
             ["Silver", "Couche 2 medaillon : donnee normalisee, geocodee, filtrée"],
             ["SIS", "Secteur d'Information des Sols (BRGM/Georisques)"],
-            ["TTL", "Time To Live · duree de vie d'un enregistrement (Cassandra)"],
-            ["TSV", "Tab-Separated Values · format de sortie Overpass API"],
+            ["TTL", "Time To Live - duree de vie d'un enregistrement (Cassandra)"],
+            ["TSV", "Tab-Separated Values - format de sortie Overpass API"],
             ["WCAG", "Web Content Accessibility Guidelines (norme accessibilite web)"],
         ],
         [42, 138],
@@ -1075,9 +1075,9 @@ def main():
     pdf.set_xy(15, y + 57)
     pdf.set_font("Helvetica", "I", 8.5)
     pdf.set_text_color(*MENTION)
-    pdf.cell(88, 5, "Theme clair · fond de plan IGN", align="C")
+    pdf.cell(88, 5, "Theme clair - fond de plan IGN", align="C")
     pdf.cell(4, 5, "")
-    pdf.cell(88, 5, "Theme sombre · accessibilite WCAG AA", align="C")
+    pdf.cell(88, 5, "Theme sombre - accessibilite WCAG AA", align="C")
 
     # ── Resultats ───────────────────────────────────────────────────────────
     pdf.add_page()
@@ -1135,24 +1135,24 @@ def main():
     pdf.set_xy(15, y + 57)
     pdf.set_font("Helvetica", "I", 8.5)
     pdf.set_text_color(*MENTION)
-    pdf.cell(88, 5, "Theme clair · fond de plan IGN", align="C")
+    pdf.cell(88, 5, "Theme clair - fond de plan IGN", align="C")
     pdf.cell(4, 5, "")
-    pdf.cell(88, 5, "Theme sombre · accessibilite WCAG AA", align="C")
+    pdf.cell(88, 5, "Theme sombre - accessibilite WCAG AA", align="C")
 
     # ── 25. Grille RNCP ─────────────────────────────────────────────────────
     pdf.add_page()
-    pdf.h1(25, "Couverture de la grille RNCP40875 · Bloc 1")
+    pdf.h1(25, "Couverture de la grille RNCP40875 - Bloc 1")
     pdf.table(
         ["Competence", "Preuve dans le projet"],
         [
-            ["C1.1 · Relationnel", "Schema etoile PostgreSQL + tests de charge (1190 req/s, p95 3,5 ms) + 3/3 contraintes"],
-            ["C1.2 · NoSQL", "Cassandra events_by_type, TTL 7 j, partitionnement par type d'evenement"],
-            ["C1.3 · Data Lake", "Parquet Bronze/Silver/Gold sur HDFS ; sources variees CSV/TSV/GZ"],
-            ["C1.4 · Scalabilite", "Docker Compose 11 services, healthchecks, volumes persistants, mode local-first"],
-            ["C2.1 · API", "FastAPI /docs + auth JWT roles (viewer/admin) + quotas par IP (120/600 req/min)"],
-            ["C2.2 · Streaming", "Producteur/consommateur Kafka -> Cassandra ; flux Velib + chantiers temps reel"],
-            ["C2.3 · Transformation", "Polars normalise 83 sources ; DVF + INSEE Filosofi reels fusionnes"],
-            ["C2.4 · Optimisation", "Parquet Snappy, index PG, lru_cache, lazy frame Polars, p95 < 4 ms"],
+            ["C1.1 - Relationnel", "Schema etoile PostgreSQL + tests de charge (1190 req/s, p95 3,5 ms) + 3/3 contraintes"],
+            ["C1.2 - NoSQL", "Cassandra events_by_type, TTL 7 j, partitionnement par type d'evenement"],
+            ["C1.3 - Data Lake", "Parquet Bronze/Silver/Gold sur HDFS ; sources variees CSV/TSV/GZ"],
+            ["C1.4 - Scalabilite", "Docker Compose 11 services, healthchecks, volumes persistants, mode local-first"],
+            ["C2.1 - API", "FastAPI /docs + auth JWT roles (viewer/admin) + quotas par IP (120/600 req/min)"],
+            ["C2.2 - Streaming", "Producteur/consommateur Kafka -> Cassandra ; flux Velib + chantiers temps reel"],
+            ["C2.3 - Transformation", "Polars normalise 83 sources ; DVF + INSEE Filosofi reels fusionnes"],
+            ["C2.4 - Optimisation", "Parquet Snappy, index PG, lru_cache, lazy frame Polars, p95 < 4 ms"],
         ],
         [35, 145],
     )
