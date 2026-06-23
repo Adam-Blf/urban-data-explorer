@@ -22,17 +22,23 @@ SILVER_DIR = ROOT / "data" / "silver"
 
 
 def ingest_source(spec) -> pl.DataFrame:
-    """Charge un CSV brut et retourne un DataFrame Silver."""
-    csv_path = DATA_DIR / f"{spec.source_id}.csv"
-    if not csv_path.exists():
+    """Charge un fichier brut (CSV/TSV/GZ) et retourne un DataFrame Silver."""
+    # Cherche dans l'ordre: .csv, .tsv, .csv.gz
+    for ext in (".csv", ".tsv", ".csv.gz"):
+        candidate = DATA_DIR / f"{spec.source_id}{ext}"
+        if candidate.exists():
+            csv_path = candidate
+            break
+    else:
         return pl.DataFrame()
 
     start = time.perf_counter()
+    sep = "\t" if csv_path.suffix == ".tsv" else spec.separator
 
     try:
         df = pl.read_csv(
             csv_path,
-            separator=spec.separator,
+            separator=sep,
             encoding=spec.encoding if spec.encoding != "utf-8-sig" else "utf8",
             infer_schema_length=500,
             ignore_errors=True,

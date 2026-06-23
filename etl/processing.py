@@ -11,7 +11,9 @@ Ce module gère :
 from __future__ import annotations
 
 import json
+import math
 import re
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
