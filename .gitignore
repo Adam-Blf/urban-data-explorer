@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .env
 data/raw/downloads/*.csv
+data/raw/downloads/*.tsv
 data/raw/downloads/*.json
 data/raw/downloads/*.csv.gz
 data/raw/downloads/*.zip
