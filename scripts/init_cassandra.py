@@ -6,6 +6,7 @@ Usage: python scripts/init_cassandra.py [--host HOST] [--port PORT]
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -47,7 +48,6 @@ def main(argv: list[str] | None = None) -> int:
     for stmt in statements:
         # Extract keyspace from CREATE KEYSPACE to set it after creation
         if "CREATE KEYSPACE" in stmt.upper():
-            import re
             m = re.search(r"CREATE KEYSPACE\s+(?:IF NOT EXISTS\s+)?(\w+)", stmt, re.IGNORECASE)
             if m:
                 keyspace = m.group(1)

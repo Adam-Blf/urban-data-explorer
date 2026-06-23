@@ -472,9 +472,6 @@ def build_gold_timeline(silver_df: pl.DataFrame) -> pl.DataFrame:
     if dashboard_df.is_empty():
         return pl.DataFrame()
 
-    from datetime import date
-    import math
-
     # Déterminer les 12 derniers mois
     current_year = date.today().year
     current_month = date.today().month
