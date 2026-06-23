@@ -45,14 +45,24 @@ def pg_execute(sql: str, params: tuple[object, ...] | None = None) -> None:
         conn.commit()
 
 
-def cassandra_session():
-    """Open a Cassandra session configured from the environment."""
-    from cassandra.cluster import Cluster
+_cass_cluster = None
+_cass_session = None
 
-    host = os.getenv("CASSANDRA_HOST", "cassandra")
-    port = int(os.getenv("CASSANDRA_PORT", "9042"))
-    keyspace = os.getenv("CASSANDRA_KEYSPACE", "ude")
-    cluster = Cluster([host], port=port)
-    session = cluster.connect()
-    session.set_keyspace(keyspace)
-    return session
+
+def cassandra_session():
+    """Return a module-level Cassandra session (lazy singleton).
+
+    Uses AsyncioConnection for Python 3.12 compatibility (asyncore was removed).
+    Creates the cluster once; subsequent calls reuse the connection pool.
+    """
+    global _cass_cluster, _cass_session
+    if _cass_session is None:
+        from cassandra.cluster import Cluster
+        from cassandra.io.asyncioreactor import AsyncioConnection
+
+        host = os.getenv("CASSANDRA_HOST", "cassandra")
+        port = int(os.getenv("CASSANDRA_PORT", "9042"))
+        keyspace = os.getenv("CASSANDRA_KEYSPACE", "ude")
+        _cass_cluster = Cluster([host], port=port, connection_class=AsyncioConnection)
+        _cass_session = _cass_cluster.connect(keyspace)
+    return _cass_session

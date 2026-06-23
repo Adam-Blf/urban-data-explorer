@@ -33,6 +33,16 @@ services:
       - ./scripts:/scripts:ro
       - cassandradata:/var/lib/cassandra        # persistance -> resilience
 
+  cassandra-init:
+    image: cassandra:4.1
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./cassandra:/cassandra-init:ro
+    command: cqlsh cassandra -f /cassandra-init/schema.cql
+    restart: "no"
+
   api:
     build:
       context: .
