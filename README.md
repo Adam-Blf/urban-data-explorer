@@ -1,4 +1,4 @@
-# Urban Data Explorer · Paris
+# Urban Data Explorer - Paris
 
 <!-- adam-badges:start -->
 [![commits](https://img.shields.io/github/commit-activity/t/Adam-Blf/urban-data-explorer?color=001329&label=commits&style=flat-square)](https://github.com/Adam-Blf/urban-data-explorer/commits)
@@ -12,7 +12,7 @@
 <div align="center">
 
 [![RNCP40875 - Bloc 1](https://img.shields.io/badge/RNCP40875-Bloc_1-brightgreen?style=for-the-badge)](https://www.francecompetences.fr/recherche/rncp/40875/)
-[![Version](https://img.shields.io/badge/version-1.3.0-000091?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-1.4.0-000091?style=for-the-badge)](#)
 [![Tests](https://img.shields.io/badge/tests-118%20passed-10B981?style=for-the-badge)](#)
 [![Sources](https://img.shields.io/badge/sources-83-000091?style=for-the-badge)](#)
 
@@ -35,15 +35,15 @@
 [![Mapbox](https://img.shields.io/badge/Mapbox-000000?style=flat-square&logo=mapbox&logoColor=white)](#)
 [![MapLibre](https://img.shields.io/badge/MapLibre-396CB2?style=flat-square&logo=maplibre&logoColor=white)](#)
 [![IGN](https://img.shields.io/badge/IGN_G%C3%A9oplateforme-000091?style=flat-square)](#)
-[![DSFR](https://img.shields.io/badge/Design-DSFR_%C3%89tat-000091?style=flat-square)](#)
+[![EFREI](https://img.shields.io/badge/Design-EFREI_Brand-163767?style=flat-square)](#)
 
 </div>
 
 ---
 
-Un tableau de bord cartographique pour l'exploration, en temps réel et en différé, des indicateurs socio-urbains de Paris. L'interface adopte les codes du **Système de Design de l'État (DSFR)** : police Marianne, bleu France, fond de plan **IGN Géoplateforme**, thèmes clair/sombre et accessibilité WCAG AA.
+Un tableau de bord cartographique pour l'exploration, en temps réel et en différé, des indicateurs socio-urbains de Paris. L'interface adopte la **charte graphique EFREI** : police Gilroy, bleu `#163767`, rose `#FF43B8`, fond de plan **IGN Géoplateforme**, thèmes clair/sombre et accessibilité WCAG AA.
 
-Projet réalisé en binôme par **Adam Beloucif & Émilien Morice**, validant les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ingénierie des Données)**, certificateur Efrei · Paris Panthéon-Assas Université.
+Projet réalisé en binôme par **Adam Beloucif & Émilien Morice**, validant les compétences du **Bloc 1 du titre RNCP40875 (Expert en Ingénierie des Données)**, certificateur Efrei - Paris Panthéon-Assas Université.
 
 ---
 
@@ -53,17 +53,17 @@ Stack médaillon locale-first ou distribuée, du CSV Open Data à la cartographi
 
 ```mermaid
 flowchart TD
-    OD["Open Data Paris + OSM · 83 sources<br/>CSV/TSV/GZ · DVF + INSEE + Overpass"]
-    OD -->|"ETL batch · Polars"| BRONZE["Bronze<br/>Parquet brut"]
+    OD["Open Data Paris + OSM - 83 sources<br/>CSV/TSV/GZ - DVF + INSEE + Overpass"]
+    OD -->|"ETL batch - Polars"| BRONZE["Bronze<br/>Parquet brut"]
     BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
     SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
     SILVER -.-> LAKE[("Data Lake<br/>HDFS / Parquet")]
     GOLD --> PG[("PostgreSQL<br/>schema en etoile")]
     PROD["Producteur Kafka<br/>flux urbains temps reel"] --> KAFKA{{"Kafka"}}
-    KAFKA --> CONS["Consommateur"] --> CASS[("Cassandra<br/>events · TTL 7 jours")]
-    PG --> API["FastAPI<br/>API REST · /docs"]
+    KAFKA --> CONS["Consommateur"] --> CASS[("Cassandra<br/>events - TTL 7 jours")]
+    PG --> API["FastAPI<br/>API REST - /docs"]
     CASS --> API
-    API --> FE["Frontend React / TypeScript<br/>charte DSFR"]
+    API --> FE["Frontend React / TypeScript<br/>charte EFREI"]
     FE --> M2["MapLibre 2D<br/>fond IGN"]
     FE --> M3["Mapbox 3D<br/>extrusion batiments"]
 
@@ -107,9 +107,9 @@ Ouvrir `http://localhost:5173`. L'API est disponible sur `http://localhost:8000/
 
 Le projet dispose d'une infrastructure complète conteneurisée :
 
-1. Démarrez les services de stockage et de messagerie (PostgreSQL, Cassandra) :
+1. Démarrez les services core (PostgreSQL + Cassandra avec init schema auto) :
    ```bash
-   docker-compose up -d postgres cassandra
+   docker-compose up -d postgres cassandra cassandra-init
    ```
 2. *(Optionnel)* Démarrez la stack streaming et big data (Kafka, Zookeeper, Hadoop/HDFS, Hive) :
    ```bash
@@ -118,6 +118,10 @@ Le projet dispose d'une infrastructure complète conteneurisée :
 3. L'API FastAPI et le Frontend React peuvent également être lancés via Docker :
    ```bash
    docker-compose up -d api frontend
+   ```
+4. *(Init Cassandra hors Docker)* Pour initialiser le schema Cassandra en local :
+   ```bash
+   python scripts/init_cassandra.py --host localhost --port 9042
    ```
 
 ---
@@ -134,7 +138,7 @@ Le catalogue ([`etl/catalog.py`](etl/catalog.py)) référence **83 sources** don
 | Logement & Urbanisme | 12 | DVF, DPE, logements sociaux, MH, Filosofi |
 
 **Sources externes réelles** (chargées par [`etl/external.py`](etl/external.py), remplaçant les valeurs de référence) :
-- **DVF · Demandes de Valeurs Foncières** (DGFiP / data.gouv.fr) : transactions immobilières 2023, département 75 → **prix au m² médian réel** et **volume de ventes** par arrondissement.
+- **DVF - Demandes de Valeurs Foncières** (DGFiP / data.gouv.fr) : transactions immobilières 2023, département 75 → **prix au m² médian réel** et **volume de ventes** par arrondissement.
 - **INSEE Filosofi 2020** : revenu médian disponible par quartier IRIS → **revenu médian réel** agrégé par arrondissement.
 
 Téléchargement :
@@ -151,31 +155,31 @@ Chaque enregistrement Gold porte un drapeau `data_source` (`real` / `reference`)
 ## 🛠️ Indicateurs personnalisés (Gold)
 
 Les données de synthèse sont classées en catégories d'indicateurs comparatifs côte-à-côte :
-1. **Marché immobilier & prix** : prix au m² (`prix_m2`) et volumes de ventes (`sales_volume`) — **réels (DVF 2023)**.
+1. **Marché immobilier & prix** : prix au m² (`prix_m2`) et volumes de ventes (`sales_volume`) - **réels (DVF 2023)**.
 2. **Logement social** : part (%) (`logement_social_pct`) et nombre de logements financés (`logements_sociaux_count`).
-3. **Revenus & socio-éco** : revenu disponible médian par ménage (`revenu_median`) — **réel (INSEE Filosofi 2020)**.
-4. **Accessibilité au logement** : `m2_abordables` = revenu annuel médian / prix au m² (combien de m² une année de revenu permet d'acheter), indice `accessibilite_idx` — **indicateur croisé prix/revenus** demandé par l'énoncé.
+3. **Revenus & socio-éco** : revenu disponible médian par ménage (`revenu_median`) - **réel (INSEE Filosofi 2020)**.
+4. **Accessibilité au logement** : `m2_abordables` = revenu annuel médian / prix au m² (combien de m² une année de revenu permet d'acheter), indice `accessibilite_idx` - **indicateur croisé prix/revenus** demandé par l'énoncé.
 5. **Cadre de vie & environnement** : accessibilité transports/santé/culture, densité d'espaces verts.
 6. **Synthèse globale (Score)** : moyenne des indices de catégories par arrondissement.
 
 ---
 
-## 🎨 Interface (refonte DSFR)
+## 🎨 Interface (charte EFREI)
 
-L'interface a été refondue aux codes du Système de Design de l'État : bloc-marque « République Française », police Marianne, bleu France `#000091`, rouge Marianne `#E1000F`, encadrés nets et choroplèthe séquentielle. Fond de plan **IGN Géoplateforme** en 2D, **Mapbox** en 3D, thèmes clair et sombre, contrastes WCAG AA.
+L'interface adopte la charte graphique EFREI : police **Gilroy** (display) + Poppins (corps), bleu profond `#163767`, rose signature `#FF43B8`, bleu secondaire `#0C78B4`. Fond de plan **IGN Géoplateforme** en 2D, **Mapbox** en 3D, thèmes clair et sombre, contrastes WCAG AA.
 
 ![Aperçu de l'interface](ude-light.png)
 
 ## 📑 Livrables de soutenance
 
-Les supports sont générés de façon reproductible (charte DSFR + co-branding Efrei) :
+Les supports sont générés de façon reproductible (charte EFREI) :
 
 ```bash
 python scripts/generate_report_pdf.py     # -> rapport.pdf (rapport de soutenance)
 python scripts/generate_slides_pptx.py     # -> soutenance.pptx (support oral, 16 slides)
 ```
 
-## 🔐 API · authentification & quotas (C2.1)
+## 🔐 API - authentification & quotas (C2.1)
 
 L'API expose une authentification **JWT** (OAuth2 password flow) et un **limiteur de débit par IP**.
 
@@ -188,7 +192,7 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 
 - **Authentification** : jetons signés HS256, rôles `viewer` / `admin`, expiration 60 min.
 - **Autorisations** : route `/auth/me` réservée au rôle `admin` (401 sans jeton, 403 si rôle insuffisant).
-- **Quotas** : fenêtre glissante par IP — 120 req·min anonyme, 600 req·min authentifié, sinon `429 Too Many Requests`.
+- **Quotas** : fenêtre glissante par IP - 120 req-min anonyme, 600 req-min authentifié, sinon `429 Too Many Requests`.
 - **CORS restreint** à l'origine du frontend (`UDE_CORS_ORIGINS`).
 - **API filtrable** : `GET /datamarts/dashboard?arrondissement=75011&score_min=70&sort=score`.
 
@@ -200,7 +204,7 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 | **C1.2** | Concevoir et structurer une base de données non-relationnelle (NoSQL) | Modélisation orientée requêtes dans Cassandra pour stocker les snapshots d'événements de streaming ([cassandra/schema.cql](cassandra/schema.cql)). | **Conforme** |
 | **C1.3** | Configurer et requêter un cluster de stockage (Data Lake) | Architecture de stockage Bronze → Silver → Gold organisée par répertoires et fichiers Parquet optimisés. | **Conforme** |
 | **C1.4** | Architecturer des infrastructures scalables et résilientes | Docker Compose : `restart: unless-stopped`, **healthchecks** (postgres, cassandra, api), démarrage ordonné (`depends_on: service_healthy`), **volumes persistants**, profils `streaming`/`lake`. Mode local-first hors ligne. [ADR](docs/ADR/0001-architecture-data.md). | **Conforme** |
-| **C2.1** | Développer une API Rest pour exposer les données | API FastAPI (`api/main.py`) documentée via Swagger (`/docs`). **Authentification JWT** (OAuth2, rôles viewer/admin) et **quotas par IP** (anonyme 120 / authentifié 600 req·min) dans [`api/security.py`](api/security.py). | **Conforme** |
+| **C2.1** | Développer une API Rest pour exposer les données | API FastAPI (`api/main.py`) documentée via Swagger (`/docs`). **Authentification JWT** (OAuth2, rôles viewer/admin) et **quotas par IP** (anonyme 120 / authentifié 600 req-min) dans [`api/security.py`](api/security.py). | **Conforme** |
 | **C2.2** | Développer un programme de collecte en temps réel (Streaming) | Ingestion continue des données (Vélib, chantiers) à l'aide d'un couple Producteur/Consommateur Kafka. | **Conforme** |
 | **C2.3** | Écrire des scripts de transformation et d'agrégation | Polars : nettoyage, normalisation des codes, jointures spatiales IRIS et **fusion de sources réelles** (DVF 2023 + INSEE Filosofi 2020) dans [`etl/external.py`](etl/external.py) + [`etl/processing.py`](etl/processing.py). | **Conforme** |
 | **C2.4** | Optimiser les performances de traitement et stockage | Parquet colonnaire (Silver/Gold), index PostgreSQL (p95 < 4 ms), drapeau qualité `data_source` (`real`/`reference`) sur chaque enregistrement Gold. | **Conforme** |

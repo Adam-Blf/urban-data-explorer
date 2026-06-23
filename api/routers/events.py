@@ -30,7 +30,6 @@ def recent_events(limit: int = 50, event_type: str = "service_snapshot"):
             )
             for row in rows
         ]
-        session.cluster.shutdown()
         return result
     except Exception:
         from ..data import recent_events as mock_events
