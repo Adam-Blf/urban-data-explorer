@@ -778,13 +778,14 @@ ALL_SOURCES: list[SourceSpec] = [
         address_candidates=("adresse",),
     ),
     SourceSpec(
-        source_id="ilots_chaleur",
-        title="Ilots de chaleur urbains - vulnerabilite par IRIS",
+        source_id="ilots_fraicheur_equip",
+        title="Ilots de fraicheur - equipements et activites rafraichissants",
         family="environnement",
-        catalog_url="https://opendata.paris.fr/explore/dataset/ilots-de-chaleur-vulnerabilite-par-iris/",
-        download_url=_ODP.format("ilots-de-chaleur-vulnerabilite-par-iris"),
+        catalog_url="https://opendata.paris.fr/explore/dataset/ilots-de-fraicheur-equipements-activites/",
+        download_url=_ODP.format("ilots-de-fraicheur-equipements-activites"),
         geo_point_column="geo_point_2d",
         arrondissement_candidates=("arrondissement",),
+        address_candidates=("adresse",),
     ),
     SourceSpec(
         source_id="arbres_paris",
@@ -798,23 +799,19 @@ ALL_SOURCES: list[SourceSpec] = [
     ),
     SourceSpec(
         source_id="aires_jeux",
-        title="Aires de jeux - elements d'equipement",
+        title="Aires de jeux pour enfants a Paris - OpenStreetMap",
         family="environnement",
-        catalog_url="https://opendata.paris.fr/explore/dataset/aires-de-jeux-elements-dequipement/",
-        download_url=_ODP.format("aires-de-jeux-elements-dequipement"),
-        geo_point_column="geo_point_2d",
-        arrondissement_candidates=("arrondissement",),
-        address_candidates=("adresse",),
+        catalog_url="https://www.openstreetmap.org",
+        download_url="OVERPASS:[out:csv(::lat,::lon,name,leisure,access,opening_hours;true;\"\t\")][timeout:90];area[\"ref:INSEE\"=\"75056\"]->.p;node[leisure=playground](area.p);out body;",
+        provider="OpenStreetMap / Overpass API",
+        separator="\t",
+        latitude_candidates=("lat",),
+        longitude_candidates=("lon",),
+        address_candidates=("name",),
     ),
-    SourceSpec(
-        source_id="bruit_paris",
-        title="Carte de bruit - indicateurs Lden 2022",
-        family="environnement",
-        catalog_url="https://opendata.paris.fr/explore/dataset/carte-de-bruit-lden-en-2022/",
-        download_url=_ODP.format("carte-de-bruit-lden-en-2022"),
-        geo_point_column="geo_point_2d",
-        arrondissement_candidates=("arrondissement",),
-    ),
+    # bruit_paris retire le 2026-06-24 : dataset carte-de-bruit-lden-en-2022
+    # supprime d'opendata.paris.fr, aucun remplacant geocodable par ligne
+    # (les datasets bruit restants sont des series temporelles par station).
     SourceSpec(
         source_id="terrains_sport",
         title="Terrains de sport et installations exterieures a Paris - OpenStreetMap",
