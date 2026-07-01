@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { ControlPanel } from './components/ControlPanel';
 import { DataPanel } from './components/DataPanel';
 import { DataTable } from './components/DataTable';
+import { TableExplorer } from './components/TableExplorer';
 import { MapViewport } from './components/MapViewport';
 import { SettingsDrawer } from './components/SettingsDrawer';
 
@@ -37,6 +38,7 @@ export default function App() {
   const [showControlPanel, setShowControlPanel] = useState<boolean>(true);
   const [showDataPanel, setShowDataPanel] = useState<boolean>(true);
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [showTableExplorer, setShowTableExplorer] = useState<boolean>(false);
 
   // API Data
   const [districts, setDistricts] = useState<District[]>([]);
@@ -193,6 +195,8 @@ export default function App() {
         setShowDataPanel={setShowDataPanel}
         showTable={showTable}
         setShowTable={setShowTable}
+        showTableExplorer={showTableExplorer}
+        setShowTableExplorer={setShowTableExplorer}
       />
 
       <SettingsDrawer
@@ -231,6 +235,11 @@ export default function App() {
         setSelectedDistrict={setSelectedDistrict}
         isVisible={showTable}
         onClose={() => setShowTable(false)}
+      />
+
+      <TableExplorer
+        isVisible={showTableExplorer}
+        onClose={() => setShowTableExplorer(false)}
       />
     </div>
   );

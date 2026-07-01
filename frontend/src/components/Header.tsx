@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box, TableProperties } from 'lucide-react';
+import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box, TableProperties, Database } from 'lucide-react';
 
 interface HeaderProps {
   isConnected: boolean;
@@ -15,6 +15,8 @@ interface HeaderProps {
   setShowDataPanel: (show: boolean) => void;
   showTable: boolean;
   setShowTable: (show: boolean) => void;
+  showTableExplorer: boolean;
+  setShowTableExplorer: (show: boolean) => void;
 }
 
 /* Bloc-marque EFREI : logo + titre application */
@@ -68,6 +70,8 @@ export const Header: React.FC<HeaderProps> = ({
   setShowDataPanel,
   showTable,
   setShowTable,
+  showTableExplorer,
+  setShowTableExplorer,
 }) => {
   return (
     <header
@@ -134,6 +138,14 @@ export const Header: React.FC<HeaderProps> = ({
             title="Tableau des données par arrondissement"
           >
             <TableProperties size={16} /> Tableau
+          </button>
+          <button
+            onClick={() => setShowTableExplorer(!showTableExplorer)}
+            className={`dsfr-btn dsfr-btn--tertiary ${showTableExplorer ? 'is-active' : ''}`}
+            aria-pressed={showTableExplorer}
+            title="Explorateur de tables SQL / NoSQL"
+          >
+            <Database size={16} /> Tables
           </button>
         </div>
 

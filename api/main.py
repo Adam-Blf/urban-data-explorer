@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .routers import auth, catalog, datamarts, events, health, pipeline, repo, search
+from .routers import auth, catalog, datamarts, events, health, pipeline, repo, search, tables
 from .security import check_quota
 from .observability import metrics_endpoint, prometheus_middleware
 
@@ -59,6 +59,7 @@ app.include_router(pipeline.router)
 app.include_router(events.router)
 app.include_router(repo.router)
 app.include_router(search.router)
+app.include_router(tables.router)
 
 
 @app.get("/", tags=["health"])
