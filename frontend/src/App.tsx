@@ -4,6 +4,7 @@ import { District, Overview, TimelinePoint, EventLog } from './types';
 import { Header } from './components/Header';
 import { ControlPanel } from './components/ControlPanel';
 import { DataPanel } from './components/DataPanel';
+import { DataTable } from './components/DataTable';
 import { MapViewport } from './components/MapViewport';
 import { SettingsDrawer } from './components/SettingsDrawer';
 
@@ -35,6 +36,7 @@ export default function App() {
   // Panel visibility
   const [showControlPanel, setShowControlPanel] = useState<boolean>(true);
   const [showDataPanel, setShowDataPanel] = useState<boolean>(true);
+  const [showTable, setShowTable] = useState<boolean>(false);
 
   // API Data
   const [districts, setDistricts] = useState<District[]>([]);
@@ -189,6 +191,8 @@ export default function App() {
         setShowControlPanel={setShowControlPanel}
         showDataPanel={showDataPanel}
         setShowDataPanel={setShowDataPanel}
+        showTable={showTable}
+        setShowTable={setShowTable}
       />
 
       <SettingsDrawer
@@ -219,6 +223,14 @@ export default function App() {
         activeFamily={activeFamily}
         isVisible={showDataPanel}
         onClose={() => setShowDataPanel(false)}
+      />
+
+      <DataTable
+        districts={districts}
+        selectedDistrict={selectedDistrict}
+        setSelectedDistrict={setSelectedDistrict}
+        isVisible={showTable}
+        onClose={() => setShowTable(false)}
       />
     </div>
   );
