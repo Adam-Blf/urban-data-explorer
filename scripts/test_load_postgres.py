@@ -1,7 +1,7 @@
 """Test de charge et d'intégrité PostgreSQL - Projet Urban Data Explorer.
 
 C1.1 : Des tests de charge sont réalisés confirmant l'intégrité et la performance
-de la base de données (modèle en étoile relationnel).
+de la base de données (couche relationnelle Gold).
 """
 
 from __future__ import annotations
@@ -105,7 +105,7 @@ def execute_user_session(user_id: int) -> tuple[int, list[float]]:
     latencies = []
     success_count = 0
     
-    # Requête de jointure en étoile (Fact + Dimensions)
+    # Requête de restitution Gold (agrégats relationnels)
     query = """
         SELECT 
             da.label, 

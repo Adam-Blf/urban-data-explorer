@@ -19,8 +19,8 @@ responsabilités, rejouabilité, performance de lecture.
 Moteur vectorisé (Rust), rapide sur un poste, sans cluster. **Pourquoi** : volumétrie
 parisienne tient en mémoire ; évite la complexité d'un cluster pour la démo.
 
-### 3. PostgreSQL (relationnel, étoile) + Cassandra (NoSQL) (C1.1, C1.2)
-Étoile pour l'analytique structurée (faits + dimensions, index). Cassandra pour les
+### 3. PostgreSQL (relationnel, couche Gold) + Cassandra (NoSQL) (C1.1, C1.2)
+Couche Gold pour l'analytique structurée (tables de restitution, index). Cassandra pour les
 événements de streaming (écritures append-only, tri par date, TTL 7 j). **Pourquoi** :
 chaque base sur son point fort ; complémentarité SQL / NoSQL.
 

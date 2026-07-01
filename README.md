@@ -53,15 +53,15 @@ Stack médaillon locale-first ou distribuée, du CSV Open Data à la cartographi
 
 ```mermaid
 flowchart TD
-    OD["Open Data Paris + OSM - 83 sources<br/>CSV/TSV/GZ - DVF + INSEE + Overpass"]
-    OD -->|"ETL batch - Polars"| BRONZE["Bronze<br/>Parquet brut"]
-    BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
-    SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
-    SILVER -.-> LAKE[("Data Lake<br/>HDFS / Parquet")]
-    GOLD --> PG[("PostgreSQL<br/>schema en etoile")]
-    PROD["Producteur Kafka<br/>flux urbains temps reel"] --> KAFKA{{"Kafka"}}
-    KAFKA --> CONS["Consommateur"] --> CASS[("Cassandra<br/>events - TTL 7 jours")]
-    PG --> API["FastAPI<br/>API REST - /docs"]
+   OD["Open Data Paris + OSM - 83 sources<br/>CSV/TSV/GZ - DVF + INSEE + Overpass"]
+   OD -->|"ETL batch - Polars"| BRONZE["Bronze<br/>Parquet brut"]
+   BRONZE --> SILVER["Silver<br/>normalise + geocode IRIS"]
+   SILVER --> GOLD["Gold<br/>datamarts dashboard / timeline"]
+   SILVER -.-> LAKE[("Data Lake<br/>HDFS / Parquet")]
+   GOLD --> PG[("PostgreSQL<br/>couche relationnelle Gold")]
+   PROD["Producteur Kafka<br/>flux urbains temps reel"] --> KAFKA{{"Kafka"}}
+   KAFKA --> CONS["Consommateur"] --> CASS[("Cassandra<br/>events - TTL 7 jours")]
+   PG --> API["FastAPI<br/>API REST - /docs"]
     CASS --> API
     API --> FE["Frontend React / TypeScript<br/>charte EFREI"]
     FE --> M2["MapLibre 2D<br/>fond IGN"]
@@ -74,7 +74,7 @@ flowchart TD
 ```
 
 1. **ETL & Data Lake (C2.3, C2.4)** : Logique Bronze → Silver → Gold implémentée avec **Polars** (moteur ultra-rapide en Rust), avec géocodage offline par point-in-polygon sur les zones IRIS de Paris.
-2. **Base de données relationnelle (C1.1)** : PostgreSQL modélisé sous forme de schéma en étoile optimisé avec clés étrangères, index de performance et contraintes d'intégrité.
+2. **Base de données relationnelle (C1.1)** : PostgreSQL modélisé en couche Gold relationnelle, optimisé avec clés étrangères, index de performance et contraintes d'intégrité.
 3. **Base de données NoSQL (C1.2)** : Cassandra stockant les snapshots d'événements de streaming.
 4. **Messagerie & Streaming (C2.2)** : Producteur/Consommateur Kafka écrivant les flux urbains en temps réel dans Cassandra.
 5. **API (C2.1)** : FastAPI exposant les routes filtrables, documentée automatiquement sous `/docs`.
@@ -200,7 +200,7 @@ curl http://127.0.0.1:8000/auth/me -H "Authorization: Bearer <TOKEN>"
 
 | Compétence | Description de la compétence évaluée | Preuve de mise en œuvre dans le projet | Statut |
 | :--- | :--- | :--- | :---: |
-| **C1.1** | Concevoir et structurer une base de données relationnelle | Modèle relationnel en étoile mis en place dans [postgres/init.sql](postgres/init.sql). Script de test de charge : [scripts/test_load_postgres.py](scripts/test_load_postgres.py). | **Conforme** |
+| **C1.1** | Concevoir et structurer une base de données relationnelle | Modèle relationnel en couche Gold mis en place dans [postgres/init.sql](postgres/init.sql). Script de test de charge : [scripts/test_load_postgres.py](scripts/test_load_postgres.py). | **Conforme** |
 | **C1.2** | Concevoir et structurer une base de données non-relationnelle (NoSQL) | Modélisation orientée requêtes dans Cassandra pour stocker les snapshots d'événements de streaming ([cassandra/schema.cql](cassandra/schema.cql)). | **Conforme** |
 | **C1.3** | Configurer et requêter un cluster de stockage (Data Lake) | Architecture de stockage Bronze → Silver → Gold organisée par répertoires et fichiers Parquet optimisés. | **Conforme** |
 | **C1.4** | Architecturer des infrastructures scalables et résilientes | Docker Compose : `restart: unless-stopped`, **healthchecks** (postgres, cassandra, api), démarrage ordonné (`depends_on: service_healthy`), **volumes persistants**, profils `streaming`/`lake`. Mode local-first hors ligne. [ADR](docs/ADR/0001-architecture-data.md). | **Conforme** |

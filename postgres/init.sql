@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS district_embeddings (
 CREATE INDEX IF NOT EXISTS idx_district_embeddings_vector
   ON district_embeddings USING ivfflat (embedding vector_cosine_ops) WITH (lists = 4);
 
--- ==========================================================================
--- Modèle en étoile – Urban Data Explorer
--- C1.1: Base relationnelle normalisée, intégrité des données
--- ==========================================================================
+-- ========================================================================== 
+-- Architecture médaillon – Urban Data Explorer
+-- C1.1: Base relationnelle couche Gold, intégrité des données
+-- ========================================================================== 
 
 -- ── Dimensions ───────────────────────────────────────────────────────────
 
