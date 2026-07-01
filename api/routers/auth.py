@@ -1,3 +1,17 @@
+"""Router /auth – authentification JWT et autorisations (C2.1).
+
+Routes :
+- POST /auth/token : OAuth2 password flow -> retourne un JWT signe (HS256, 60 min).
+  Comptes de demo : demo/demo (viewer) et admin/admin (admin).
+- GET  /auth/me    : route protegee (role admin requis) – verifie la validite du jeton.
+
+Securite :
+- Mots de passe hasches PBKDF2-HMAC-SHA256 (200 000 iterations + sel aleatoire).
+- Jeton JWT porte : sub (username), role, exp (expiration).
+- Secret JWT configure via UDE_JWT_SECRET (variable d'environnement).
+- En production : remplacer DEMO_USERS par une vraie table en base.
+"""
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, status

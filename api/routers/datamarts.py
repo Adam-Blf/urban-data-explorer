@@ -1,3 +1,19 @@
+"""Router /datamarts – datamarts agrégés pour le dashboard Paris.
+
+Routes principales :
+- GET /datamarts/dashboard  : tableau des 20 arrondissements avec les 5 indices
+  (immobilier, logement_social, revenu, cadre_vie, environnement).
+  Filtrable par arrondissement, score_min et triable (code ou score).
+- GET /datamarts/overview   : KPIs globaux ville (moyennes des 20 arrondissements).
+- GET /datamarts/timeline   : evolution mensuelle sur 12 mois des indices.
+- GET /datamarts/geojson/{level} : GeoJSON enrichi par niveau de granularite (0-4).
+
+Strategie de donnees (dans l'ordre de priorite) :
+  1. PostgreSQL fact_arrondissement_* (si Docker en marche).
+  2. Parquet Gold (data/gold/*.parquet).
+  3. Generateur mathematique deterministe (fallback hors-ligne).
+"""
+
 from __future__ import annotations
 from fastapi import APIRouter, Query
 from ..data import city_overview, district_rows, timeline_rows, geojson_by_granularity

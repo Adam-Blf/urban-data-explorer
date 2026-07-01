@@ -1,3 +1,14 @@
+"""Router /pipeline – suivi du pipeline ETL et qualite des donnees (C1.3 / C2.4).
+
+Routes :
+- GET /pipeline/latest  : dernier run ETL (date, stage, status, row_count).
+  Source prioritaire : table pipeline_runs PostgreSQL ; fallback : generateur.
+- GET /pipeline/metrics : derniers N runs avec duree, debit (rows/sec), bytes ecrits.
+  Donnees issues de data/metrics/pipeline_metrics.parquet (ecrit par etl/metrics.py).
+- GET /pipeline/quality : rapport de qualite des datasets Gold (completeness, out-of-range,
+  freshness). Calcule en temps reel sur data/gold/*.parquet.
+"""
+
 from __future__ import annotations
 from typing import Any
 from fastapi import APIRouter, Query

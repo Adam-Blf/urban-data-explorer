@@ -1,3 +1,11 @@
+"""Router /catalog – exposition du catalogue des 82 sources Open Data.
+
+Route :
+- GET /catalog/sources : liste des sources, filtrables par famille
+  (mobilite, vie_quotidienne, environnement, logement_urbanisme).
+  Retourne les metadonnees de chaque SourceSpec (id, titre, provider, URL catalogue).
+"""
+
 from __future__ import annotations
 from fastapi import APIRouter
 from ..data import source_catalog
