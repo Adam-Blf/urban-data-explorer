@@ -10,7 +10,7 @@ from pathlib import Path
 import polars as pl
 
 from .catalog import SourceSpec
-from .processing import build_silver_record
+from ..silver.processing import build_silver_record
 
 
 def load_source_as_silver(spec: SourceSpec, data_dir: Path) -> pl.DataFrame:

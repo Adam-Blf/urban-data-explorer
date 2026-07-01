@@ -13,26 +13,26 @@ Pour chaque competence du referentiel, le tableau indique OU dans le code citer.
 
 | Element | Fichier | Ligne | Symbole |
 |---------|---------|-------|---------|
-| Dataclass SourceSpec | `etl/catalog.py` | 27 | `SourceSpec` |
-| Liste ALL_SOURCES (82 entrees) | `etl/catalog.py` | 59 | `ALL_SOURCES` |
-| Famille mobilite (17 sources) | `etl/catalog.py` | 64 | `velib_stations` → `ascenseurs_osm` |
-| Famille vie_quotidienne (42 sources) | `etl/catalog.py` | 248 | `maternelles` → `librairies_papeteries` |
-| Famille environnement (11 sources) | `etl/catalog.py` | 750 | `espaces_verts` → `stations_velo_osm` |
-| Famille logement_urbanisme (12 sources) | `etl/catalog.py` | 879 | `logements_sociaux` → `risque_radon` |
-| INDEX source_id → SourceSpec | `etl/catalog.py` | 1018 | `SOURCE_MAP` |
-| Dictionnaire FAMILIES | `etl/catalog.py` | 1020 | `FAMILIES` |
-| Sources Overpass API (requetes Overpass) | `etl/catalog.py` | 175 | `parkings_velos.download_url` |
+| Dataclass SourceSpec | `etl/bronze/catalog.py` | 27 | `SourceSpec` |
+| Liste ALL_SOURCES (82 entrees) | `etl/bronze/catalog.py` | 59 | `ALL_SOURCES` |
+| Famille mobilite (17 sources) | `etl/bronze/catalog.py` | 64 | `velib_stations` → `ascenseurs_osm` |
+| Famille vie_quotidienne (42 sources) | `etl/bronze/catalog.py` | 248 | `maternelles` → `librairies_papeteries` |
+| Famille environnement (11 sources) | `etl/bronze/catalog.py` | 750 | `espaces_verts` → `stations_velo_osm` |
+| Famille logement_urbanisme (12 sources) | `etl/bronze/catalog.py` | 879 | `logements_sociaux` → `risque_radon` |
+| INDEX source_id → SourceSpec | `etl/bronze/catalog.py` | 1018 | `SOURCE_MAP` |
+| Dictionnaire FAMILIES | `etl/bronze/catalog.py` | 1020 | `FAMILIES` |
+| Sources Overpass API (requetes Overpass) | `etl/bronze/catalog.py` | 175 | `parkings_velos.download_url` |
 
 ### C1.2 - Architecture medaillon Bronze / Silver / Gold
 
 | Couche | Fichier | Ligne | Description |
 |--------|---------|-------|-------------|
 | Bronze : ecriture Parquet brut | `spark/jobs/batch_ingest.py` | 19 | `BRONZE_DIR = data/bronze/` |
-| Bronze : lecture CSV → Polars | `etl/io.py` | 16 | `load_source_as_silver()` |
-| Silver : normalisation et geocodage | `etl/processing.py` | 260 | `build_silver_record()` |
+| Bronze : lecture CSV → Polars | `etl/bronze/io.py` | 16 | `load_source_as_silver()` |
+| Silver : normalisation et geocodage | `etl/silver/processing.py` | 260 | `build_silver_record()` |
 | Silver : ecriture Parquet normalise | `spark/jobs/batch_ingest.py` | 20 | `SILVER_DIR = data/silver/` |
-| Gold : datamart dashboard | `etl/processing.py` | 383 | `build_gold_dashboard()` |
-| Gold : datamart timeline | `etl/processing.py` | 465 | `build_gold_timeline()` |
+| Gold : datamart dashboard | `etl/silver/processing.py` | 383 | `build_gold_dashboard()` |
+| Gold : datamart timeline | `etl/silver/processing.py` | 465 | `build_gold_timeline()` |
 | Gold : ecriture + push PostgreSQL | `spark/jobs/build_gold.py` | 48 | `main()` |
 | Orchestration batch ingest complet | `spark/jobs/batch_ingest.py` | 23 | `main()` |
 
@@ -74,32 +74,32 @@ Pour chaque competence du referentiel, le tableau indique OU dans le code citer.
 
 | Element | Fichier | Ligne | Description |
 |---------|---------|-------|-------------|
-| Parsing colonnes geo_point | `etl/processing.py` | 34 | `_parse_geo_point()` |
-| Normalisation codes arrondissement | `etl/processing.py` | 73 | `_normalize_code()` |
-| Point-in-polygon (ray-casting) | `etl/processing.py` | 159 | `_point_in_polygon()` |
-| Geocodage IRIS offline | `etl/processing.py` | 199 | `resolve_iris()` |
-| Fallback API adresse.data.gouv.fr | `etl/processing.py` | 248 | `reverse_geocode_api()` |
-| Construction record Silver complet | `etl/processing.py` | 260 | `build_silver_record()` |
-| Telechargement HTTP des CSV | `etl/scraper.py` | 14 | `download_dataset()` |
-| Extraction metadonnees Opendatasoft | `etl/scraper.py` | 44 | `scrape_catalog_metadata()` |
+| Parsing colonnes geo_point | `etl/silver/processing.py` | 34 | `_parse_geo_point()` |
+| Normalisation codes arrondissement | `etl/silver/processing.py` | 73 | `_normalize_code()` |
+| Point-in-polygon (ray-casting) | `etl/silver/processing.py` | 159 | `_point_in_polygon()` |
+| Geocodage IRIS offline | `etl/silver/processing.py` | 199 | `resolve_iris()` |
+| Fallback API adresse.data.gouv.fr | `etl/silver/processing.py` | 248 | `reverse_geocode_api()` |
+| Construction record Silver complet | `etl/silver/processing.py` | 260 | `build_silver_record()` |
+| Telechargement HTTP des CSV | `etl/bronze/scraper.py` | 14 | `download_dataset()` |
+| Extraction metadonnees Opendatasoft | `etl/bronze/scraper.py` | 44 | `scrape_catalog_metadata()` |
 
 ### C2.4 - Metriques de pipeline et optimisation
 
 | Element | Fichier | Ligne | Description |
 |---------|---------|-------|-------------|
-| Enregistrement metriques par etape | `etl/metrics.py` | 22 | `record_stage()` |
-| Persistance Parquet append | `etl/metrics.py` | 56 | `METRICS_PATH` |
-| Lecture metriques historiques | `etl/metrics.py` | 87 | `load_metrics()` |
+| Enregistrement metriques par etape | `etl/gold/metrics.py` | 22 | `record_stage()` |
+| Persistance Parquet append | `etl/gold/metrics.py` | 56 | `METRICS_PATH` |
+| Lecture metriques historiques | `etl/gold/metrics.py` | 87 | `load_metrics()` |
 | Exposition via API | `api/routers/pipeline.py` | 22 | `pipeline_metrics()` |
-| Rapport qualite Gold (completeness, out-of-range) | `etl/quality.py` | 68 | `compute_quality()` |
-| Regles de plages numeriques attendues | `etl/quality.py` | 26 | `RANGE_RULES` |
+| Rapport qualite Gold (completeness, out-of-range) | `etl/silver/quality.py` | 68 | `compute_quality()` |
+| Regles de plages numeriques attendues | `etl/silver/quality.py` | 26 | `RANGE_RULES` |
 | Exposition via API | `api/routers/pipeline.py` | 33 | `pipeline_quality()` |
 
 ---
 
 ## C3 - Calcul des 5 indices (formules)
 
-Toutes les formules se trouvent dans `api/data.py` (priorite ETL) et `etl/processing.py` (calcul Polars).
+Toutes les formules se trouvent dans `api/data.py` (priorite ETL) et `etl/silver/processing.py` (calcul Polars).
 
 | Indice | Fichier | Ligne | Formule |
 |--------|---------|-------|---------|
@@ -110,9 +110,9 @@ Toutes les formules se trouvent dans `api/data.py` (priorite ETL) et `etl/proces
 | `environnement_idx` (espaces verts) | `api/data.py` | 150 | si count ETL : `env * 7.5` ; sinon proxy abordabilite |
 | `accessibilite_idx` (m2/revenu) | `api/data.py` | 162 | `(revenu_median / prix_m2) / 4.0 * 100` |
 | Score global | `api/data.py` | 166 | moyenne des 5 indices |
-| Valeurs de reference (fallback) | `etl/processing.py` | 347 | `PRIX_M2_BASES`, `REVENU_MEDIAN_BASES`, etc. |
-| Sources reelles DVF 2023 | `etl/external.py` | 59 | `load_dvf_prices()` → mediane prix/m2 par arr. |
-| Sources reelles INSEE Filosofi | `etl/external.py` | 100 | `load_filosofi_income()` → revenu median IRIS |
+| Valeurs de reference (fallback) | `etl/silver/processing.py` | 347 | `PRIX_M2_BASES`, `REVENU_MEDIAN_BASES`, etc. |
+| Sources reelles DVF 2023 | `etl/bronze/external.py` | 59 | `load_dvf_prices()` → mediane prix/m2 par arr. |
+| Sources reelles INSEE Filosofi | `etl/bronze/external.py` | 100 | `load_filosofi_income()` → revenu median IRIS |
 
 ---
 
@@ -182,12 +182,12 @@ Toutes les formules se trouvent dans `api/data.py` (priorite ETL) et `etl/proces
 | Mecanisme | Fichier | Ligne | Description |
 |-----------|---------|-------|-------------|
 | Fallback 3 couches (PG/Parquet/math) | `api/data.py` | 200 | `district_rows()` |
-| Fallback geocodage (IRIS → API → none) | `etl/processing.py` | 280 | `build_silver_record()` |
-| Cache LRU geocodage API | `etl/processing.py` | 223 | `_reverse_geocode_cached()` |
+| Fallback geocodage (IRIS → API → none) | `etl/silver/processing.py` | 280 | `build_silver_record()` |
+| Cache LRU geocodage API | `etl/silver/processing.py` | 223 | `_reverse_geocode_cached()` |
 | Cache LRU GeoJSON | `api/data.py` | 560 | `_load_geojson()` |
 | Cache LRU district_rows | `api/data.py` | 200 | `@lru_cache(maxsize=1)` |
-| Metriques ne bloquent jamais le pipeline | `etl/metrics.py` | 81 | `except Exception: print([WARN])` |
-| Rapport qualite completeness + out-of-range | `etl/quality.py` | 68 | `compute_quality()` |
+| Metriques ne bloquent jamais le pipeline | `etl/gold/metrics.py` | 81 | `except Exception: print([WARN])` |
+| Rapport qualite completeness + out-of-range | `etl/silver/quality.py` | 68 | `compute_quality()` |
 | Microbatch : arret propre si Kafka/Cassandra KO | `streaming/microbatch.py` | 43 | `sys.exit(0)` sur exception |
 
 ---

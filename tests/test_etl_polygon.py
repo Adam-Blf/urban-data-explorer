@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from etl.processing import _point_in_polygon
+from etl.silver.processing import _point_in_polygon
 
 # Carré unitaire [0,0]-[1,0]-[1,1]-[0,1]
 SQUARE = [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]]

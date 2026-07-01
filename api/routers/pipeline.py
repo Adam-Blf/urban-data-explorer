@@ -42,7 +42,7 @@ def pipeline_metrics(limit: int = Query(50, ge=1, le=500)):
 
     Données issues de data/metrics/pipeline_metrics.parquet (C2.4/C1.3).
     """
-    from etl.metrics import load_metrics
+    from etl.gold.metrics import load_metrics
     return load_metrics(limit=limit)
 
 
@@ -56,5 +56,5 @@ def pipeline_quality():
     - row_count, column_count : dimensions
     - freshness_days : ancienneté du fichier en jours
     """
-    from etl.quality import compute_quality
+    from etl.silver.quality import compute_quality
     return compute_quality()

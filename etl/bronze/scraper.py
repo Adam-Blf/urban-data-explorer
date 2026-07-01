@@ -5,7 +5,7 @@ import requests
 from pathlib import Path
 from typing import Any
 
-from etl.catalog import SourceSpec
+from .catalog import SourceSpec
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
