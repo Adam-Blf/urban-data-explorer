@@ -15,9 +15,9 @@ sys.path.insert(0, str(ROOT))
 
 import polars as pl
 
-from etl.catalog import ALL_SOURCES
-from etl.io import load_source_as_silver
-from etl.processing import build_gold_dashboard, build_gold_timeline
+from etl.bronze.catalog import ALL_SOURCES
+from etl.bronze.io import load_source_as_silver
+from etl.silver.processing import build_gold_dashboard, build_gold_timeline
 
 DATA_DIR = ROOT / "data" / "raw" / "downloads"
 BRONZE_DIR = ROOT / "data" / "bronze"

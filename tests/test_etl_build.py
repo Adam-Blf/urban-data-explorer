@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import pytest
 import polars as pl
-from etl.processing import (
+from etl.silver.processing import (
     build_gold_dashboard,
     build_gold_timeline,
     _family_counts,
     build_silver_record,
 )
-from etl.catalog import SOURCE_MAP
+from etl.bronze.catalog import SOURCE_MAP
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────

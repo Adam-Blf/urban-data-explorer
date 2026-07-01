@@ -14,8 +14,8 @@ from datetime import UTC, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
 
-from etl.catalog import ALL_SOURCES, FAMILIES
-from etl.processing import (
+from etl.bronze.catalog import ALL_SOURCES, FAMILIES
+from etl.silver.processing import (
     LOGEMENT_SOCIAL_COUNT_BASES,
     LOGEMENT_SOCIAL_PCT_BASES,
     PRIX_M2_BASES,

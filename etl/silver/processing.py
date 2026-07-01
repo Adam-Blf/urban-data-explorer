@@ -21,9 +21,9 @@ from typing import Any
 import polars as pl
 import requests
 
-from .catalog import FAMILIES, SourceSpec
+from ..bronze.catalog import FAMILIES, SourceSpec
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "data" / "raw" / "downloads"
 IRIS_PATH = DATA_DIR / "paris_iris.geojson"
 

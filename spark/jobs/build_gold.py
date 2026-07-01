@@ -14,8 +14,8 @@ from pathlib import Path
 
 import polars as pl
 
-from etl.metrics import record_stage
-from etl.processing import build_gold_dashboard, build_gold_timeline
+from etl.gold.metrics import record_stage
+from etl.silver.processing import build_gold_dashboard, build_gold_timeline
 
 ROOT = Path(__file__).resolve().parents[2]
 SILVER_DIR = ROOT / "data" / "silver"

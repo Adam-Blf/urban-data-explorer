@@ -7,12 +7,12 @@ import pytest
 
 class TestQualityModule:
     def test_compute_quality_returns_list(self):
-        from etl.quality import compute_quality
+        from etl.silver.quality import compute_quality
         result = compute_quality()
         assert isinstance(result, list)
 
     def test_compute_quality_entries_have_required_keys(self):
-        from etl.quality import compute_quality
+        from etl.silver.quality import compute_quality
         result = compute_quality()
         # Must have at least the Gold dashboard and timeline datasets
         assert len(result) >= 1
@@ -25,21 +25,21 @@ class TestQualityModule:
             assert has_metrics or has_error
 
     def test_completeness_pct_range(self):
-        from etl.quality import compute_quality
+        from etl.silver.quality import compute_quality
         result = compute_quality()
         for entry in result:
             if "completeness_pct" in entry:
                 assert 0.0 <= entry["completeness_pct"] <= 100.0
 
     def test_out_of_range_non_negative(self):
-        from etl.quality import compute_quality
+        from etl.silver.quality import compute_quality
         result = compute_quality()
         for entry in result:
             if "out_of_range_count" in entry:
                 assert entry["out_of_range_count"] >= 0
 
     def test_freshness_days_non_negative(self):
-        from etl.quality import compute_quality
+        from etl.silver.quality import compute_quality
         result = compute_quality()
         for entry in result:
             if entry.get("freshness_days") is not None:

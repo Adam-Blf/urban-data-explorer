@@ -10,9 +10,9 @@ from pathlib import Path
 
 import polars as pl
 
-from etl.catalog import ALL_SOURCES
-from etl.io import load_source_as_silver
-from etl.scraper import download_dataset
+from etl.bronze.catalog import ALL_SOURCES
+from etl.bronze.io import load_source_as_silver
+from etl.bronze.scraper import download_dataset
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "data" / "raw" / "downloads"

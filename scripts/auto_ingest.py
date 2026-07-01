@@ -105,10 +105,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        from etl.catalog import ALL_SOURCES
+        from etl.bronze.catalog import ALL_SOURCES
     except ImportError:
         sys.path.insert(0, str(ROOT))
-        from etl.catalog import ALL_SOURCES
+        from etl.bronze.catalog import ALL_SOURCES
 
     targets = [s for s in ALL_SOURCES if not s.metadata_only]
     if args.source:

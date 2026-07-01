@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from etl.processing import _normalize_code, _parse_geo_point
+from etl.silver.processing import _normalize_code, _parse_geo_point
 
 
 # ── _normalize_code ──────────────────────────────────────────────────────────
