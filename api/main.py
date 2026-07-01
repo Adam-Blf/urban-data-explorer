@@ -1,3 +1,14 @@
+"""Entrypoint FastAPI – Urban Data Explorer API.
+
+Configure l'application FastAPI avec :
+- CORS restreint aux origines du frontend (UDE_CORS_ORIGINS).
+- Quota par IP sur toutes les routes (check_quota, C2.1).
+- Instrumentation Prometheus (prometheus_middleware).
+- Montage des routers : health, auth, catalog, datamarts, pipeline, events, repo, search, tables.
+- Mode local-first : si UDE_STATIC_DIR est defini, l'API sert aussi la SPA React
+  (un seul processus, pas de CORS, mode hors-ligne).
+"""
+
 from __future__ import annotations
 
 import os
