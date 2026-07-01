@@ -125,18 +125,38 @@ def _enrich_district_row(code: str, raw_row: dict) -> dict:
     immobilier_idx = round(clamp((prix_m2 - 8000) / (16000 - 8000) * 100, 10, 95))
     logement_social_idx = round(clamp(logement_social_pct * 2.5, 5, 95))
     revenu_idx = round(clamp((revenu_median - 20000) / (48000 - 20000) * 100, 10, 95))
-    # cadre_vie = services quotidiens (vq) + espaces verts (env), normalisés.
-    # Si les counts sont vides (données ETL incomplètes), dérive depuis
-    # revenu_idx et un biais deterministe par code d'arrondissement.
-    _vq_norm = clamp(vq / 12.0, 0.0, 1.0)
-    _env_norm = clamp(env / 8.0, 0.0, 1.0)
+
+    # cadre_vie_idx
+    # Priorité 1 : counts ETL disponibles → normalisation directe
+    # Priorité 2 : proxy mathématique sur données économiques réelles
+    #   Logique : quartiers avec prix et revenus élevés ont généralement de meilleurs
+    #   services et espaces publics soignés ; la proportion de logement social crée
+    #   un gradient inversé. Formule : offset fixe + combinaison pondérée normalisée.
     if vq > 0 or env > 0:
+        _vq_norm = clamp(vq / 12.0, 0.0, 1.0)
+        _env_norm = clamp(env / 8.0, 0.0, 1.0)
         cadre_vie_idx = round(clamp(20 + (_vq_norm * 0.55 + _env_norm * 0.45) * 65, 15, 90))
     else:
-        # Fallback : proxy cadre de vie basé sur revenu + biais arrondissement
-        _bias = _digest(code + ":cadre_vie")  # 0..1 stable par code
-        cadre_vie_idx = round(clamp(revenu_idx * 0.45 + 35 + _bias * 22, 35, 88))
-    environnement_idx = round(clamp(env * 7.5, 20, 95))
+        cadre_vie_idx = round(clamp(
+            30 + immobilier_idx * 0.35 + revenu_idx * 0.25 + (100 - logement_social_idx) * 0.10,
+            25, 90
+        ))
+
+    # environnement_idx
+    # Priorité 1 : count ETL disponible → densité de sources environnementales
+    # Priorité 2 : proxy abordabilité + densité sociale
+    #   Logique : m²/revenu proxy l'espace disponible par habitant ;
+    #   la proportion de logement social proxy les grands ensembles (espaces interstitiels).
+    if env > 0:
+        environnement_idx = round(clamp(env * 7.5, 20, 95))
+    else:
+        _abord = (revenu_median / prix_m2) if prix_m2 > 0 else 2.5
+        _abord_norm = clamp(_abord / 4.0, 0.0, 1.0)
+        _social_norm = clamp(logement_social_pct / 40.0, 0.0, 1.0)
+        environnement_idx = round(clamp(
+            _abord_norm * 35 + _social_norm * 25 + 20,
+            20, 80
+        ))
 
     # Accessibilité au logement : m² achetables avec un an de revenu médian
     m2_abordables = round(revenu_median / prix_m2, 2) if prix_m2 else 0.0
