@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box } from 'lucide-react';
+import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box, TableProperties } from 'lucide-react';
 
 interface HeaderProps {
   isConnected: boolean;
@@ -13,6 +13,8 @@ interface HeaderProps {
   setShowControlPanel: (show: boolean) => void;
   showDataPanel: boolean;
   setShowDataPanel: (show: boolean) => void;
+  showTable: boolean;
+  setShowTable: (show: boolean) => void;
 }
 
 /* Bloc-marque EFREI : logo + titre application */
@@ -63,7 +65,9 @@ export const Header: React.FC<HeaderProps> = ({
   showControlPanel,
   setShowControlPanel,
   showDataPanel,
-  setShowDataPanel
+  setShowDataPanel,
+  showTable,
+  setShowTable,
 }) => {
   return (
     <header
@@ -122,6 +126,14 @@ export const Header: React.FC<HeaderProps> = ({
             title="Afficher / masquer les indicateurs"
           >
             <BarChart3 size={16} /> Indicateurs
+          </button>
+          <button
+            onClick={() => setShowTable(!showTable)}
+            className={`dsfr-btn dsfr-btn--tertiary ${showTable ? 'is-active' : ''}`}
+            aria-pressed={showTable}
+            title="Tableau des données par arrondissement"
+          >
+            <TableProperties size={16} /> Tableau
           </button>
         </div>
 
