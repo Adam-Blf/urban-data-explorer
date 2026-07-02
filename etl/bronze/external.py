@@ -23,7 +23,8 @@ import statistics
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+# parents[2] : ce module vit dans etl/bronze/, 2 niveaux sous la racine repo.
+ROOT = Path(__file__).resolve().parents[2]
 DOWNLOADS = ROOT / "data" / "raw" / "downloads"
 
 DVF_PATH = DOWNLOADS / "dvf_75_2023.csv.gz"

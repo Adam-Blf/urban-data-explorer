@@ -18,7 +18,8 @@ from typing import Any
 
 import polars as pl
 
-ROOT = Path(__file__).resolve().parents[1]
+# parents[2] : ce module vit dans etl/silver/, 2 niveaux sous la racine repo.
+ROOT = Path(__file__).resolve().parents[2]
 GOLD_DIR = ROOT / "data" / "gold"
 
 # Expected numeric ranges for key columns (column -> (min, max)).

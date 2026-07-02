@@ -391,7 +391,7 @@ def build_gold_dashboard(silver_df: pl.DataFrame) -> pl.DataFrame:
         return pl.DataFrame()
 
     # Sources externes réelles (vides si fichiers absents -> fallback)
-    from .external import load_dvf_prices, load_filosofi_income
+    from ..bronze.external import load_dvf_prices, load_filosofi_income
     dvf = load_dvf_prices()
     filo = load_filosofi_income()
 
