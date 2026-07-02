@@ -9,7 +9,7 @@ Ce document présente les résultats théoriques et de référence des tests req
 
 ## 1. Validation de l'Intégrité Référentielle
 
-Les contraintes d'intégrité SQL déclarées dans le schéma en étoile du projet (`postgres/init.sql`) ont été validées avec succès.
+Les contraintes d'intégrité SQL déclarées dans la couche relationnelle Gold du projet (`postgres/init.sql`) ont été validées avec succès.
 
 | Règle d'Intégrité Testée | Résultat | Description |
 | :--- | :---: | :--- |
@@ -21,7 +21,7 @@ Les contraintes d'intégrité SQL déclarées dans le schéma en étoile du proj
 
 ## 2. Analyse des Performances et Test de Charge
 
-Le benchmark simule des requêtes d'agrégation et de jointure multidimensionnelle simultanées sur le modèle en étoile (Facts ⟷ Dimensions) via un pool de threads concurrents.
+Le benchmark simule des requêtes d'agrégation et de restitution simultanées sur la couche relationnelle Gold via un pool de threads concurrents.
 
 ### Paramètres du Benchmark
 - **Utilisateurs simultanés (threads)** : 10

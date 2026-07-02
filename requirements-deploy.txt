@@ -7,6 +7,10 @@ pydantic==2.10.4
 python-dotenv==1.0.1
 polars==1.24.0
 pyarrow==19.0.1
-python-jose[cryptography]==3.3.0
+PyJWT==2.10.0
 python-multipart==0.0.18
 requests==2.32.3
+# Imports top-level de l'API : observability.py (metrics) et db.py (via
+# routers/tables.py). Sans eux l'app crashe avant de bind le port sur Render.
+prometheus_client==0.21.1
+psycopg2-binary==2.9.9

@@ -230,12 +230,12 @@ def build():
             [(desc, 12, False, txt)],
         ], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE, space_after=4)
         x += Inches(3.05)
-    textbox(s, Inches(0.85), Inches(3.65), Inches(8.4), Inches(0.4),
-            [[("Polars (moteur Rust) →  jointures spatiales IRIS  →  schéma en étoile", 13, True, GREY)]],
+        textbox(s, Inches(0.85), Inches(3.65), Inches(8.4), Inches(0.4),
+            [[("Polars (moteur Rust) →  jointures spatiales IRIS  →  couche Gold relationnelle", 13, True, GREY)]],
             align=PP_ALIGN.CENTER)
     bullets(s, Inches(0.85), Inches(4.35), Inches(11.6), Inches(2.4), [
         ("Ingestion : ", "ETL batch Polars (Bronze→Silver→Gold) + collecte temps réel Kafka."),
-        ("Stockage : ", "PostgreSQL (relationnel étoile), Cassandra (NoSQL événements), Data Lake HDFS/Parquet."),
+        ("Stockage : ", "PostgreSQL (couche Gold relationnelle), Cassandra (NoSQL événements), Data Lake HDFS/Parquet."),
         ("Exposition : ", "API REST FastAPI documentée (Swagger /docs) → frontend React/TypeScript MapLibre (2D IGN) + Mapbox (3D)."),
         ("Orchestration : ", "Docker Compose multi-services (11 conteneurs, profils streaming & lake)."),
     ], size=14, gap=10)

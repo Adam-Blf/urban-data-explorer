@@ -406,7 +406,7 @@ def main():
         ["Couche", "Technologie", "Role"],
         [
             ["Traitement", "Python 3.12 + Polars", "ETL vectorise (moteur Rust), transformations Silver/Gold"],
-            ["Base relationnelle", "PostgreSQL 15", "Datamart dashboard en schema etoile, tests de charge"],
+            ["Base relationnelle", "PostgreSQL 15", "Datamart dashboard en couche Gold, tests de charge"],
             ["Base NoSQL", "Cassandra 4", "Stockage evenements temps reel, TTL 7 jours, partitionnement"],
             ["Data Lake", "Parquet + HDFS", "Couches Bronze/Silver/Gold, columnar, compresse (Snappy)"],
             ["Streaming", "Apache Kafka + Zookeeper", "Pipeline temps reel : Velib, chantiers; producteur/consommateur"],
