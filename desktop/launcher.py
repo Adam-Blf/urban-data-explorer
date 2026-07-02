@@ -27,6 +27,13 @@ def _base_dir() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
+# `python desktop/launcher.py` met desktop/ en tete de sys.path, pas la racine
+# du repo : `import api` echouerait (ModuleNotFoundError). On ajoute la racine
+# explicitement. Sans effet en mode frozen (PyInstaller bundle les modules).
+if not getattr(sys, "frozen", False):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+
 def main() -> None:
     base = _base_dir()
     dist = base / "frontend" / "dist"
