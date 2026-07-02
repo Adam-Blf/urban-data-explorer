@@ -14,7 +14,8 @@ from typing import Any
 
 import polars as pl
 
-ROOT = Path(__file__).resolve().parents[1]
+# parents[2] : ce module vit dans etl/gold/, 2 niveaux sous la racine repo.
+ROOT = Path(__file__).resolve().parents[2]
 METRICS_DIR = ROOT / "data" / "metrics"
 METRICS_PATH = METRICS_DIR / "pipeline_metrics.parquet"
 
