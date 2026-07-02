@@ -22,6 +22,7 @@ from fastapi.staticfiles import StaticFiles
 from .routers import auth, catalog, datamarts, events, health, pipeline, repo, search, tables
 from .security import check_quota
 from .observability import metrics_endpoint, prometheus_middleware
+from .keepalive import start_keepalive
 
 # Mode exe local-first : si UDE_STATIC_DIR pointe vers un build front (dist),
 # l'API sert aussi la SPA -> un seul processus, meme origine, hors ligne.
@@ -58,6 +59,10 @@ app.add_middleware(
 
 # Prometheus instrumentation middleware (wraps every request)
 app.middleware("http")(prometheus_middleware)
+
+# Anti-endormissement Render free tier · self-ping /health toutes les 10 min.
+# No-op hors Render (RENDER_EXTERNAL_URL absente en local/CI).
+start_keepalive()
 
 app.include_router(health.router)
 app.include_router(auth.router)
