@@ -15,7 +15,13 @@ export default function App() {
   // Config & Modes
   const [mapMode, setMapMode] = useState<'2d' | '3d'>('2d');
   const [mapboxToken, setMapboxToken] = useState<string>(() => {
-    return localStorage.getItem('ude_mapbox_token') || '';
+    // Priorite au token saisi via les settings, sinon celui injecte au build
+    // (frontend/.env, VITE_MAPBOX_TOKEN) pour que la carte 3D marche direct.
+    return (
+      localStorage.getItem('ude_mapbox_token') ||
+      import.meta.env.VITE_MAPBOX_TOKEN ||
+      ''
+    );
   });
   const [showSettings, setShowSettings] = useState(false);
 
