@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
 
+## [1.5.0] - 2026-10-08
+
+- refactor(icons): replace `lucide-react` with `reicon-react` 1.2.6 in the frontend (7 components, no custom glyphs)
+
 ## [1.4.0] - 2026-10-07
 
 First tagged release. Latest changes:

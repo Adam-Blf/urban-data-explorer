@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, Database, Table2, ChevronRight, ChevronDown,
-  RefreshCw, Search, ChevronLeft, ChevronRight as ChevronRightIcon,
-  AlertCircle, Wifi, WifiOff, Copy, Check,
-} from 'lucide-react';
+  X,
+  Database,
+  Grid2,
+  ChevronRight,
+  ChevronDown,
+  Refresh,
+  Search,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon,
+  AlertCircle,
+  Wifi,
+  WifiOff,
+  Copy,
+  Check,
+} from 'reicon-react';
 import { API_BASE } from '../services/api';
 
 // ---------------------------------------------------------------------------
@@ -199,7 +210,7 @@ function SidebarTree({
                       borderRight: isActive ? '2px solid #163767' : '2px solid transparent',
                     }}
                   >
-                    <Table2 size={12} style={{ flexShrink: 0, opacity: 0.7 }} />
+                    <Grid2 size={12} style={{ flexShrink: 0, opacity: 0.7 }} />
                     <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</span>
                     {t.row_estimate != null && (
                       <span style={{ fontSize: 10, color: 'var(--text-mention)', flexShrink: 0 }}>
@@ -234,7 +245,7 @@ function SidebarTree({
                       borderRight: isActive ? '2px solid #163767' : '2px solid transparent',
                     }}
                   >
-                    <Table2 size={12} style={{ flexShrink: 0, opacity: 0.7 }} />
+                    <Grid2 size={12} style={{ flexShrink: 0, opacity: 0.7 }} />
                     <span>{t.name}</span>
                   </div>
                 );
@@ -560,7 +571,7 @@ export const TableExplorer: React.FC<{ isVisible: boolean; onClose: () => void }
               title="Actualiser"
               aria-label="Actualiser l'inventaire"
             >
-              <RefreshCw size={14} className={inventoryLoading ? 'spin' : ''} />
+              <Refresh size={14} className={inventoryLoading ? 'spin' : ''} />
             </button>
 
             <button

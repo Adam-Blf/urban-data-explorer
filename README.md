@@ -12,7 +12,7 @@
 <div align="center">
 
 [![RNCP40875 - Bloc 1](https://img.shields.io/badge/RNCP40875-Bloc_1-brightgreen?style=for-the-badge)](https://www.francecompetences.fr/recherche/rncp/40875/)
-[![Version](https://img.shields.io/badge/version-1.4.0-000091?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-1.5.0-000091?style=for-the-badge)](#)
 [![Tests](https://img.shields.io/badge/tests-118%20passed-10B981?style=for-the-badge)](#)
 [![Sources](https://img.shields.io/badge/sources-83-000091?style=for-the-badge)](#)
 

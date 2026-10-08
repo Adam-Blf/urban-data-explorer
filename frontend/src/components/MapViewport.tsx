@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import type * as MapboxGlType from 'mapbox-gl';
-import { AlertTriangle, Settings } from 'lucide-react';
+import { AlertTriangle, Gear } from 'reicon-react';
 import { api } from '../services/api';
 import { District } from '../types';
 
@@ -607,7 +607,7 @@ export const MapViewport: React.FC<MapViewportProps> = ({
             La vue 2D s'appuie sur le fond de plan IGN et ne nécessite aucun jeton.
           </p>
           <button onClick={() => setShowSettings(true)} className="dsfr-btn dsfr-btn--primary" style={{ marginTop: '4px' }}>
-            <Settings size={18} aria-hidden="true" /> Configurer le jeton
+            <Gear size={18} aria-hidden="true" /> Configurer le jeton
           </button>
         </div>
       )}
