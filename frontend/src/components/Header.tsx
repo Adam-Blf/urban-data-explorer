@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, SlidersHorizontal, BarChart3, Sun, Moon, Map, Box, TableProperties, Database } from 'lucide-react';
+import { Gear, Sliders, ChartBar, Sun, Moon, Map, Box, Grid2, Database } from 'reicon-react';
 
 interface HeaderProps {
   isConnected: boolean;
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-pressed={showControlPanel}
             title="Afficher / masquer les filtres"
           >
-            <SlidersHorizontal size={16} /> Filtres
+            <Sliders size={16} /> Filtres
           </button>
           <button
             onClick={() => setShowDataPanel(!showDataPanel)}
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-pressed={showDataPanel}
             title="Afficher / masquer les indicateurs"
           >
-            <BarChart3 size={16} /> Indicateurs
+            <ChartBar size={16} /> Indicateurs
           </button>
           <button
             onClick={() => setShowTable(!showTable)}
@@ -137,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-pressed={showTable}
             title="Tableau des données par arrondissement"
           >
-            <TableProperties size={16} /> Tableau
+            <Grid2 size={16} /> Tableau
           </button>
           <button
             onClick={() => setShowTableExplorer(!showTableExplorer)}
@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Paramètres"
             aria-label="Paramètres"
           >
-            <Settings size={18} />
+            <Gear size={18} />
           </button>
         </div>
       </div>

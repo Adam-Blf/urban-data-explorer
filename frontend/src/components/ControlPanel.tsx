@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Layers, Filter, Info, X } from 'lucide-react';
+import { Layers, Filter, InfoCircle, X } from 'reicon-react';
 
 interface ControlPanelProps {
   granularity: number;
@@ -142,7 +142,7 @@ export const ControlPanel = React.memo<ControlPanelProps>(function ControlPanel(
 
       {/* Note explicative */}
       <div className="dsfr-card--alt dsfr-accent-left" style={{ padding: '14px 16px', display: 'flex', gap: '10px' }}>
-        <Info size={16} style={{ color: 'var(--blue-france)', flexShrink: 0, marginTop: '1px' }} />
+        <InfoCircle size={16} style={{ color: 'var(--blue-france)', flexShrink: 0, marginTop: '1px' }} />
         <p style={{ fontSize: '12px', color: 'var(--text-default)', lineHeight: 1.5 }}>
           La <strong style={{ color: 'var(--text-title)' }}>synthèse globale</strong> colore la carte par score moyen des 5 catégories.
           Sélectionnez une thématique pour appliquer une coloration choroplèthe dédiée.

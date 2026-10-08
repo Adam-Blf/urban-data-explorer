@@ -1,9 +1,14 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, ArrowUpDown, ArrowUp, ArrowDown,
-  Download, Search, TableProperties,
-} from 'lucide-react';
+  X,
+  SortV,
+  ArrowUp,
+  ArrowDown,
+  Download,
+  Search,
+  Grid2,
+} from 'reicon-react';
 import { District } from '../types';
 
 interface DataTableProps {
@@ -121,7 +126,7 @@ export const DataTable: React.FC<DataTableProps> = React.memo(function DataTable
   }, [filtered, sortKey, sortDir]);
 
   const SortIcon = ({ k }: { k: SortKey }) => {
-    if (sortKey !== k) return <ArrowUpDown size={11} style={{ opacity: 0.35 }} />;
+    if (sortKey !== k) return <SortV size={11} style={{ opacity: 0.35 }} />;
     return sortDir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />;
   };
 
@@ -159,7 +164,7 @@ export const DataTable: React.FC<DataTableProps> = React.memo(function DataTable
             padding: '10px 16px', borderBottom: '1px solid var(--border)',
             flexShrink: 0,
           }}>
-            <TableProperties size={16} style={{ color: '#163767', flexShrink: 0 }} />
+            <Grid2 size={16} style={{ color: '#163767', flexShrink: 0 }} />
             <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-title)', flexShrink: 0 }}>
               Tableau des arrondissements
               <span style={{ fontWeight: 400, color: 'var(--text-mention)', marginLeft: '8px' }}>

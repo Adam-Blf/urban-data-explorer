@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, X } from 'lucide-react';
+import { Gear, X } from 'reicon-react';
 
 interface SettingsDrawerProps {
   showSettings: boolean;
@@ -67,7 +67,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Settings size={18} style={{ color: 'var(--blue-france)' }} /> Paramètres de la carte
+          <Gear size={18} style={{ color: 'var(--blue-france)' }} /> Paramètres de la carte
         </h3>
         <button onClick={() => setShowSettings(false)} className="dsfr-btn dsfr-btn--tertiary" style={{ padding: '6px' }} aria-label="Fermer">
           <X size={16} />

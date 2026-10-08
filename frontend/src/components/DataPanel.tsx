@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Activity, X, Play, Pause, ShieldCheck } from 'lucide-react';
+import { TrendUp, WavePulse, X, Play, Pause, ShieldCheck } from 'reicon-react';
 import { District, Overview, TimelinePoint, EventLog, QualityEntry } from '../types';
 import { api } from '../services/api';
 
@@ -339,7 +339,7 @@ export const DataPanel = React.memo<DataPanelProps>(function DataPanel({
       <div className="dsfr-card" style={{ padding: '14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <TrendingUp size={14} style={{ color: 'var(--blue-france)' }} /> {timelineLabel}
+            <TrendUp size={14} style={{ color: 'var(--blue-france)' }} /> {timelineLabel}
           </h3>
           {timeline.length > 1 && (
             <button
@@ -497,7 +497,7 @@ export const DataPanel = React.memo<DataPanelProps>(function DataPanel({
       {/* Flux d'événements */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h3 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-title)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Activity size={14} className="blink-soft" style={{ color: 'var(--red-marianne)' }} />
+          <WavePulse size={14} className="blink-soft" style={{ color: 'var(--red-marianne)' }} />
           Flux d'ingestion · événements Cassandra
         </h3>
         <div className="dsfr-card--alt" style={{ padding: '4px 12px', overflowY: 'auto', maxHeight: '140px' }}>
